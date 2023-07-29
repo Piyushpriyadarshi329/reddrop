@@ -1,11 +1,16 @@
-import {View, Text, Image, Pressable, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  Pressable,
+  TouchableOpacity,
+  Button,
+} from 'react-native';
 import React, {useState, useCallback} from 'react';
 import Icon from 'react-native-vector-icons/Entypo';
 import Color from '../asset/Color';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateuserdata} from './../redux/reducer/Authreducer';
-
-
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -38,7 +43,6 @@ export default function Profile() {
           </View>
           <View style={{flexDirection: 'row', marginTop: 5}}>
             <Text style={{color: 'black'}}>Maharastra, 400011</Text>
-
           </View>
         </View>
         <View style={{flex: 1}}>
@@ -58,30 +62,21 @@ export default function Profile() {
 
       <View style={{flexDirection: 'column', flex: 8}}>
         <View style={{flex: textShown ? 2.5 : 1.5, marginHorizontal: 20}}>
-          
-          <View>
-          
-          </View>
+          <View></View>
         </View>
         <View style={{flex: textShown ? 5 : 6, marginHorizontal: 20}}>
-        
-
-          <View style={{flex:1,alignItems:"center"}}>
-
-<TouchableOpacity style={{backgroundColor:Color.primary,borderRadius:5}}
-onPress={()=>{
-
-  dispatch(
-    updateuserdata({
-      islogin: false,
-    }),
-  );
-}}
->
-
-  <Text style={{color:"black",fontSize:20,padding:5}}>Logout</Text>
-</TouchableOpacity>
-</View>
+          <View style={{flex: 1, alignItems: 'center'}}>
+            <Button
+              color={'red'}
+              title="Log out"
+              onPress={() => {
+                dispatch(
+                  updateuserdata({
+                    islogin: false,
+                  }),
+                );
+              }}></Button>
+          </View>
         </View>
       </View>
     </View>

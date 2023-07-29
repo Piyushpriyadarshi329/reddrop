@@ -1,4 +1,4 @@
-const Color: any = {
+const Color = {
   red: '#c1242a',
   white: 'white',
   lightgray: 'lightgray',

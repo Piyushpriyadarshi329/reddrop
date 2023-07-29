@@ -14,6 +14,7 @@ import {useLogin} from '../customhook/useLogin';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateuserdata} from './../redux/reducer/Authreducer';
 import {AuthStyles} from './authStyles';
+import {Toast} from 'react-native-toast-message/lib/src/Toast';
 
 export default function Login() {
   const navigation = useNavigation();
@@ -43,9 +44,17 @@ export default function Login() {
             userid: res.data.id,
           }),
         );
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: res.Message,
+        });
       }
     } catch (error) {
-      console.log(error);
+      Toast.show({
+        type: 'error',
+        text1: 'Something went wrong',
+      });
     }
   }
   return (
