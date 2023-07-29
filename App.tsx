@@ -8,8 +8,8 @@ import {
 import React, {Fragment} from 'react';
 import Auth from './src/auth/Auth';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import { store } from './src/redux/Store'
-import { Provider } from 'react-redux'
+import {store} from './src/redux/Store';
+import {Provider} from 'react-redux';
 import Color from './src/asset/Color';
 
 export default function App() {
@@ -17,15 +17,12 @@ export default function App() {
 
   return (
     <Provider store={store}>
-
-    <Fragment>
-      <SafeAreaView style={{flex: 0, backgroundColor: 'red'}} />
-      <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
-        <StatusBar backgroundColor={Color.primary} barStyle="dark-content" />
-       
+      <Fragment>
+        <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+          <StatusBar backgroundColor={Color.primary} barStyle="dark-content" />
           <Auth />
-      </SafeAreaView>
-    </Fragment>
+        </SafeAreaView>
+      </Fragment>
     </Provider>
   );
 }
