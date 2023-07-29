@@ -1,41 +1,34 @@
 import {View, Text, TextInput, TouchableOpacity, Pressable} from 'react-native';
 import React, {useState} from 'react';
-import Color from './../asset/Color';
+import Color from '../asset/Color';
 import {useNavigation} from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/AntDesign';
-import {useLogin} from '../customhook/useLogin';
+import type {RootState} from '../redux/Store';
 import {useSelector, useDispatch} from 'react-redux';
-import {updateuserdata} from './../redux/reducer/Authreducer';
+import {updateappstate} from './../redux/reducer/Authreducer';
+import Icon from 'react-native-vector-icons/AntDesign';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function Login() {
-  const navigation = useNavigation();
+export default function Register() {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
+  const [name, setname] = useState('');
+  const [mobile, setmobile] = useState('');
   const [email, setemail] = useState('');
-  const [password, setpassword] = useState('');
 
   async function submithandler() {
     try {
-      let payload = {
-        email: email,
-        password: password,
-        usertype: 1,
+      let payload: {mobile: number} = {
+        mobile: Number(mobile),
       };
 
-      console.log('payload', payload);
+      dispatch(
+        updateappstate({
+          islogin: true,
+        }),
+      );
 
-      var res: any = await useLogin(payload);
-
-      console.log('res', res);
-
-      if (res.Success) {
-        dispatch(
-          updateuserdata({
-            islogin: true,
-            userid: res.data.id,
-          }),
-        );
-      }
+      //   navigation.navigate('OTP');
     } catch (error) {
       console.log(error);
     }
@@ -43,7 +36,7 @@ export default function Login() {
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
-      <View style={{flex: 1}}></View>
+      <View style={{flex: 2}}></View>
       <View style={{flex: 3, justifyContent: 'center'}}>
         <Text
           style={{
@@ -57,20 +50,38 @@ export default function Login() {
       </View>
       <View style={{flex: 0.7, marginLeft: 50}}>
         <Text style={{color: Color.black, fontSize: 22, fontWeight: 'bold'}}>
-          Login
-        </Text>
-      </View>
-
-      <View style={{flex: 0.7, marginLeft: 50}}>
-        <Text style={{color: 'gray', fontSize: 18, fontWeight: '500'}}>
-          Please Signin to Continue
+          Create Account
         </Text>
       </View>
 
       <View style={{flex: 1, marginLeft: 50}}></View>
 
-      <View style={{flex: 4}}>
-        {/* <View
+      <View style={{flex: 6}}>
+        <View
+          style={{
+            marginHorizontal: 70,
+            flex: 1,
+            justifyContent: 'flex-start',
+            flexDirection: 'row',
+          }}>
+          <View style={{marginTop: 10}}>
+            <Icon name="user" size={20} color="black" />
+          </View>
+          <TextInput
+            style={{
+              borderBottomWidth: 1,
+              borderRadius: 5,
+              marginLeft: 10,
+              height: 40,
+              flex: 1,
+            }}
+            placeholder="Please enter Full Name."
+            onChangeText={text => {
+              setname(text);
+            }}
+          />
+        </View>
+        <View
           style={{
             marginHorizontal: 70,
             flex: 1,
@@ -81,14 +92,20 @@ export default function Login() {
             <Icon name="mobile1" size={20} color="black" />
           </View>
           <TextInput
-            style={{borderBottomWidth: 1, borderRadius: 5,marginLeft:10,flex:1,height:40}}
-            placeholder="please enter Mobile No."
+            style={{
+              borderBottomWidth: 1,
+              borderRadius: 5,
+              height: 40,
+              marginLeft: 10,
+              flex: 1,
+            }}
+            placeholder="Please enter Mobile No."
             keyboardType="numeric"
             onChangeText={text => {
               setmobile(text);
             }}
           />
-        </View> */}
+        </View>
 
         <View
           style={{
@@ -98,65 +115,32 @@ export default function Login() {
             flexDirection: 'row',
           }}>
           <View style={{marginTop: 10}}>
-            <Icon name="mobile1" size={20} color="black" />
+            <MaterialIcon name="email" size={20} color="black" />
           </View>
           <TextInput
             style={{
               borderBottomWidth: 1,
               borderRadius: 5,
+              height: 40,
               marginLeft: 10,
               flex: 1,
-              height: 40,
             }}
-            placeholder="please enter Email"
-            keyboardType="email-address"
-            value={email}
+            placeholder="Please enter Email"
+            keyboardType="numeric"
             onChangeText={text => {
               setemail(text);
             }}
           />
         </View>
-
-        <View
-          style={{
-            marginHorizontal: 70,
-            flex: 1,
-            justifyContent: 'flex-start',
-            flexDirection: 'row',
-          }}>
-          <View style={{marginTop: 10}}>
-            <Icon name="mobile1" size={20} color="black" />
-          </View>
-          <TextInput
-            style={{
-              borderBottomWidth: 1,
-              borderRadius: 5,
-              marginLeft: 10,
-              flex: 1,
-              height: 40,
-            }}
-            placeholder="please enter Password"
-            keyboardType="email-address"
-            value={password}
-            onChangeText={text => {
-              setpassword(text);
-            }}
-          />
-        </View>
-
         <View
           style={{
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-            marginTop: 20,
+            marginTop: 10,
           }}>
           <TouchableOpacity
-            style={{
-              backgroundColor: Color.primary,
-              borderRadius: 5,
-              height: 40,
-            }}
+            style={{backgroundColor: Color.primary, borderRadius: 5}}
             onPress={submithandler}>
             <Text style={{fontSize: 20, color: 'white', padding: 10}}>
               Submit
@@ -167,18 +151,18 @@ export default function Login() {
 
       <View
         style={{
-          flex: 6,
+          flex: 3,
           justifyContent: 'flex-end',
           marginBottom: 30,
           alignItems: 'center',
         }}>
         <View style={{flexDirection: 'row'}}>
-          <Text style={{color: Color.black}}>Don't have an account?</Text>
+          <Text style={{color: Color.black}}>Already have an account?</Text>
           <Pressable
             onPress={() => {
-              navigation.navigate('Register');
+              navigation.navigate('Login');
             }}>
-            <Text style={{color: Color.primary, marginLeft: 5}}>Sign up</Text>
+            <Text style={{color: Color.primary, marginLeft: 5}}>Sign in</Text>
           </Pressable>
         </View>
       </View>

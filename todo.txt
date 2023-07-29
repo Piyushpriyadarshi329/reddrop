@@ -1,0 +1,11 @@
+
+
+
+
+
+1)slot insted of time==>done
+2)clinic apicall ==>done
+3)in clinic doctorlist==>done
+4)styling
+5)customer book show in doctor Appointment
+6) address table and api

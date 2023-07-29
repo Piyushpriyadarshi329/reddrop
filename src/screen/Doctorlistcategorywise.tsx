@@ -6,16 +6,36 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Image,
-  TouchableOpacity,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Doctor from '../component/Doctor';
 import Color from '../asset/Color';
-import Appointmentcard from '../component/Appointmentcard';
 
-export default function Appointment() {
-  const [selected, setselected] = useState('scheduled');
-  const [scheduled, setscheduled] = useState([
+export default function Doctorlistcategorywise() {
+  // Allergy and immunology
+  // Anesthesiology
+  // Dermatology
+  // Diagnostic radiology
+
+  // Emergency medicine
+  // Family medicine
+  // Internal medicine
+  // Medical genetics
+  // Neurology
+  // Nuclear medicine
+
+  // Obstetrics and gynecology
+  // Ophthalmology
+  // Pathology
+  // Pediatrics
+  // Physical medicine and rehabilitation
+  // Preventive medicine
+  // Psychiatry
+  // Radiation oncology
+  // Surgery
+  // Urology
+
+  const [category, setcategory] = useState([
     {
       descn: 'Allergy and immunology',
       valule: 1,
@@ -90,7 +110,7 @@ export default function Appointment() {
     },
   ]);
 
-  const [history, sethistory] = useState([
+  const [doctors, setdoctors] = useState([
     {
       active: 1,
       clinic_id: '566fbaf6-7c2c-4cf6-9fc4-e0d038abcce3',
@@ -115,17 +135,6 @@ export default function Appointment() {
     },
   ]);
 
-  useEffect(() => {
-    getappointlist();
-  }, []);
-
-  async function getappointlist() {
-    try {
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   return (
     <View style={{flex: 1, flexDirection: 'column'}}>
       <View
@@ -136,84 +145,48 @@ export default function Appointment() {
           backgroundColor: Color.primary,
         }}>
         <Text style={{fontWeight: '700', fontSize: 16, color: 'black'}}>
-          Appointment
+          Find Doctors
         </Text>
       </View>
 
       <View
         style={{
-          flex: 1,
+          flex: 0.8,
           justifyContent: 'center',
           alignItems: 'center',
-          flexDirection: 'row',
+          marginTop: 10,
+          marginHorizontal: 20,
         }}>
-        <TouchableOpacity
-          onPress={() => {
-            setselected('scheduled');
-          }}
+        <TextInput
           style={{
-            marginHorizontal: 20,
-            backgroundColor:
-              selected == 'scheduled' ? Color.secondary : Color.primary,
-            flex: 1,
-          }}>
-          <Text
-            style={{
-              fontWeight: '700',
-              fontSize: 16,
-              color: 'black',
-              padding: 5,
-              textAlign: 'center',
-            }}>
-            Scheduled
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => {
-            setselected('history');
+            borderWidth: 0.2,
+            width: '100%',
+            borderRadius: 20,
+            textAlign: 'center',
+            height: 35,
           }}
-          style={{
-            marginHorizontal: 20,
-            backgroundColor:
-              selected == 'history' ? Color.secondary : Color.primary,
-            flex: 1,
-          }}>
-          <Text
-            style={{
-              fontWeight: '700',
-              fontSize: 16,
-              color: 'black',
-              textAlign: 'center',
-            }}>
-            History
-          </Text>
-        </TouchableOpacity>
+          placeholder="Search Doctors"></TextInput>
       </View>
 
       <View style={{flex: 12, marginHorizontal: 10, marginTop: 10}}>
         <ScrollView>
-          {selected == 'history' ? (
-            <>
-              {history.map((i: any) => {
-                return (
-                  <>
-                    <Appointmentcard />
-                  </>
-                );
-              })}
-            </>
-          ) : (
-            <>
-              {history.map((i: any) => {
-                return (
-                  <>
-                    <Appointmentcard />
-                  </>
-                );
-              })}
-            </>
-          )}
+          {category.map(i => {
+            return (
+              <View>
+                <Text style={{fontSize: 16, fontWeight: '700', color: 'black'}}>
+                  {i.descn}
+                </Text>
+
+                <ScrollView horizontal={true}>
+                  <View style={{flexDirection: 'row', marginTop: 10}}>
+                    {doctors.map(i => {
+                      return <Doctor data={i} />;
+                    })}
+                  </View>
+                </ScrollView>
+              </View>
+            );
+          })}
         </ScrollView>
       </View>
     </View>

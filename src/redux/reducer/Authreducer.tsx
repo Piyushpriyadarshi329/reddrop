@@ -1,27 +1,32 @@
 import {createSlice} from '@reduxjs/toolkit';
 import type {PayloadAction} from '@reduxjs/toolkit';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface CounterState {
-  userid: number | null;
+  userid: string;
   islogin: boolean;
 }
 
 const initialState: CounterState = {
-  userid: null,
+  userid: '',
   islogin: false,
 };
 
-export const counterSlice = createSlice({
+export const Appstate = createSlice({
   name: 'userdata',
   initialState,
   reducers: {
     updateuserdata: (state, action: PayloadAction<any>) => {
+      AsyncStorage.setItem(
+        'userdata',
+        JSON.stringify({...state, ...action.payload}),
+      );
       return {...state, ...action.payload};
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const {updateuserdata} = counterSlice.actions;
+export const {updateuserdata} = Appstate.actions;
 
-export default counterSlice.reducer;
+export default Appstate.reducer;

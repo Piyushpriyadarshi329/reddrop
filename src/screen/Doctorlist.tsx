@@ -6,38 +6,27 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 import {useGetdoctorlist} from '../customhook/useGetdoctorlist';
 import {useGetcliniclist} from '../customhook/useGetcliniclist';
 
-export default function Home() {
+export default function Doctorlist({route}: any) {
+  const {data} = route.params;
+
+  console.log('doctorlist data', data);
   const [topdoctorlist, settopdoctorlist] = useState([]);
-  const [topcliniclist, settopcliniclist] = useState([]);
 
   useEffect(() => {
     getdoctorlist();
-    getcliniclist();
   }, []);
 
   async function getdoctorlist() {
     try {
-      let payload: any = {};
+      let payload: any = {
+        clinic_id: data.id,
+      };
 
       let res: any = await useGetdoctorlist(payload);
 
-      console.log('res', res.data);
+      console.log('res doctorlist', res.data);
 
       settopdoctorlist(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async function getcliniclist() {
-    try {
-      let payload: any = {};
-
-      let res: any = await useGetcliniclist(payload);
-
-      console.log('res clinic', res.data);
-
-      settopcliniclist(res.data);
     } catch (error) {
       console.log(error);
     }
@@ -78,7 +67,7 @@ export default function Home() {
       <View style={{flex: 1.7, flexDirection: 'column', marginTop: -20}}>
         <View>
           <Text style={{fontSize: 16, fontWeight: '600', color: 'black'}}>
-            Top Doctors
+            Doctors
           </Text>
         </View>
         <View style={{flex: 1, flexDirection: 'row', marginTop: 10}}>
@@ -89,26 +78,7 @@ export default function Home() {
           </ScrollView>
         </View>
       </View>
-      <View style={{flex: 1.7, flexDirection: 'column', marginTop: -20}}>
-        <View>
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: '600',
-              color: 'black',
-              marginTop: 0,
-            }}>
-            Top Clinic
-          </Text>
-        </View>
-        <View style={{flex: 1, flexDirection: 'row', marginTop: 10}}>
-          <ScrollView horizontal={true}>
-            {topcliniclist.map(j => {
-              return <Clinic data={j} />;
-            })}
-          </ScrollView>
-        </View>
-      </View>
+      <View style={{flex: 1.7, flexDirection: 'column', marginTop: -20}}></View>
 
       <View style={{flex: 1.5}}></View>
     </View>
