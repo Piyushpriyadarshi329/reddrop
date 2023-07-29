@@ -3,7 +3,7 @@
 var BASE_URL = 'http://16.171.19.177:80/api/v1';
 
 export const LOGIN_URL = BASE_URL + '/login';
-export const REGISTER_URL = BASE_URL + '/register';
+export const REGISTER_URL = BASE_URL + '/signup';
 export const GETDOCTORLIST_URL = BASE_URL + '/getdoctorlist';
 export const GETAVAILABLITY_URL = BASE_URL + '/getavailability';
 export const BOOKSLOT_URL = BASE_URL + '/bookSlot';
