@@ -7,6 +7,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {updateappstate} from './../redux/reducer/Authreducer';
 import Icon from 'react-native-vector-icons/AntDesign';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useRegister} from '../customhook/useRegister';
 
 export default function Register() {
   const dispatch = useDispatch();
@@ -15,20 +16,41 @@ export default function Register() {
   const [name, setname] = useState('');
   const [mobile, setmobile] = useState('');
   const [email, setemail] = useState('');
+  const [password, setpassword] = useState('');
 
   async function submithandler() {
     try {
-      let payload: {mobile: number} = {
+      let payload: {
+        name: string;
+        email: string;
+        mobile: Number;
+        password: string;
+        usertype: string;
+      } = {
+        name: name,
+        email: email,
         mobile: Number(mobile),
+        password: password,
+        usertype: 'CUSTOMER',
       };
 
-      dispatch(
-        updateappstate({
-          islogin: true,
-        }),
-      );
+      // dispatch(
+      //   updateappstate({
+      //     islogin: true,
+      //   }),
+      // );
 
-      //   navigation.navigate('OTP');
+      let res: any = await useRegister(payload);
+
+      console.log('res', res);
+
+      if (res.Success) {
+        alert(res.Message);
+
+        navigation.navigate('Login');
+      } else {
+        alert(res.Message);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -74,6 +96,7 @@ export default function Register() {
               marginLeft: 10,
               height: 40,
               flex: 1,
+              color: 'black',
             }}
             placeholder="Please enter Full Name."
             onChangeText={text => {
@@ -98,6 +121,7 @@ export default function Register() {
               height: 40,
               marginLeft: 10,
               flex: 1,
+              color: 'black',
             }}
             placeholder="Please enter Mobile No."
             keyboardType="numeric"
@@ -124,14 +148,42 @@ export default function Register() {
               height: 40,
               marginLeft: 10,
               flex: 1,
+              color: 'black',
             }}
             placeholder="Please enter Email"
-            keyboardType="numeric"
+            keyboardType="default"
             onChangeText={text => {
               setemail(text);
             }}
           />
         </View>
+
+        <View
+          style={{
+            marginHorizontal: 70,
+            flex: 1,
+            justifyContent: 'flex-start',
+            flexDirection: 'row',
+          }}>
+          <View style={{marginTop: 10}}>
+            <MaterialIcon name="email" size={20} color="black" />
+          </View>
+          <TextInput
+            style={{
+              borderBottomWidth: 1,
+              borderRadius: 5,
+              height: 40,
+              marginLeft: 10,
+              flex: 1,
+              color: 'black',
+            }}
+            placeholder="Please enter Password"
+            onChangeText={text => {
+              setpassword(text);
+            }}
+          />
+        </View>
+
         <View
           style={{
             flex: 1,

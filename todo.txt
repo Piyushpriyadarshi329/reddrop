@@ -9,3 +9,6 @@
 4)styling
 5)customer book show in doctor Appointment
 6) address table and api
+
+
+//  sql = `SELECT *,c.id as clinic_doctor_id FROM clinic_doctor_mapping c INNER JOIN clinics cl ON cl.id = c.clinic_id WHERE c.doctor_id = '${doctor_id}'`;
