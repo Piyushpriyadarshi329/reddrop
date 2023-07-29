@@ -28,7 +28,9 @@ export default function BookApointment() {
   const [datelist, setdatelist] = useState<any>([]);
   const [availabilitylist, setavailabilitylist] = useState([]);
   const [timeslot, settimeslot] = useState([]);
-  const [cliniclist, setcliniclist] = useState();
+  const [cliniclist, setcliniclist] = useState<any>([]);
+
+  const [doctor_clinic_id, setdoctor_clinic_id] = useState('');
 
   console.log('Appsate', customerdata);
 
@@ -139,8 +141,13 @@ export default function BookApointment() {
 
       let res: any = await useGetcliniclist(payload);
 
-      console.log('res cliniclist', res);
-      setcliniclist(res.data);
+      console.log('res cliniclist==>', res);
+      if (res.data.length == 1) {
+        setdoctor_clinic_id(res.data[0].clinic_doctor_id);
+        setcliniclist([]);
+      } else {
+        setcliniclist(res.data);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -162,7 +169,7 @@ export default function BookApointment() {
       } = {
         id: uuid.v4(),
         customer_id: Appstate.userid,
-        doctor_clinic_id: customerdata.doctor.id,
+        doctor_clinic_id: doctor_clinic_id,
         slot_index: selectedtime.index,
         workingtime_id: selectedtime.item.id,
         created_datetime: new Date().getTime(),
@@ -178,7 +185,7 @@ export default function BookApointment() {
 
       console.log('bookslotres', bookslotres);
 
-      navigation.navigate('Payment');
+      navigation.navigate('Home');
     } catch (error) {
       console.log(error);
     }
@@ -281,6 +288,19 @@ export default function BookApointment() {
         </Text>
       </View>
 
+      <View style={{flex: 1}}>
+        {cliniclist.map((i: any) => {
+          return (
+            <TouchableOpacity
+              onPress={() => {
+                setdoctor_clinic_id(i.clinic_doctor_id);
+              }}>
+              <Text style={{color: 'black'}}>{i.name}</Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+
       <View style={{flex: 1.4, flexDirection: 'row', marginHorizontal: 20}}>
         {datelist.map(i => {
           return (
@@ -325,6 +345,7 @@ export default function BookApointment() {
           );
         })}
       </View>
+
       <View
         style={{
           flex: 4,
@@ -400,3 +421,5 @@ export default function BookApointment() {
     </View>
   );
 }
+
+// sql = `SELECT *,c.id as clinic_doctor_id FROM clinic_doctor_mapping c INNER JOIN clinics cl ON cl.id = c.clinic_id WHERE c.doctor_id = '${doctor_id}'`;

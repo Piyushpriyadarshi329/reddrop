@@ -12,108 +12,17 @@ import React, {useState, useEffect} from 'react';
 import Doctor from '../component/Doctor';
 import Color from '../asset/Color';
 import Appointmentcard from '../component/Appointmentcard';
+import {useSelector, useDispatch} from 'react-redux';
+import type {RootState} from './../redux/Store';
+import {usegetAppointments} from '../customhook/usegetAppointments';
 
 export default function Appointment() {
-  const [selected, setselected] = useState('scheduled');
-  const [scheduled, setscheduled] = useState([
-    {
-      descn: 'Allergy and immunology',
-      valule: 1,
-    },
-    {
-      descn: 'Anesthesiology',
-      valule: 2,
-    },
-    {
-      descn: 'Dermatology',
-      valule: 3,
-    },
-    {
-      descn: 'Diagnostic radiology',
-      valule: 4,
-    },
-    {
-      descn: 'Emergency medicine',
-      valule: 5,
-    },
-    {
-      descn: 'Medical genetic',
-      valule: 8,
-    },
-    {
-      descn: 'Neurology',
-      valule: 9,
-    },
-    {
-      descn: 'Nuclear medicine',
-      valule: 10,
-    },
-    {
-      descn: 'Physical medicine and rehabilitationy',
-      valule: 11,
-    },
-    {
-      descn: 'Pathology',
-      valule: 12,
-    },
-    {
-      descn: 'Pediatrics',
-      valule: 13,
-    },
-    {
-      descn: 'Allergy and immunology',
-      valule: 14,
-    },
-    {
-      descn: 'Anesthesiology',
-      valule: 15,
-    },
-    {
-      descn: 'Dermatology',
-      valule: 16,
-    },
-    {
-      descn: 'Allergy and immunology',
-      valule: 17,
-    },
-    {
-      descn: 'Anesthesiology',
-      valule: 18,
-    },
-    {
-      descn: 'Preventive medicine',
-      valule: 19,
-    },
-    {
-      descn: 'Urology',
-      valule: 20,
-    },
-  ]);
+  const {Appstate, customerdata} = useSelector((state: RootState) => state);
 
-  const [history, sethistory] = useState([
-    {
-      active: 1,
-      clinic_id: '566fbaf6-7c2c-4cf6-9fc4-e0d038abcce3',
-      doctor_id: '6d5be353-491c-4cfb-84e0-d7da2d65da1e',
-      email: 'doc@gmail.com',
-      id: '6d5be353-491c-4cfb-84e0-d7da2d65da1e',
-      mobile: '8217084948',
-      name: 'piyush priyadarshi',
-      password: '123',
-      profile_image_key: null,
-    },
-    {
-      active: 1,
-      clinic_id: '566fbaf6-7c2c-4cf6-9fc4-e0d038abcce3',
-      doctor_id: '6d5be353-491c-4cfb-84e0-d7da2d65da1e',
-      email: 'doc@gmail.com',
-      id: '6d5be353-491c-4cfb-84e0-d7da2d65da1e',
-      mobile: '8217084948',
-      name: 'piyush priyadarshi',
-      password: '123',
-      profile_image_key: null,
-    },
-  ]);
+  const [selected, setselected] = useState('scheduled');
+  const [scheduled, setscheduled] = useState([]);
+
+  const [history, sethistory] = useState([]);
 
   useEffect(() => {
     getappointlist();
@@ -121,6 +30,17 @@ export default function Appointment() {
 
   async function getappointlist() {
     try {
+      let payload = {
+        customerId: Appstate.userid,
+        doctorId: '',
+        status: '',
+      };
+
+      let getAppointmentsres: any = await usegetAppointments(payload);
+
+      console.log('getAppointmentsres', getAppointmentsres);
+      setscheduled(getAppointmentsres.data.filter(i => i.status == 'BOOKED'));
+      sethistory(getAppointmentsres.data.filter(i => i.status == 'COMPLETED'));
     } catch (error) {
       console.log(error);
     }
@@ -195,23 +115,43 @@ export default function Appointment() {
         <ScrollView>
           {selected == 'history' ? (
             <>
-              {history.map((i: any) => {
-                return (
-                  <>
-                    <Appointmentcard />
-                  </>
-                );
-              })}
+              {history.length == 0 ? (
+                <>
+                  <View>
+                    <Text>No Record Found</Text>
+                  </View>
+                </>
+              ) : (
+                <>
+                  {history.map((i: any) => {
+                    return (
+                      <>
+                        <Appointmentcard data={i} />
+                      </>
+                    );
+                  })}
+                </>
+              )}
             </>
           ) : (
             <>
-              {history.map((i: any) => {
-                return (
-                  <>
-                    <Appointmentcard />
-                  </>
-                );
-              })}
+              {scheduled.length == 0 ? (
+                <>
+                  <View>
+                    <Text>No Record Found</Text>
+                  </View>
+                </>
+              ) : (
+                <>
+                  {scheduled.map((i: any) => {
+                    return (
+                      <>
+                        <Appointmentcard data={i} />
+                      </>
+                    );
+                  })}
+                </>
+              )}
             </>
           )}
         </ScrollView>

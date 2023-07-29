@@ -8,3 +8,4 @@ export const GETDOCTORLIST_URL = BASE_URL + '/getdoctorlist';
 export const GETAVAILABLITY_URL = BASE_URL + '/getavailability';
 export const BOOKSLOT_URL = BASE_URL + '/bookSlot';
 export const GETCLINICLIST_URL = BASE_URL + '/getcliniclist';
+export const GETAPPOINTMENTS_URL = BASE_URL + '/getAppointments';

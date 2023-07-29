@@ -12,7 +12,7 @@ export async function useGetcliniclist(payload: any) {
     try {
       var res = await axios.post(GETCLINICLIST_URL, payload);
 
-      console.log('res', res.data);
+      // console.log('res', res.data);
 
       myResolve(res.data);
     } catch (error: any) {
