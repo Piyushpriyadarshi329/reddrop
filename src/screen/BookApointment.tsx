@@ -244,9 +244,8 @@ export default function BookApointment() {
                 marginTop: 3,
                 marginRight: 5,
               }}>
-              4.8
+              ____ Booking
             </Text>
-            <Icon name="star" size={20} color="black" />
           </View>
           <View style={{flexDirection: 'row', marginTop: 5}}>
             <Icon name="map-marker-alt" size={20} color="black" />
@@ -259,7 +258,7 @@ export default function BookApointment() {
                 marginTop: 3,
                 marginRight: 5,
               }}>
-              1.5 KM Away
+              ________ KM Away
             </Text>
           </View>
         </View>
@@ -282,26 +281,42 @@ export default function BookApointment() {
             fontSize: 14,
             fontWeight: 'normal',
           }}>
-          Becoming a doctor is an enormous commitment because it takes years of
-          dedicated studying and clinical preparation before you can practise as
-          a doctor.
+          .......................................
         </Text>
       </View>
 
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, flexDirection: 'row', marginHorizontal: 20}}>
         {cliniclist.map((i: any) => {
           return (
             <TouchableOpacity
+              style={{
+                flex: 1,
+                backgroundColor:
+                  doctor_clinic_id == i.doctor_clinic_id
+                    ? Color.primary
+                    : Color.primary,
+                justifyContent: 'center',
+                marginHorizontal: 10,
+                borderRadius: 10,
+              }}
               onPress={() => {
                 setdoctor_clinic_id(i.clinic_doctor_id);
               }}>
-              <Text style={{color: 'black'}}>{i.name}</Text>
+              <Text style={{color: 'black', textAlign: 'center'}}>
+                {i.name}
+              </Text>
             </TouchableOpacity>
           );
         })}
       </View>
 
-      <View style={{flex: 1.4, flexDirection: 'row', marginHorizontal: 20}}>
+      <View
+        style={{
+          flex: 1.4,
+          flexDirection: 'row',
+          marginHorizontal: 20,
+          marginTop: 10,
+        }}>
         {datelist.map(i => {
           return (
             <Pressable
