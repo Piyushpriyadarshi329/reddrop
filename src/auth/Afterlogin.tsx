@@ -6,13 +6,14 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from '../screen/Home';
 import Profile from '../screen/Profile';
 import Appointment from '../screen/Appointment';
-import Apointmentstack from './Apointmentstack';
+import Apointmentstack from './stack/Apointmentstack';
 import {useSelector, useDispatch} from 'react-redux';
 import type {RootState} from '../redux/Store';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Color from '../asset/Color';
-import Homestack from './Homestack';
+import Homestack from './stack/Homestack';
+import ProfileStack from './stack/ProfileStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -46,7 +47,7 @@ export default function Afterlogin() {
         })}>
         <Tab.Screen name="Home" component={Homestack} />
         <Tab.Screen name="Appointment" component={Apointmentstack} />
-        <Tab.Screen name="Profile" component={Profile} />
+        <Tab.Screen name="Profile" component={ProfileStack} />
       </Tab.Navigator>
     </NavigationContainer>
   );

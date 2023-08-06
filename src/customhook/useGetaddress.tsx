@@ -1,7 +1,7 @@
 import axios from 'axios';
-import {GETOCCUPIEDSLOTS_URL} from '../API_CONFIG';
+import {GETADDRESS_URL} from '../API_CONFIG';
 
-export async function usegetOccupiedSlots(payload: any) {
+export async function useGetaddress(payload: any) {
   // const config: any =  {
   //     headers: {
   //       Authorization: `Bearer ${rentalbikedetails.accessToken}`,
@@ -10,9 +10,11 @@ export async function usegetOccupiedSlots(payload: any) {
 
   let myPromise = new Promise(async function (myResolve, myReject) {
     try {
-      var res = await axios.post(GETOCCUPIEDSLOTS_URL, payload);
+      var res = await axios.post(GETADDRESS_URL, payload);
 
-      myResolve(res.data);
+      // console.log('res', res.data);
+
+      myResolve(res);
     } catch (error: any) {
       myReject(error);
     }

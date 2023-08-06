@@ -10,3 +10,5 @@ export const BOOKSLOT_URL = BASE_URL + '/bookSlot';
 export const GETCLINICLIST_URL = BASE_URL + '/getcliniclist';
 export const GETAPPOINTMENTS_URL = BASE_URL + '/getAppointments';
 export const GETOCCUPIEDSLOTS_URL = BASE_URL + '/getOccupiedSlots';
+export const ADDADDRESS_URL = BASE_URL + '/addaddress';
+export const GETADDRESS_URL = BASE_URL + '/getaddress';

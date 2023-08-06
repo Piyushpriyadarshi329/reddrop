@@ -33,6 +33,7 @@ export default function Login() {
           updateuserdata({
             islogin: true,
             userid: res.data.id,
+            username: res.data.name,
           }),
         );
       }

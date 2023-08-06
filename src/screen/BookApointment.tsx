@@ -8,8 +8,8 @@ import {
   ScrollView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-// import Icon from 'react-native-vector-icons/dist/Entypo';
-import Icon from 'react-native-vector-icons/dist/Fontisto';
+import Icon1 from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Fontisto';
 import {useSelector, useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import Color from '../asset/Color';
@@ -19,6 +19,7 @@ import {showtimefromstring, slotwisetime} from '../Appfunction';
 import {useBookslot} from '../customhook/useBookslot';
 import uuid from 'react-native-uuid';
 import {useGetcliniclist} from '../customhook/useGetcliniclist';
+import {usegetOccupiedSlots} from '../customhook/usegetOccupiedSlots';
 
 export default function BookApointment() {
   const navigation = useNavigation();
@@ -30,7 +31,7 @@ export default function BookApointment() {
   const [timeslot, settimeslot] = useState([]);
   const [cliniclist, setcliniclist] = useState<any>([]);
 
-  const [doctor_clinic_id, setdoctor_clinic_id] = useState('');
+  const [selectedclinic, setselectedclinic] = useState<any>('');
 
   console.log('Appsate', customerdata);
 
@@ -62,6 +63,12 @@ export default function BookApointment() {
         date: d.getDate(),
         month: d.getMonth(),
         day: d.getDay(),
+        senddate:
+          d.getFullYear() +
+          '-' +
+          ('0' + (d.getMonth() + 1)).slice(-2) +
+          '-' +
+          ('0' + d.getDate()).slice(-2),
       };
 
       localdaylist.push(obj);
@@ -78,20 +85,38 @@ export default function BookApointment() {
 
   useEffect(() => {
     if (selecteddate) {
-      console.log('selecteddate', selecteddate);
+      createslot();
+    }
+  }, [selecteddate, selectedclinic]);
+
+  async function createslot() {
+    try {
+      let payload = {
+        doctor_clinic_id: selectedclinic.clinic_doctor_id,
+        dateString: selecteddate.senddate,
+      };
+
+      let getOccupiedSlotsres: any = await usegetOccupiedSlots(payload);
+
+      console.log('getOccupiedSlotsres', getOccupiedSlotsres.data);
 
       let filterdata: any = availabilitylist.filter(
-        (i: any) => i.week_day == selecteddate.day,
+        (i: any) =>
+          i.week_day == selecteddate.day &&
+          i.clinic_id == selectedclinic.clinic_id,
       );
 
-      console.log('filterdata', filterdata);
-
-      // {"clinic_id": "566fbaf6-7c2c-4cf6-9fc4-e0d038abcce3", "doctor_id": "ca0ca687-51f6-45f0-bf1d-c195e5df8d87", "entry_id": "aa", "from_time": "093000", "id": "f1247e5f-8abf-4a45-9c35-d4c9f8ca0686", "no_of_slot": 5, "to_time": "120000", "week": null, "week_day": 1}
+      // console.log('filterdata', filterdata);
 
       if (filterdata.length > 0) {
         var localtimeslot: any = [];
 
         filterdata.map((i, index) => {
+          let filterbookedslot = getOccupiedSlotsres.data.filter(
+            k => k.work_time_id == i.id,
+          );
+          console.log('filterbookedslot====>', filterbookedslot);
+
           let t1 = filterdata[index].from_time;
           let t2 = filterdata[index].to_time;
           let slot = filterdata[index].no_of_slot;
@@ -100,11 +125,19 @@ export default function BookApointment() {
 
           // console.log('newdata', newdata);
 
-          newdata.map((j: any) => {
+          newdata.map((j: any, ind: any) => {
             let obj: any = {};
 
             obj.time = j;
             obj.id = filterdata[index].id;
+            obj.booked = false;
+            if (filterbookedslot.length > 0) {
+              if (filterbookedslot[0].occupiedSlots.includes(ind)) {
+                obj.booked = true;
+              }
+            }
+
+            console.log('obj', obj);
 
             localtimeslot.push(obj);
           });
@@ -116,8 +149,10 @@ export default function BookApointment() {
       } else {
         settimeslot([]);
       }
+    } catch (error) {
+      console.log(error);
     }
-  }, [selecteddate]);
+  }
 
   async function getavailability() {
     try {
@@ -143,7 +178,7 @@ export default function BookApointment() {
 
       console.log('res cliniclist==>', res);
       if (res.data.length == 1) {
-        setdoctor_clinic_id(res.data[0].clinic_doctor_id);
+        setselectedclinic(res.data[0]);
         setcliniclist([]);
       } else {
         setcliniclist(res.data);
@@ -155,6 +190,10 @@ export default function BookApointment() {
 
   async function bookapointmenthandler() {
     try {
+      const Appointment_date = new Date(
+        `${selecteddate.senddate}T00:00:00Z`,
+      ).getTime();
+
       let bookslotpayload: {
         id: string | number[];
         customer_id: string;
@@ -166,10 +205,11 @@ export default function BookApointment() {
         group_id: string | number[];
         modified_datetime: number;
         payment_order_id: string | number[];
+        Appointment_date: string;
       } = {
         id: uuid.v4(),
         customer_id: Appstate.userid,
-        doctor_clinic_id: doctor_clinic_id,
+        doctor_clinic_id: selectedclinic.clinic_doctor_id,
         slot_index: selectedtime.index,
         workingtime_id: selectedtime.item.id,
         created_datetime: new Date().getTime(),
@@ -177,6 +217,7 @@ export default function BookApointment() {
         group_id: uuid.v4(),
         modified_datetime: new Date().getTime(),
         payment_order_id: uuid.v4(),
+        Appointment_date: Appointment_date,
       };
 
       console.log('bookslotpayload', bookslotpayload);
@@ -193,17 +234,29 @@ export default function BookApointment() {
 
   return (
     <View style={{flex: 1, flexDirection: 'column'}}>
-      <View style={{flex: 1, marginTop: 10}}>
-        <Text
-          style={{
-            color: 'black',
-            fontSize: 16,
-            fontWeight: '800',
-            textAlign: 'center',
-          }}>
-          Doctor Detail
-        </Text>
+      <View style={{flex: 1, marginTop: 10, flexDirection: 'row'}}>
+        <View style={{marginLeft: 10}}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}>
+            <Icon1 name="arrow-back" size={30} color={Color.primary} />
+          </TouchableOpacity>
+        </View>
+
+        <View style={{flex: 1, marginLeft: -100}}>
+          <Text
+            style={{
+              color: 'black',
+              fontSize: 16,
+              fontWeight: '800',
+              textAlign: 'center',
+            }}>
+            Doctor Detail
+          </Text>
+        </View>
       </View>
+
       <View style={{flex: 2, flexDirection: 'row', marginHorizontal: 10}}>
         <View style={{flex: 1.5}}>
           <Image
@@ -233,7 +286,7 @@ export default function BookApointment() {
               fontSize: 13,
               fontWeight: '600',
             }}>
-            Diagnostic radiology
+            {'{{spilization}}'}
           </Text>
           <View style={{flexDirection: 'row', marginTop: 5}}>
             <Text
@@ -292,15 +345,15 @@ export default function BookApointment() {
               style={{
                 flex: 1,
                 backgroundColor:
-                  doctor_clinic_id == i.doctor_clinic_id
+                  selectedclinic.clinic_doctor_id == i.clinic_doctor_id
                     ? Color.primary
-                    : Color.primary,
+                    : Color.secondary,
                 justifyContent: 'center',
                 marginHorizontal: 10,
                 borderRadius: 10,
               }}
               onPress={() => {
-                setdoctor_clinic_id(i.clinic_doctor_id);
+                setselectedclinic(i);
               }}>
               <Text style={{color: 'black', textAlign: 'center'}}>
                 {i.name}
@@ -373,33 +426,78 @@ export default function BookApointment() {
             data={[...timeslot]}
             keyExtractor={item => JSON.stringify(item)}
             renderItem={item => {
+              console.log('item', item.item);
               return (
-                <TouchableOpacity
-                  key={JSON.stringify(item.item.time)}
-                  style={{
-                    flex: 1,
-                    borderWidth: 1,
-                    marginTop: 10,
-                    marginHorizontal: 5,
-                    borderRadius: 5,
-                    backgroundColor:
-                      selectedtime.item == item.item ? Color.primary : 'white',
-                  }}
-                  onPress={() => {
-                    setselectedtime(item);
-                  }}>
-                  <View style={{flex: 1}}>
-                    <Text
+                <>
+                  {item.item?.booked ? (
+                    <TouchableOpacity
+                      key={JSON.stringify(item.item?.time)}
                       style={{
-                        textAlign: 'center',
-                        color: 'black',
-                        fontSize: 16,
-                        padding: 5,
+                        flex: 1,
+                        borderWidth: 1,
+                        marginTop: 10,
+                        marginHorizontal: 5,
+                        borderRadius: 5,
+
+                        // backgroundColor:
+                        //   selectedtime.item == item.item ? Color.primary : 'white',
+                        backgroundColor: 'red',
+                      }}
+                      onPress={() => {
+                        if (item.item?.booked) {
+                          alert('Already booked');
+                        } else {
+                          setselectedtime(item);
+                        }
                       }}>
-                      Slot- {item.index + 1}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
+                      <View style={{flex: 1}}>
+                        <Text
+                          style={{
+                            textAlign: 'center',
+                            color: 'white',
+                            fontSize: 16,
+                            padding: 5,
+                          }}>
+                          Slot- {item.index + 1}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      key={JSON.stringify(item.item?.time)}
+                      style={{
+                        flex: 1,
+                        borderWidth: 1,
+                        marginTop: 10,
+                        marginHorizontal: 5,
+                        borderRadius: 5,
+
+                        backgroundColor:
+                          selectedtime.item == item.item
+                            ? Color.primary
+                            : 'white',
+                      }}
+                      onPress={() => {
+                        if (item.item?.booked) {
+                          alert('Already booked');
+                        } else {
+                          setselectedtime(item);
+                        }
+                      }}>
+                      <View style={{flex: 1}}>
+                        <Text
+                          style={{
+                            textAlign: 'center',
+                            color: 'black',
+                            fontSize: 16,
+                            padding: 5,
+                          }}>
+                          Slot- {item.index + 1}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  )}
+                </>
               );
             }}
             numColumns={4}

@@ -5,11 +5,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export interface CounterState {
   userid: string;
   islogin: boolean;
+  username: string;
 }
 
 const initialState: CounterState = {
   userid: '',
   islogin: false,
+  username: '',
 };
 
 export const Appstate = createSlice({

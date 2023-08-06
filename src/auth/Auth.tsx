@@ -6,7 +6,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from '../screen/Home';
 import Profile from '../screen/Profile';
 import Appointment from '../screen/Appointment';
-import Apointmentstack from './Apointmentstack';
+import Apointmentstack from './stack/Apointmentstack';
 import {useSelector, useDispatch} from 'react-redux';
 import type {RootState} from './../redux/Store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
