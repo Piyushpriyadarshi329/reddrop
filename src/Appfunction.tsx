@@ -38,7 +38,7 @@ export function sendtime(timestamp: number) {
   return ('0' + hour).slice(-2) + ('0' + min).slice(-2);
 }
 
-export function slotwisetime(t1: string, t2: string, slot: number) {
+export function getSlotwisetime(t1: string, t2: string, slot: number) {
   //   let t1="0930"
   // let t2="1430"
   // let slot=6
@@ -79,6 +79,5 @@ export function slotwisetime(t1: string, t2: string, slot: number) {
     );
   }
 
-  console.log(arr);
   return arr;
 }

@@ -52,6 +52,7 @@ export interface ClinicDto {
   active: boolean;
   address_id: string;
 }
+export type GetClinicsResponse = DataResponse<ClinicDto[]>;
 
 /** UserController */
 export interface LoginRequest {
@@ -96,7 +97,7 @@ export interface BookingDto {
   modified_datetime: number;
   payment_order_id: string;
   agent_id?: string;
-  Appointment_date: string;
+  appointment_date: number;
 }
 export type BookSlotRequest = Omit<
   BookingDto,

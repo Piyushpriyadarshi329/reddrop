@@ -12,7 +12,7 @@ import {
 import uuid from 'react-native-uuid';
 import Icon from 'react-native-vector-icons/Fontisto';
 import {useSelector} from 'react-redux';
-import {slotwisetime} from '../../Appfunction';
+import {getSlotwisetime} from '../../Appfunction';
 import Color from '../../asset/Color';
 import Navbar from '../../component/Navbar';
 import {useBookslot} from '../../customhook/useBookslot';
@@ -21,15 +21,21 @@ import {useGetcliniclist} from '../../customhook/useGetcliniclist';
 import {usegetOccupiedSlots} from '../../customhook/usegetOccupiedSlots';
 import type {RootState} from '../../redux/Store';
 import {DateCard} from './DateCard';
+import {BookSlotRequest} from '../../types';
 
+interface TimeSlot {
+  time: any;
+  id: string;
+  booked: boolean;
+}
+interface DayItem {}
 export default function BookApointment() {
   const navigation = useNavigation();
   const {Appstate, customerdata} = useSelector((state: RootState) => state);
   const [selecteddate, setselecteddate] = useState<any>(null);
   const [selectedtime, setselectedtime] = useState<any>('');
   const [datelist, setdatelist] = useState<any>([]);
-  const [timeslot, settimeslot] = useState([]);
-  const [cliniclist, setcliniclist] = useState<any>([]);
+  const [timeslot, settimeslot] = useState<TimeSlot[]>([]);
 
   const [selectedclinic, setselectedclinic] = useState<any>('');
 
@@ -38,6 +44,20 @@ export default function BookApointment() {
     doctor_clinic_id: selectedclinic.clinic_doctor_id,
   });
 
+  const {mutate: bookSlot} = useBookslot({
+    onSuccess: () => {
+      Alert.alert('Booked Successfully.', '', [
+        {text: 'Ok', onPress: () => navigation.goBack()},
+      ]);
+    },
+  });
+
+  let {data: cliniclist} = useGetcliniclist(
+    {doctor_id: customerdata.doctor.id},
+    data => {
+      setselectedclinic(data?.[0]);
+    },
+  );
   useEffect(() => {
     let localdaylist = [];
 
@@ -64,10 +84,6 @@ export default function BookApointment() {
   }, []);
 
   useEffect(() => {
-    getcliniclist();
-  }, []);
-
-  useEffect(() => {
     if (selecteddate) {
       createslot();
     }
@@ -75,15 +91,6 @@ export default function BookApointment() {
 
   async function createslot() {
     try {
-      let payload = {
-        doctor_clinic_id: selectedclinic.clinic_doctor_id,
-        dateString: selecteddate.senddate,
-      };
-
-      // let getOccupiedSlotsres = await usegetOccupiedSlots(payload);
-
-      console.log('getOccupiedSlotsres', getOccupiedSlotsres);
-
       let clinicDayAvailabilities = availabilitylist?.filter(
         i =>
           i.week_day == selecteddate.day &&
@@ -91,41 +98,29 @@ export default function BookApointment() {
       );
 
       if (!!clinicDayAvailabilities?.length) {
-        var localtimeslot: any = [];
+        var localtimeslot: TimeSlot[] = [];
 
-        clinicDayAvailabilities?.map((clinicDayAvailability, index) => {
+        clinicDayAvailabilities?.map(clinicDayAvailability => {
           let filterbookedslot = getOccupiedSlotsres?.filter(
             k => k.work_time_id == clinicDayAvailability.id,
           );
-          console.log('filterbookedslot====>', filterbookedslot);
 
           let t1 = clinicDayAvailability.from_time;
           let t2 = clinicDayAvailability.to_time;
           let slot = clinicDayAvailability.no_of_slot;
 
-          let newdata: any = slotwisetime(t1, t2, slot);
+          let slotwiseTimes = getSlotwisetime(t1, t2, slot);
 
-          // console.log('newdata', newdata);
-
-          newdata.map((j: any, ind: any) => {
-            let obj: any = {};
-
-            obj.time = j;
-            obj.id = clinicDayAvailability.id;
-            obj.booked = false;
-            if (!!filterbookedslot?.length) {
-              if (filterbookedslot[0].occupiedSlots.includes(ind)) {
-                obj.booked = true;
-              }
-            }
-
-            console.log('obj', obj);
-
-            localtimeslot.push(obj);
+          slotwiseTimes.map((slotTime, index) => {
+            localtimeslot.push({
+              time: slotTime,
+              id: clinicDayAvailability.id,
+              booked:
+                !!filterbookedslot?.length &&
+                filterbookedslot[0].occupiedSlots.includes(index),
+            });
           });
         });
-
-        console.log('localtimeslot', localtimeslot.length);
 
         settimeslot([...localtimeslot]);
       } else {
@@ -139,64 +134,23 @@ export default function BookApointment() {
     doctor_id: customerdata.doctor.id,
   });
 
-  async function getcliniclist() {
-    try {
-      let payload = {
-        doctor_id: customerdata.doctor.id,
-      };
-
-      let res: any = await useGetcliniclist(payload);
-
-      console.log('res cliniclist==>', res);
-      if (res.data.length == 1) {
-        setselectedclinic(res.data[0]);
-        setcliniclist([]);
-      } else {
-        setcliniclist(res.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  const onBookingSuccess = () => {
-    Alert.alert('Booked Successfully.', '', [
-      {text: 'Ok', onPress: () => navigation.goBack()},
-    ]);
-  };
   async function bookapointmenthandler() {
     try {
       const Appointment_date = new Date(
         `${selecteddate.senddate}T00:00:00Z`,
       ).getTime();
 
-      let bookslotpayload: {
-        id: string | number[];
-        customer_id: string;
-        doctor_clinic_id: string;
-        slot_index: number;
-        workingtime_id: string;
-        created_datetime: number;
-        status: string;
-        group_id: string | number[];
-        modified_datetime: number;
-        payment_order_id: string | number[];
-        Appointment_date: string;
-      } = {
-        id: uuid.v4(),
+      let bookslotpayload: BookSlotRequest = {
         customer_id: Appstate.userid,
         doctor_clinic_id: selectedclinic.clinic_doctor_id,
         slot_index: selectedtime.index,
         workingtime_id: selectedtime.item.id,
-        created_datetime: new Date().getTime(),
-        status: 'BOOKED',
-        group_id: uuid.v4(),
-        modified_datetime: new Date().getTime(),
-        payment_order_id: uuid.v4(),
-        Appointment_date: Appointment_date,
+        group_id: uuid.v4().toString(),
+        payment_order_id: uuid.v4().toString(),
+        appointment_date: Appointment_date,
       };
 
-      await useBookslot(bookslotpayload);
-      onBookingSuccess();
+      bookSlot(bookslotpayload);
     } catch (error) {
       console.log(error);
     }
@@ -286,7 +240,7 @@ export default function BookApointment() {
       </View>
 
       <View style={{flex: 1, flexDirection: 'row', marginHorizontal: 20}}>
-        {cliniclist.map((i: any) => {
+        {cliniclist?.map((i: any) => {
           return (
             <TouchableOpacity
               style={{

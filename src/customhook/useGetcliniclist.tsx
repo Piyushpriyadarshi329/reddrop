@@ -1,24 +1,18 @@
 import axios from 'axios';
 import {GETCLINICLIST_URL} from '../API_CONFIG';
+import {useQuery} from '@tanstack/react-query';
+import {ClinicDto, GetClinicsResponse} from '../types';
 
-export async function useGetcliniclist(payload: any) {
-  // const config: any =  {
-  //     headers: {
-  //       Authorization: `Bearer ${rentalbikedetails.accessToken}`,
-  //     },
-  //   };
-
-  let myPromise = new Promise(async function (myResolve, myReject) {
-    try {
-      var res = await axios.post(GETCLINICLIST_URL, payload);
-
-      // console.log('res', res.data);
-
-      myResolve(res.data);
-    } catch (error: any) {
-      myReject(error);
-    }
-  });
-
-  return myPromise;
+export function useGetcliniclist(
+  payload: any,
+  onSuccess: (data: ClinicDto[] | undefined) => void,
+) {
+  return useQuery(
+    ['CLINIC_LIST', payload],
+    () => axios.post<GetClinicsResponse>(GETCLINICLIST_URL, payload),
+    {
+      select: data => data.data.data,
+      onSuccess: onSuccess,
+    },
+  );
 }
