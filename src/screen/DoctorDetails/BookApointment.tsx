@@ -1,12 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
-import {
-  default as React,
-  default as React,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import {default as React, useEffect, useRef, useState} from 'react';
 import {
   Alert,
   Button,
@@ -25,9 +19,9 @@ import Navbar from '../../component/Navbar';
 import {useBookslot} from '../../customhook/useBookslot';
 import {useGetavailability} from '../../customhook/useGetavailability';
 import type {RootState} from '../../redux/Store';
-import {useGetcliniclist} from '../customhook/useGetcliniclist';
-import {usegetOccupiedSlots} from '../customhook/usegetOccupiedSlots';
 import {DateCard} from './DateCard';
+import {usegetOccupiedSlots} from '../../customhook/usegetOccupiedSlots';
+import {useGetcliniclist} from '../../customhook/useGetcliniclist';
 
 export default function BookApointment() {
   const navigation = useNavigation();

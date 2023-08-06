@@ -3,7 +3,7 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from '../../screen/Home';
-import BookApointment from '../../screen/BookApointment';
+import BookApointment from '../../screen/DoctorDetails/BookApointment';
 import Doctorlist from '../../screen/Doctorlist';
 import Profile from '../../screen/Profile';
 
