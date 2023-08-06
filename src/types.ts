@@ -18,6 +18,7 @@ export interface DoctorDto {
 
 export interface GetDotcorsListRequest {
   clinic_id?: string;
+  doctor_id?: string;
 }
 
 export type GetDoctorsListResponse = DataResponse<DoctorDto[]>;
@@ -95,6 +96,7 @@ export interface BookingDto {
   modified_datetime: number;
   payment_order_id: string;
   agent_id?: string;
+  Appointment_date: string;
 }
 export type BookSlotRequest = Omit<
   BookingDto,
@@ -139,7 +141,8 @@ export type GetOccupiedSlotsResponse = DataResponse<OccupiedSlots[]>;
 
 export interface WorkingTimeDto {
   id: string;
-  doctor_clinic_id: string;
+  doctor_id: string;
+  clinic_id: string;
   entry_id: string;
   week_day: number;
   from_time: string;
@@ -178,4 +181,32 @@ export interface Appointmentdto extends BookingDto {
   clinic_name?: string;
   clinic_address?: string;
 }
+
+export interface AddAdressRequest {
+  user_id?: string;
+  address_line1?: string;
+  address_line2?: string;
+  city?: string;
+  state?: string;
+  pincode?: number;
+  lat?: number;
+  lan?: number;
+}
+export interface GetAdressRequest {
+  user_id?: string;
+}
+
+export interface AddAdresstdto extends AddAdressRequest {
+  id?: string;
+}
+export interface GetAdresstdto extends GetAdressRequest {}
+
+export type AddAdressResponse = DataResponse<AddAdresstdto[]>;
+export type GetAdressResponse = DataResponse<AddAdresstdto[]>;
 export type GetAppointmentResponse = DataResponse<Appointmentdto[]>;
+
+export type GetAvailabilityRequest = {
+  doctor_id?: string;
+  clinic_id?: string;
+};
+export type GetAvailabilityResponse = DataResponse<WorkingTimeDto[]>;

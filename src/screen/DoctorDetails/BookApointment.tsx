@@ -1,6 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import LottieView from 'lottie-react-native';
-import {default as React, useEffect, useRef, useState} from 'react';
+import {default as React, useEffect, useState} from 'react';
 import {
   Alert,
   Button,
@@ -18,10 +17,10 @@ import Color from '../../asset/Color';
 import Navbar from '../../component/Navbar';
 import {useBookslot} from '../../customhook/useBookslot';
 import {useGetavailability} from '../../customhook/useGetavailability';
+import {useGetcliniclist} from '../../customhook/useGetcliniclist';
+import {usegetOccupiedSlots} from '../../customhook/usegetOccupiedSlots';
 import type {RootState} from '../../redux/Store';
 import {DateCard} from './DateCard';
-import {usegetOccupiedSlots} from '../../customhook/usegetOccupiedSlots';
-import {useGetcliniclist} from '../../customhook/useGetcliniclist';
 
 export default function BookApointment() {
   const navigation = useNavigation();
@@ -29,13 +28,15 @@ export default function BookApointment() {
   const [selecteddate, setselecteddate] = useState<any>(null);
   const [selectedtime, setselectedtime] = useState<any>('');
   const [datelist, setdatelist] = useState<any>([]);
-  const [availabilitylist, setavailabilitylist] = useState([]);
   const [timeslot, settimeslot] = useState([]);
   const [cliniclist, setcliniclist] = useState<any>([]);
 
   const [selectedclinic, setselectedclinic] = useState<any>('');
 
-  const animationRef = useRef<LottieView>(null);
+  const {data: getOccupiedSlotsres} = usegetOccupiedSlots({
+    dateString: selecteddate.senddate,
+    doctor_clinic_id: selectedclinic.clinic_doctor_id,
+  });
 
   useEffect(() => {
     let localdaylist = [];
@@ -63,7 +64,6 @@ export default function BookApointment() {
   }, []);
 
   useEffect(() => {
-    getavailability();
     getcliniclist();
   }, []);
 
@@ -80,30 +80,28 @@ export default function BookApointment() {
         dateString: selecteddate.senddate,
       };
 
-      let getOccupiedSlotsres: any = await usegetOccupiedSlots(payload);
+      // let getOccupiedSlotsres = await usegetOccupiedSlots(payload);
 
-      console.log('getOccupiedSlotsres', getOccupiedSlotsres.data);
+      console.log('getOccupiedSlotsres', getOccupiedSlotsres);
 
-      let filterdata: any = availabilitylist.filter(
-        (i: any) =>
+      let clinicDayAvailabilities = availabilitylist?.filter(
+        i =>
           i.week_day == selecteddate.day &&
           i.clinic_id == selectedclinic.clinic_id,
       );
 
-      // console.log('filterdata', filterdata);
-
-      if (filterdata.length > 0) {
+      if (!!clinicDayAvailabilities?.length) {
         var localtimeslot: any = [];
 
-        filterdata.map((i, index) => {
-          let filterbookedslot = getOccupiedSlotsres.data.filter(
-            k => k.work_time_id == i.id,
+        clinicDayAvailabilities?.map((clinicDayAvailability, index) => {
+          let filterbookedslot = getOccupiedSlotsres?.filter(
+            k => k.work_time_id == clinicDayAvailability.id,
           );
           console.log('filterbookedslot====>', filterbookedslot);
 
-          let t1 = filterdata[index].from_time;
-          let t2 = filterdata[index].to_time;
-          let slot = filterdata[index].no_of_slot;
+          let t1 = clinicDayAvailability.from_time;
+          let t2 = clinicDayAvailability.to_time;
+          let slot = clinicDayAvailability.no_of_slot;
 
           let newdata: any = slotwisetime(t1, t2, slot);
 
@@ -113,9 +111,9 @@ export default function BookApointment() {
             let obj: any = {};
 
             obj.time = j;
-            obj.id = filterdata[index].id;
+            obj.id = clinicDayAvailability.id;
             obj.booked = false;
-            if (filterbookedslot.length > 0) {
+            if (!!filterbookedslot?.length) {
               if (filterbookedslot[0].occupiedSlots.includes(ind)) {
                 obj.booked = true;
               }
@@ -137,21 +135,10 @@ export default function BookApointment() {
       console.log(error);
     }
   }
+  const {data: availabilitylist} = useGetavailability({
+    doctor_id: customerdata.doctor.id,
+  });
 
-  async function getavailability() {
-    try {
-      let payload = {
-        doctor_id: customerdata.doctor.id,
-      };
-
-      let res: any = await useGetavailability(payload);
-
-      console.log('res', res);
-      setavailabilitylist(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
   async function getcliniclist() {
     try {
       let payload = {

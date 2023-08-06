@@ -1,22 +1,14 @@
 import axios from 'axios';
 import {GETOCCUPIEDSLOTS_URL} from '../API_CONFIG';
+import {useQuery} from '@tanstack/react-query';
+import {GetOccupiedSlotsRequest, GetOccupiedSlotsResponse} from '../types';
 
-export async function usegetOccupiedSlots(payload: any) {
-  // const config: any =  {
-  //     headers: {
-  //       Authorization: `Bearer ${rentalbikedetails.accessToken}`,
-  //     },
-  //   };
-
-  let myPromise = new Promise(async function (myResolve, myReject) {
-    try {
-      var res = await axios.post(GETOCCUPIEDSLOTS_URL, payload);
-
-      myResolve(res.data);
-    } catch (error: any) {
-      myReject(error);
-    }
-  });
-
-  return myPromise;
+export function usegetOccupiedSlots(payload: GetOccupiedSlotsRequest) {
+  return useQuery(
+    ['OccupiedSlots', payload],
+    () => axios.post<GetOccupiedSlotsResponse>(GETOCCUPIEDSLOTS_URL, payload),
+    {
+      select: data => data.data.data,
+    },
+  );
 }
