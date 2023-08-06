@@ -1,9 +1,6 @@
-import {View, Text} from 'react-native';
 import React from 'react';
 
-import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Appointment from '../../screen/Appointment';
 import BookApointment from '../../screen/BookApointment';
 import Payment from '../../screen/Payment';

@@ -12,17 +12,9 @@ export async function useLogin(payload: any) {
 
   let myPromise = new Promise(async function (myResolve, myReject) {
     try {
-      console.log('Login_URL=============>', LOGIN_URL, payload);
-
       var res = await axios.post(LOGIN_URL, payload);
 
-      console.log('res', res.data);
-
-      if (res?.data?.Success && res?.status == 200) {
-        myResolve(res.data);
-      } else {
-        myReject({statuscode: 401});
-      }
+      myResolve(res.data);
     } catch (error: any) {
       myReject(error);
     }

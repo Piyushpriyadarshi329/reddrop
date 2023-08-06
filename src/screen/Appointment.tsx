@@ -1,50 +1,21 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  TextInput,
-  KeyboardAvoidingView,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
-import React, {useState, useEffect} from 'react';
-import Doctor from '../component/Doctor';
+import React, {useState} from 'react';
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {useSelector} from 'react-redux';
 import Color from '../asset/Color';
 import Appointmentcard from '../component/Appointmentcard';
-import {useSelector, useDispatch} from 'react-redux';
-import type {RootState} from './../redux/Store';
 import {usegetAppointments} from '../customhook/usegetAppointments';
+import type {RootState} from './../redux/Store';
 
 export default function Appointment() {
-  const {Appstate, customerdata} = useSelector((state: RootState) => state);
+  const {Appstate} = useSelector((state: RootState) => state);
 
   const [selected, setselected] = useState('scheduled');
-  const [scheduled, setscheduled] = useState([]);
 
-  const [history, sethistory] = useState([]);
-
-  useEffect(() => {
-    getappointlist();
-  }, []);
-
-  async function getappointlist() {
-    try {
-      let payload = {
-        customerId: Appstate.userid,
-        doctorId: '',
-        status: '',
-      };
-
-      let getAppointmentsres: any = await usegetAppointments(payload);
-
-      console.log('getAppointmentsres', getAppointmentsres);
-      setscheduled(getAppointmentsres.data.filter(i => i.status == 'BOOKED'));
-      sethistory(getAppointmentsres.data.filter(i => i.status == 'COMPLETED'));
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const {data: appointments} = usegetAppointments({
+    customerId: Appstate.userid,
+  });
+  const scheduled = appointments?.data?.filter(i => i.status == 'BOOKED');
+  const history = appointments?.data?.filter(i => i.status == 'COMPLETED');
 
   return (
     <View style={{flex: 1, flexDirection: 'column'}}>
@@ -74,7 +45,7 @@ export default function Appointment() {
           style={{
             marginHorizontal: 20,
             backgroundColor:
-              selected == 'scheduled' ? Color.secondary : Color.primary,
+              selected == 'scheduled' ? Color.primary : Color.secondary,
             flex: 1,
           }}>
           <Text
@@ -96,7 +67,7 @@ export default function Appointment() {
           style={{
             marginHorizontal: 20,
             backgroundColor:
-              selected == 'history' ? Color.secondary : Color.primary,
+              selected == 'history' ? Color.primary : Color.secondary,
             flex: 1,
           }}>
           <Text
@@ -104,6 +75,7 @@ export default function Appointment() {
               fontWeight: '700',
               fontSize: 16,
               color: 'black',
+              padding: 5,
               textAlign: 'center',
             }}>
             History
@@ -115,7 +87,7 @@ export default function Appointment() {
         <ScrollView>
           {selected == 'history' ? (
             <>
-              {history.length == 0 ? (
+              {history?.length == 0 ? (
                 <>
                   <View>
                     <Text>No Record Found</Text>
@@ -123,10 +95,10 @@ export default function Appointment() {
                 </>
               ) : (
                 <>
-                  {history.map((i: any) => {
+                  {history?.map((i: any) => {
                     return (
                       <>
-                        <Appointmentcard data={i} />
+                        <Appointmentcard appointment={i} />
                       </>
                     );
                   })}
@@ -135,7 +107,7 @@ export default function Appointment() {
             </>
           ) : (
             <>
-              {scheduled.length == 0 ? (
+              {scheduled?.length == 0 ? (
                 <>
                   <View>
                     <Text>No Record Found</Text>
@@ -143,11 +115,9 @@ export default function Appointment() {
                 </>
               ) : (
                 <>
-                  {scheduled.map((i: any) => {
+                  {scheduled?.map((i: any, index: number) => {
                     return (
-                      <>
-                        <Appointmentcard data={i} />
-                      </>
+                      <Appointmentcard appointment={i} key={index.toString()} />
                     );
                   })}
                 </>

@@ -1,20 +1,20 @@
+import {useCallback, useEffect, useState} from 'react';
 import {
-  View,
-  Text,
   Image,
-  Pressable,
-  TouchableOpacity,
   Modal,
+  Text,
   TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import React, {useState, useCallback, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {useDispatch, useSelector} from 'react-redux';
 import Color from '../asset/Color';
-import {useSelector, useDispatch} from 'react-redux';
-import {updateuserdata} from './../redux/reducer/Authreducer';
-import {RootState} from '../redux/Store';
 import {useAddaddress} from '../customhook/useAddaddress';
 import {useGetaddress} from '../customhook/useGetaddress';
+import {RootState} from '../redux/Store';
+import {updateuserdata} from './../redux/reducer/Authreducer';
+import {Button} from 'react-native';
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -27,16 +27,6 @@ export default function Profile() {
   const [state, setstate] = useState('');
   const [pincode, setpincode] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-
-  const toggleNumberOfLines = () => {
-    //To toggle the show text or hide it
-    setTextShown(!textShown);
-  };
-
-  const onTextLayout = useCallback(e => {
-    setLengthMore(e.nativeEvent.lines.length >= 4); //to check the text is more than 4 lines or not
-    // console.log(e.nativeEvent);
-  }, []);
 
   useEffect(() => {
     getaddress();
@@ -223,19 +213,16 @@ export default function Profile() {
         </View>
         <View style={{flex: textShown ? 5 : 6, marginHorizontal: 20}}>
           <View style={{flex: 1, alignItems: 'center'}}>
-            <TouchableOpacity
-              style={{backgroundColor: Color.primary, borderRadius: 5}}
+            <Button
+              color={'red'}
+              title="Log out"
               onPress={() => {
                 dispatch(
                   updateuserdata({
                     islogin: false,
                   }),
                 );
-              }}>
-              <Text style={{color: 'black', fontSize: 20, padding: 5}}>
-                Logout
-              </Text>
-            </TouchableOpacity>
+              }}></Button>
           </View>
         </View>
       </View>

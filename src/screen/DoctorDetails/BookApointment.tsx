@@ -1,25 +1,33 @@
-import {
-  View,
-  Text,
-  Image,
-  Pressable,
-  TouchableOpacity,
-  FlatList,
-  ScrollView,
-} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import Icon1 from 'react-native-vector-icons/Ionicons';
-import Icon from 'react-native-vector-icons/Fontisto';
-import {useSelector, useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
-import Color from '../asset/Color';
-import {useGetavailability} from '../customhook/useGetavailability';
-import type {RootState} from './../redux/Store';
-import {showtimefromstring, slotwisetime} from '../Appfunction';
-import {useBookslot} from '../customhook/useBookslot';
+import LottieView from 'lottie-react-native';
+import {
+  default as React,
+  default as React,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import {
+  Alert,
+  Button,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import uuid from 'react-native-uuid';
+import Icon from 'react-native-vector-icons/Fontisto';
+import {useSelector} from 'react-redux';
+import {slotwisetime} from '../../Appfunction';
+import Color from '../../asset/Color';
+import Navbar from '../../component/Navbar';
+import {useBookslot} from '../../customhook/useBookslot';
+import {useGetavailability} from '../../customhook/useGetavailability';
+import type {RootState} from '../../redux/Store';
 import {useGetcliniclist} from '../customhook/useGetcliniclist';
 import {usegetOccupiedSlots} from '../customhook/usegetOccupiedSlots';
+import {DateCard} from './DateCard';
 
 export default function BookApointment() {
   const navigation = useNavigation();
@@ -33,24 +41,7 @@ export default function BookApointment() {
 
   const [selectedclinic, setselectedclinic] = useState<any>('');
 
-  console.log('Appsate', customerdata);
-
-  let monthname = [
-    'JAN',
-    'FEB',
-    'MAR',
-    'APR',
-    'MAY',
-    'JUN',
-    'JUL',
-    'AGU',
-    'SEP',
-    'OCT',
-    'NOV',
-    'DEC',
-  ];
-
-  let weekdayname = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+  const animationRef = useRef<LottieView>(null);
 
   useEffect(() => {
     let localdaylist = [];
@@ -73,7 +64,6 @@ export default function BookApointment() {
 
       localdaylist.push(obj);
     }
-    console.log('localdaylist', localdaylist);
 
     setdatelist(localdaylist);
   }, []);
@@ -187,7 +177,11 @@ export default function BookApointment() {
       console.log(error);
     }
   }
-
+  const onBookingSuccess = () => {
+    Alert.alert('Booked Successfully.', '', [
+      {text: 'Ok', onPress: () => navigation.goBack()},
+    ]);
+  };
   async function bookapointmenthandler() {
     try {
       const Appointment_date = new Date(
@@ -220,54 +214,26 @@ export default function BookApointment() {
         Appointment_date: Appointment_date,
       };
 
-      console.log('bookslotpayload', bookslotpayload);
-
-      let bookslotres: any = await useBookslot(bookslotpayload);
-
-      console.log('bookslotres', bookslotres);
-
-      navigation.navigate('Home');
+      await useBookslot(bookslotpayload);
+      onBookingSuccess();
     } catch (error) {
       console.log(error);
     }
   }
-
   return (
     <View style={{flex: 1, flexDirection: 'column'}}>
-      <View style={{flex: 1, marginTop: 10, flexDirection: 'row'}}>
-        <View style={{marginLeft: 10}}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.goBack();
-            }}>
-            <Icon1 name="arrow-back" size={30} color={Color.primary} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={{flex: 1, marginLeft: -100}}>
-          <Text
-            style={{
-              color: 'black',
-              fontSize: 16,
-              fontWeight: '800',
-              textAlign: 'center',
-            }}>
-            Doctor Detail
-          </Text>
-        </View>
-      </View>
-
+      <Navbar title="Doctor Details" />
       <View style={{flex: 2, flexDirection: 'row', marginHorizontal: 10}}>
         <View style={{flex: 1.5}}>
           <Image
             style={{
               flex: 1,
               resizeMode: 'contain',
-              width: 150,
+              width: 130,
               borderTopLeftRadius: 10,
               borderTopRightRadius: 10,
             }}
-            source={require('./../asset/image/doctor.webp')}
+            source={require('../../asset/image/doctor.webp')}
           />
         </View>
 
@@ -372,44 +338,14 @@ export default function BookApointment() {
         }}>
         {datelist.map(i => {
           return (
-            <Pressable
-              style={{flex: 1}}
-              onPress={() => {
-                setselectedtime('');
-                setselecteddate(i);
-              }}>
-              <View
-                style={{
-                  flex: 1,
-                  borderWidth: 1,
-                  borderRadius: 10,
-                  marginHorizontal: 5,
-                  backgroundColor: selecteddate == i ? Color.primary : 'white',
-                }}>
-                <Text
-                  style={{
-                    color: 'black',
-                    fontSize: 16,
-                    textAlign: 'center',
-                    marginTop: 3,
-                  }}>
-                  {weekdayname[i.day]}
-                </Text>
-                <Text
-                  style={{
-                    color: 'black',
-                    fontSize: 16,
-                    textAlign: 'center',
-                    marginTop: 3,
-                  }}>
-                  {i.date}
-                </Text>
-                <Text
-                  style={{color: 'black', fontSize: 16, textAlign: 'center'}}>
-                  {monthname[i.month]}
-                </Text>
-              </View>
-            </Pressable>
+            <DateCard
+              {...{
+                setselectedtime,
+                setselecteddate,
+                selecteddate,
+                i,
+              }}
+            />
           );
         })}
       </View>
@@ -512,27 +448,14 @@ export default function BookApointment() {
         )}
       </View>
       <View style={{flex: 2}}>
-        <TouchableOpacity
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: Color.primary,
-            marginHorizontal: 80,
-          }}
-          onPress={bookapointmenthandler}>
-          <Text
-            style={{
-              color: 'black',
-              fontSize: 16,
-              fontWeight: '700',
-              padding: 5,
-            }}>
-            Book Apointment
-          </Text>
-        </TouchableOpacity>
+        <View style={{marginHorizontal: 80}}>
+          <Button
+            title="Book Apointment"
+            onPress={bookapointmenthandler}
+            color={Color.primary}
+          />
+        </View>
       </View>
     </View>
   );
 }
-
-// sql = `SELECT *,c.id as clinic_doctor_id FROM clinic_doctor_mapping c INNER JOIN clinics cl ON cl.id = c.clinic_id WHERE c.doctor_id = '${doctor_id}'`;

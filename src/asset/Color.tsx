@@ -1,9 +1,9 @@
-const Color: any = {
+const Color = {
   red: '#c1242a',
   white: 'white',
   lightgray: 'lightgray',
-  primary: '#E3B64D',
-  secondary: '#eed394',
+  primary: '#FFA263',
+  secondary: '#FFE0D0',
   black: 'black',
 };
 
