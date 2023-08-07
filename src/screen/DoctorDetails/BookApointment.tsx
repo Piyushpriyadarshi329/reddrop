@@ -102,19 +102,20 @@ export default function BookApointment() {
 
   async function getbookingavailability() {
     try {
+      console.log('selecteddate', selecteddate);
       let payload = {
         doctor_id: customerdata.doctor.id,
         clinic_id: selectedclinic.clinic_id,
-        date: new Date(selecteddate + 'T00:00:00Z').getTime(),
+        date: new Date(selecteddate.senddate + 'T00:00:00Z').getTime(),
       };
 
-      console.log('payload', payload);
+      console.log('payload==', payload);
 
       let getbookingavailabilityres: any = await useGetBookingAvailability(
         payload,
       );
 
-      console.log('getbookingavailabilityres', getbookingavailabilityres.data);
+      // console.log('getbookingavailabilityres', getbookingavailabilityres.data);
 
       let localtimeslot: any = [];
 
@@ -136,7 +137,7 @@ export default function BookApointment() {
         });
       });
 
-      console.log('localtimeslot', localtimeslot);
+      // console.log('localtimeslot', localtimeslot);
 
       settimeslot([...localtimeslot]);
     } catch (error) {
