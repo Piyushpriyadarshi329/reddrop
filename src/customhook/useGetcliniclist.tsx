@@ -5,7 +5,7 @@ import {ClinicDto, GetClinicsResponse} from '../types';
 
 export function useGetcliniclist(
   payload: any,
-  onSuccess: (data: ClinicDto[] | undefined) => void,
+  onSuccess?: (data: ClinicDto[] | undefined) => void,
 ) {
   return useQuery(
     ['CLINIC_LIST', payload],

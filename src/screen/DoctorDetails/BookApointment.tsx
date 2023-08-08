@@ -120,11 +120,6 @@ export default function BookApointment() {
       let localtimeslot: any = [];
 
       getbookingavailabilityres.data.map(i => {
-        console.log("{...i, title: 'hello', data: i.slots}", {
-          ...i,
-          title: 'hello',
-          data: i.slots,
-        });
         localtimeslot.push({
           ...i,
           title:
@@ -359,7 +354,7 @@ export default function BookApointment() {
                 // console.log('item', item);
                 return (
                   <>
-                    {item?.status == 'BOOKED' ? (
+                    {item?.status == 'BOOKED' || item?.status == 'NA' ? (
                       <TouchableOpacity
                         key={JSON.stringify(item?.time)}
                         style={{

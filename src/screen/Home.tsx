@@ -11,25 +11,9 @@ import Color from '../asset/Color';
 
 export default function Home() {
   const {Appstate, customerdata} = useSelector((state: RootState) => state);
-  const [topcliniclist, settopcliniclist] = useState([]);
+  // const [topcliniclist, settopcliniclist] = useState([]);
   const {data: topdoctorlist} = useGetdoctorlist({});
-  useEffect(() => {
-    getcliniclist();
-  }, []);
-
-  async function getcliniclist() {
-    try {
-      let payload: any = {};
-
-      let res: any = await useGetcliniclist(payload);
-
-      console.log('res clinic', res.data);
-
-      settopcliniclist(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const {data: topcliniclist} = useGetcliniclist({});
 
   return (
     <View style={{flex: 1, marginHorizontal: 10}}>
@@ -92,7 +76,7 @@ export default function Home() {
         </View>
         <View style={{flex: 1, flexDirection: 'row', marginTop: 10}}>
           <ScrollView horizontal={true}>
-            {topcliniclist.map(j => {
+            {topcliniclist?.map(j => {
               return <Clinic data={j} />;
             })}
           </ScrollView>
