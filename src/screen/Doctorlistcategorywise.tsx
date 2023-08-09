@@ -164,6 +164,7 @@ export default function Doctorlistcategorywise() {
             borderRadius: 20,
             textAlign: 'center',
             height: 35,
+            color: 'black',
           }}
           placeholder="Search Doctors"></TextInput>
       </View>

@@ -41,6 +41,7 @@ export default function Home() {
             borderRadius: 20,
             textAlign: 'center',
             height: 35,
+            color: 'black',
           }}
           placeholder="🔎 Search Doctors"></TextInput>
         <Text style={{color: 'black', fontSize: 14, marginTop: 5}}>

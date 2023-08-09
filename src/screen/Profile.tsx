@@ -108,7 +108,7 @@ export default function Profile() {
             <View style={{flex: 1}}>
               <TextInput
                 value={addressline2}
-                style={{borderBottomWidth: 1}}
+                style={{borderBottomWidth: 1, color: 'black'}}
                 placeholder={'Please enter address line2'}
                 onChangeText={e => {
                   setaddressline2(e);
@@ -117,7 +117,7 @@ export default function Profile() {
             <View style={{flex: 1}}>
               <TextInput
                 value={city}
-                style={{borderBottomWidth: 1}}
+                style={{borderBottomWidth: 1, color: 'black'}}
                 placeholder={'Please enter city'}
                 onChangeText={e => {
                   setcity(e);
@@ -126,7 +126,7 @@ export default function Profile() {
             <View style={{flex: 1}}>
               <TextInput
                 value={state}
-                style={{borderBottomWidth: 1}}
+                style={{borderBottomWidth: 1, color: 'black'}}
                 placeholder={'Please enter state'}
                 onChangeText={e => {
                   setstate(e);
@@ -137,7 +137,7 @@ export default function Profile() {
                 value={pincode}
                 maxLength={6}
                 keyboardType="numeric"
-                style={{borderBottomWidth: 1}}
+                style={{borderBottomWidth: 1, color: 'black'}}
                 placeholder={'Please enter pincode'}
                 onChangeText={e => {
                   setpincode(e);

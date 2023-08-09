@@ -101,6 +101,7 @@ export default function Login() {
                 marginLeft: 10,
                 flex: 1,
                 height: 50,
+                color: 'black',
               }}
               placeholder="please enter Email"
               keyboardType="email-address"
@@ -128,6 +129,7 @@ export default function Login() {
                 marginLeft: 10,
                 flex: 1,
                 height: 50,
+                color: 'black',
               }}
               placeholder="please enter Password"
               keyboardType="email-address"
