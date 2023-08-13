@@ -34,8 +34,10 @@ interface TimeSlot {
   status: string;
 }
 interface DayItem {}
-export default function BookApointment() {
+export default function BookApointment(data: {route: any}) {
   const navigation = useNavigation();
+
+  console.log('route==>', data?.route?.params?.existing_booking_id);
   const {Appstate, customerdata} = useSelector((state: RootState) => state);
   const [selecteddate, setselecteddate] = useState<any>(null);
   const [selectedtime, setselectedtime] = useState<any>('');
@@ -200,6 +202,10 @@ export default function BookApointment() {
         payment_order_id: uuid.v4().toString(),
         appointment_date: Appointment_date,
       };
+      if (data?.route?.params?.existing_appointment) {
+        bookslotpayload.existing_booking_id =
+          data?.route?.params?.existing_appointment.id;
+      }
 
       console.log('bookslotpayload', bookslotpayload);
 

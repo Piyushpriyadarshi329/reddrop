@@ -7,6 +7,7 @@ import {Provider} from 'react-redux';
 import Color from './src/asset/Color';
 import Auth from './src/auth/Auth';
 import {store} from './src/redux/Store';
+import {MenuProvider} from 'react-native-popup-menu';
 
 const queryClient = new QueryClient();
 
@@ -15,18 +16,20 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Provider store={store}>
-        <Fragment>
-          <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
-            <StatusBar
-              backgroundColor={Color.primary}
-              barStyle="dark-content"
-            />
-            <Auth />
-          </SafeAreaView>
-        </Fragment>
-        <Toast />
-      </Provider>
+      <MenuProvider>
+        <Provider store={store}>
+          <Fragment>
+            <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+              <StatusBar
+                backgroundColor={Color.primary}
+                barStyle="dark-content"
+              />
+              <Auth />
+            </SafeAreaView>
+          </Fragment>
+          <Toast />
+        </Provider>
+      </MenuProvider>
     </QueryClientProvider>
   );
 }

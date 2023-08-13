@@ -20,6 +20,10 @@ export interface GetDotcorsListRequest {
   clinic_id?: string;
   doctor_id?: string;
 }
+export interface updateSlotsStatusRequest {
+  id?: string;
+  status?: string;
+}
 
 export type GetDoctorsListResponse = DataResponse<DoctorDto[]>;
 
@@ -84,6 +88,8 @@ export enum BookingStatus {
   CANCELLED = 'CANCELLED',
   RESCHEDULED = 'RESCHEDULED',
   COMPLETED = 'COMPLETED',
+  STARTED = 'STARTED',
+  NA = 'NA',
 }
 export interface BookingDto {
   id: string;
@@ -104,6 +110,7 @@ export type BookSlotRequest = Omit<
   'id' | 'created_datetime' | 'modified_datetime' | 'group_id' | 'status'
 > & {
   group_id?: string;
+  existing_booking_id?: string;
 };
 export type BookSlotResponse = DataResponse<any>;
 
