@@ -1,15 +1,12 @@
-import {View, Text, Image, TouchableOpacity} from 'react-native';
-import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/dist/Fontisto';
-import {useSelector, useDispatch} from 'react-redux';
+import React from 'react';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {useDispatch} from 'react-redux';
 import {updatecustomerdata} from '../redux/reducer/Customerreducer';
 
 export default function Doctor({data}: any) {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-
-  console.log('doctordatadata', data);
 
   async function clickhandler() {
     try {

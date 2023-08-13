@@ -6,7 +6,7 @@ export const monthNames = [
   'MAY',
   'JUN',
   'JUL',
-  'AGU',
+  'AUG',
   'SEP',
   'OCT',
   'NOV',

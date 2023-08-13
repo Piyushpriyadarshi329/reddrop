@@ -34,16 +34,6 @@ export default function Home() {
           marginHorizontal: 20,
           marginBottom: 50,
         }}>
-        <TextInput
-          style={{
-            borderWidth: 0.2,
-            width: '100%',
-            borderRadius: 20,
-            textAlign: 'center',
-            height: 35,
-            color: 'black',
-          }}
-          placeholder="🔎 Search Doctors"></TextInput>
         <Text style={{color: 'black', fontSize: 14, marginTop: 5}}>
           Some Nutrition Tip here
         </Text>

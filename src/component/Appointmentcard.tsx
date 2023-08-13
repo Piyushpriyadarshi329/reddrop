@@ -47,11 +47,11 @@ export default function Appointmentcard({
     <View
       style={{
         flex: 1,
-        height: 150,
         marginHorizontal: 10,
         marginTop: 10,
-        backgroundColor: Color.primary,
+        backgroundColor: Color.secondary,
         borderRadius: 10,
+        paddingVertical: 10,
       }}>
       {/* <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <View
@@ -145,20 +145,26 @@ export default function Appointmentcard({
       </View>
 
       <View style={{flexDirection: 'row', flex: 0.6, marginTop: 5}}>
-        <Text style={{flex: 1, marginLeft: 20, fontSize: 14}}>30 JUL 2023</Text>
-        <Text style={{flex: 1, marginLeft: 20}}>
-          Slot - {appointment.slot_index + 1}
+        <Text style={{flex: 1, marginLeft: 20, fontSize: 14, color: 'black'}}>
+          {new Date(Number(appointment.appointment_date)).toDateString()}
+        </Text>
+        <Text style={{flex: 1, marginLeft: 20, color: 'black'}}>
+          Slot: {appointment.slot_index}
         </Text>
       </View>
 
       <View style={{flexDirection: 'row', flex: 0.7, marginTop: -5}}>
         <View style={{flexDirection: 'column', flex: 1}}>
-          <Text style={{flex: 1, marginLeft: 20}}>Ring Road</Text>
-          <Text style={{flex: 1, marginLeft: 20}}>Warje,pune</Text>
+          <Text style={{flex: 1, marginLeft: 20, color: 'black'}}>
+            Ring Road
+          </Text>
+          <Text style={{flex: 1, marginLeft: 20, color: 'black'}}>
+            Warje,pune
+          </Text>
         </View>
 
         <View style={{flex: 1}}>
-          <Text>Status:{appointment.status}</Text>
+          <Text style={{color: 'black'}}>Status:{appointment.status}</Text>
         </View>
       </View>
     </View>

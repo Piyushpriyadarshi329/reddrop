@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Pressable,
   ScrollView,
+  Button,
 } from 'react-native';
 import React, {useState} from 'react';
 import Color from './../asset/Color';
@@ -15,27 +16,26 @@ import {useSelector, useDispatch} from 'react-redux';
 import {updateuserdata} from './../redux/reducer/Authreducer';
 import {AuthStyles} from './authStyles';
 import {Toast} from 'react-native-toast-message/lib/src/Toast';
-
+import {useForm, FormProvider} from 'react-hook-form';
+import {RHFTextInput} from '../component/RHFTextInput';
+interface LoginForm {
+  username: string;
+  password: string;
+}
 export default function Login() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const formMethods = useForm<LoginForm>();
 
-  const [email, setemail] = useState('');
-  const [password, setpassword] = useState('');
-
-  async function submithandler() {
+  async function submithandler(formValues: LoginForm) {
     try {
       let payload = {
-        email: email,
-        password: password,
+        email: formValues.username,
+        password: formValues.password,
         usertype: 1,
       };
 
-      console.log('payload', payload);
-
       var res: any = await useLogin(payload);
-
-      console.log('res', res);
 
       if (res.Success) {
         dispatch(
@@ -60,125 +60,80 @@ export default function Login() {
   }
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
-      <ScrollView contentContainerStyle={{flex: 1, height: '100%'}}>
-        <View style={{flex: 3, justifyContent: 'center'}}>
-          <Text
-            style={{
-              textAlign: 'center',
-              color: 'black',
-              fontSize: 20,
-              fontWeight: '700',
-            }}>
-            Welcome To Carebook
-          </Text>
-        </View>
-        <View style={{flex: 1, marginLeft: 50}}>
-          <Text style={{color: Color.black, fontSize: 22, fontWeight: 'bold'}}>
-            Login
-          </Text>
-          <Text style={{color: 'gray', fontSize: 18, fontWeight: '500'}}>
-            Please Signin to Continue
-          </Text>
-        </View>
-
-        <View style={{flex: 1, marginLeft: 50}}></View>
-
-        <View style={AuthStyles.loginContainer}>
+      <FormProvider {...formMethods}>
+        <ScrollView contentContainerStyle={{flex: 1, height: '100%'}}>
           <View
-            style={{
-              marginHorizontal: 70,
-              flex: 1,
-              justifyContent: 'flex-start',
-              flexDirection: 'row',
-            }}>
-            <View style={{marginTop: 10}}>
-              <Icon name="user" size={20} color="black" />
-            </View>
-            <TextInput
+            style={{flex: 3, justifyContent: 'center', alignItems: 'center'}}>
+            <Text
               style={{
-                borderBottomWidth: 1,
-                borderRadius: 5,
-                marginLeft: 10,
-                flex: 1,
-                height: 50,
+                textAlign: 'center',
                 color: 'black',
-              }}
-              placeholder="please enter Email"
-              keyboardType="email-address"
-              value={email}
-              onChangeText={text => {
-                setemail(text);
-              }}
-            />
-          </View>
-
-          <View
-            style={{
-              marginHorizontal: 70,
-              flex: 1,
-              justifyContent: 'flex-start',
-              flexDirection: 'row',
-            }}>
-            <View style={{marginTop: 10}}>
-              <Icon name="key" size={20} color="black" />
-            </View>
-            <TextInput
-              style={{
-                borderBottomWidth: 1,
-                borderRadius: 5,
-                marginLeft: 10,
-                flex: 1,
-                height: 50,
-                color: 'black',
-              }}
-              placeholder="please enter Password"
-              keyboardType="email-address"
-              value={password}
-              onChangeText={text => {
-                setpassword(text);
-              }}
-            />
-          </View>
-
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 20,
-            }}>
-            <TouchableOpacity
-              style={{
-                backgroundColor: Color.primary,
-                borderRadius: 5,
-                height: 40,
-              }}
-              onPress={submithandler}>
-              <Text style={{fontSize: 20, color: 'white', padding: 10}}>
-                Submit
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <View
-          style={{
-            flex: 6,
-            justifyContent: 'flex-end',
-            marginBottom: 30,
-            alignItems: 'center',
-          }}>
-          <View style={{flexDirection: 'row'}}>
-            <Text style={{color: Color.black}}>Don't have an account?</Text>
-            <Pressable
-              onPress={() => {
-                navigation.navigate('Register');
+                fontSize: 20,
+                fontWeight: '700',
               }}>
-              <Text style={{color: Color.primary, marginLeft: 5}}>Sign up</Text>
-            </Pressable>
+              Welcome To Carebook
+            </Text>
+            <Text style={{color: 'gray', fontSize: 18, fontWeight: '500'}}>
+              Please Signin to Continue
+            </Text>
           </View>
-        </View>
-      </ScrollView>
+
+          <View style={AuthStyles.loginContainer}>
+            <View style={AuthStyles.authFieldRow}>
+              <Icon name="user" size={20} color="black" />
+              <RHFTextInput
+                name="username"
+                style={AuthStyles.textInput}
+                placeholder="Email or Phone"
+              />
+            </View>
+
+            <View style={AuthStyles.authFieldRow}>
+              <Icon name="key" size={20} color="black" />
+              <RHFTextInput
+                name="password"
+                style={AuthStyles.textInput}
+                placeholder="Password"
+                secureTextEntry={true}
+              />
+            </View>
+
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: 20,
+              }}>
+              <Button
+                title="Submit"
+                onPress={formMethods.handleSubmit(submithandler)}
+                color={Color.primary}
+              />
+            </View>
+          </View>
+
+          <View
+            style={{
+              flex: 6,
+              justifyContent: 'flex-end',
+              marginBottom: 30,
+              alignItems: 'center',
+            }}>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={{color: Color.black}}>Don't have an account?</Text>
+              <Pressable
+                onPress={() => {
+                  navigation.navigate('Register');
+                }}>
+                <Text style={{color: Color.primary, marginLeft: 5}}>
+                  Sign up
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        </ScrollView>
+      </FormProvider>
     </View>
   );
 }
