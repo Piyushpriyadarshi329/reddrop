@@ -4,12 +4,6 @@ import {LOGIN_URL} from '../API_CONFIG';
 export async function useLogin(payload: any) {
   console.log('Login_URL=============>', LOGIN_URL, payload);
 
-  // const config: any =  {
-  //     headers: {
-  //       Authorization: `Bearer ${rentalbikedetails.accessToken}`,
-  //     },
-  //   };
-
   let myPromise = new Promise(async function (myResolve, myReject) {
     try {
       var res = await axios.post(LOGIN_URL, payload);

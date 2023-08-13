@@ -1,7 +1,7 @@
 // var BASE_URL = "http://localhost:5000/api/v1";
-// var BASE_URL = 'http://192.168.100.39:5000/api/v1';
+var BASE_URL = 'http://16.171.126.47:80/api/v1';
 // var BASE_URL = 'http://16.171.195.166:80/api/v1'; //UAT
-var BASE_URL = 'http://13.233.253.68:5000/api/v1'; //prod
+// var BASE_URL = 'http://13.233.253.68:5000/api/v1'; //prod
 
 export const LOGIN_URL = BASE_URL + '/login';
 export const REGISTER_URL = BASE_URL + '/signup';

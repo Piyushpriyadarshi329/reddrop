@@ -31,11 +31,11 @@ export default function Appointmentcard({
     <View
       style={{
         flex: 1,
-        height: 150,
         marginHorizontal: 10,
         marginTop: 10,
-        backgroundColor: Color.primary,
+        backgroundColor: Color.secondary,
         borderRadius: 10,
+        paddingVertical: 10,
       }}>
       <View style={{flexDirection: 'row', flex: 1.6}}>
         <View style={{flex: 1}}>
@@ -65,7 +65,7 @@ export default function Appointmentcard({
           {new Date(Number(appointment.appointment_date)).toDateString()}
         </Text>
         <Text style={{flex: 1, marginLeft: 20, color: 'black'}}>
-          Slot - {appointment.slot_index + 1}
+          Slot: {appointment.slot_index}
         </Text>
       </View>
 
