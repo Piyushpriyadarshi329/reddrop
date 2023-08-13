@@ -1,48 +1,45 @@
-import {View, Text, TextInput, TouchableOpacity, Pressable} from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Pressable,
+  Button,
+} from 'react-native';
 import React, {useState} from 'react';
 import Color from '../asset/Color';
 import {useNavigation} from '@react-navigation/native';
 import type {RootState} from '../redux/Store';
 import {useSelector, useDispatch} from 'react-redux';
-import {updateappstate} from './../redux/reducer/Authreducer';
 import Icon from 'react-native-vector-icons/AntDesign';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useRegister} from '../customhook/useRegister';
-
+import {useForm, FormProvider} from 'react-hook-form';
+import {AuthStyles} from './authStyles';
+import {RHFTextInput} from '../component/RHFTextInput';
+import Auth from './Auth';
+interface RegisterForm {
+  name: string;
+  email: string;
+  mobile: Number;
+  password: string;
+  usertype: string;
+}
 export default function Register() {
-  const dispatch = useDispatch();
   const navigation = useNavigation();
+  const formMethods = useForm<RegisterForm>();
 
-  const [name, setname] = useState('');
-  const [mobile, setmobile] = useState('');
-  const [email, setemail] = useState('');
-  const [password, setpassword] = useState('');
-
-  async function submithandler() {
+  async function submithandler(formValues: RegisterForm) {
     try {
-      let payload: {
-        name: string;
-        email: string;
-        mobile: Number;
-        password: string;
-        usertype: string;
-      } = {
-        name: name,
-        email: email,
-        mobile: Number(mobile),
-        password: password,
+      let payload: RegisterForm = {
+        name: formValues.name,
+        email: formValues.email,
+        mobile: formValues.mobile,
+        password: formValues.password,
         usertype: 'CUSTOMER',
       };
 
-      // dispatch(
-      //   updateappstate({
-      //     islogin: true,
-      //   }),
-      // );
-
       let res: any = await useRegister(payload);
-
-      console.log('res', res);
 
       if (res.Success) {
         alert(res.Message);
@@ -55,11 +52,9 @@ export default function Register() {
       console.log(error);
     }
   }
-
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
-      <View style={{flex: 2}}></View>
-      <View style={{flex: 3, justifyContent: 'center'}}>
+      <View style={{flex: 3, justifyContent: 'center', alignItems: 'center'}}>
         <Text
           style={{
             textAlign: 'center',
@@ -69,136 +64,65 @@ export default function Register() {
           }}>
           Welcome To Carebook
         </Text>
-      </View>
-      <View style={{flex: 0.7, marginLeft: 50}}>
-        <Text style={{color: Color.black, fontSize: 22, fontWeight: 'bold'}}>
+        <Text style={{color: 'gray', fontSize: 18, fontWeight: '500'}}>
           Create Account
         </Text>
       </View>
 
-      <View style={{flex: 1, marginLeft: 50}}></View>
-
       <View style={{flex: 6}}>
-        <View
-          style={{
-            marginHorizontal: 70,
-            flex: 1,
-            justifyContent: 'flex-start',
-            flexDirection: 'row',
-          }}>
-          <View style={{marginTop: 10}}>
+        <FormProvider {...formMethods}>
+          <View style={AuthStyles.authFieldRow}>
             <Icon name="user" size={20} color="black" />
+            <RHFTextInput
+              name={'fullname'}
+              placeholder="Full Name"
+              style={AuthStyles.textInput}
+            />
           </View>
-          <TextInput
-            style={{
-              borderBottomWidth: 1,
-              borderRadius: 5,
-              marginLeft: 10,
-              height: 40,
-              flex: 1,
-              color: 'black',
-            }}
-            placeholder="Please enter Full Name."
-            onChangeText={text => {
-              setname(text);
-            }}
-          />
-        </View>
-        <View
-          style={{
-            marginHorizontal: 70,
-            flex: 1,
-            justifyContent: 'flex-start',
-            flexDirection: 'row',
-          }}>
-          <View style={{marginTop: 10}}>
+          <View style={AuthStyles.authFieldRow}>
             <Icon name="mobile1" size={20} color="black" />
+            <RHFTextInput
+              name="mobile"
+              keyboardType="numeric"
+              placeholder="Mobile No."
+              style={AuthStyles.textInput}
+            />
           </View>
-          <TextInput
-            style={{
-              borderBottomWidth: 1,
-              borderRadius: 5,
-              height: 40,
-              marginLeft: 10,
-              flex: 1,
-              color: 'black',
-            }}
-            placeholder="Please enter Mobile No."
-            keyboardType="numeric"
-            onChangeText={text => {
-              setmobile(text);
-            }}
-          />
-        </View>
 
-        <View
-          style={{
-            marginHorizontal: 70,
-            flex: 1,
-            justifyContent: 'flex-start',
-            flexDirection: 'row',
-          }}>
-          <View style={{marginTop: 10}}>
+          <View style={AuthStyles.authFieldRow}>
             <MaterialIcon name="email" size={20} color="black" />
+            <RHFTextInput
+              name="email"
+              placeholder="Email"
+              keyboardType="email-address"
+              style={AuthStyles.textInput}
+            />
           </View>
-          <TextInput
-            style={{
-              borderBottomWidth: 1,
-              borderRadius: 5,
-              height: 40,
-              marginLeft: 10,
-              flex: 1,
-              color: 'black',
-            }}
-            placeholder="Please enter Email"
-            keyboardType="default"
-            onChangeText={text => {
-              setemail(text);
-            }}
-          />
-        </View>
 
-        <View
-          style={{
-            marginHorizontal: 70,
-            flex: 1,
-            justifyContent: 'flex-start',
-            flexDirection: 'row',
-          }}>
-          <View style={{marginTop: 10}}>
+          <View style={AuthStyles.authFieldRow}>
             <MaterialIcon name="email" size={20} color="black" />
+            <RHFTextInput
+              name="password"
+              placeholder="Password"
+              secureTextEntry
+              style={AuthStyles.textInput}
+            />
           </View>
-          <TextInput
-            style={{
-              borderBottomWidth: 1,
-              borderRadius: 5,
-              height: 40,
-              marginLeft: 10,
-              flex: 1,
-              color: 'black',
-            }}
-            placeholder="Please enter Password"
-            onChangeText={text => {
-              setpassword(text);
-            }}
-          />
-        </View>
 
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: 10,
-          }}>
-          <TouchableOpacity
-            style={{backgroundColor: Color.primary, borderRadius: 5}}
-            onPress={submithandler}>
-            <Text style={{fontSize: 20, color: 'white', padding: 10}}>
-              Submit
-            </Text>
-          </TouchableOpacity>
-        </View>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 10,
+            }}>
+            <Button
+              title="Submit"
+              color={Color.primary}
+              onPress={formMethods.handleSubmit(submithandler)}
+            />
+          </View>
+        </FormProvider>
       </View>
 
       <View

@@ -1,5 +1,5 @@
 import {useFormContext, Controller} from 'react-hook-form';
-import {StyleSheet, TextInput} from 'react-native';
+import {StyleSheet, TextInput, KeyboardTypeOptions} from 'react-native';
 
 export const RHFTextInput = (props: {
   name: string;
@@ -7,6 +7,7 @@ export const RHFTextInput = (props: {
   required?: boolean;
   style?: any;
   secureTextEntry?: boolean;
+  keyboardType?: KeyboardTypeOptions;
 }) => {
   const {control} = useFormContext();
   return (
