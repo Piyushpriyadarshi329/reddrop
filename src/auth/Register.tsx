@@ -83,7 +83,7 @@ export default function Register() {
             <Icon name="mobile1" size={20} color="black" />
             <RHFTextInput
               name="mobile"
-              keyboardType="numeric"
+              keyboardType="phone-pad"
               placeholder="Mobile No."
               style={AuthStyles.textInput}
             />
