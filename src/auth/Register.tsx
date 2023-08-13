@@ -100,7 +100,7 @@ export default function Register() {
           </View>
 
           <View style={AuthStyles.authFieldRow}>
-            <MaterialIcon name="email" size={20} color="black" />
+            <MaterialIcon name="key" size={20} color="black" />
             <RHFTextInput
               name="password"
               placeholder="Password"
