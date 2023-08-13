@@ -1,10 +1,19 @@
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
-import {Image, Text, View} from 'react-native';
+import React, {useState, useRef} from 'react';
+import {Image, Modal, Text, TouchableOpacity, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import Color from '../asset/Color';
 import {updatecustomerdata} from '../redux/reducer/Customerreducer';
 import {Appointmentdto} from '../types';
+import {useUpdateSlotStatus} from '../customhook/useUpdateSlotStatus';
+
+import Icon from 'react-native-vector-icons/Entypo';
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from 'react-native-popup-menu';
 
 export default function Appointmentcard({
   appointment,
@@ -13,6 +22,9 @@ export default function Appointmentcard({
 }) {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const buttonref = useRef(null);
 
   async function clickhandler() {
     try {
@@ -26,7 +38,11 @@ export default function Appointmentcard({
       console.log(error);
     }
   }
+  const {mutate: UpdateSlotStatus} = useUpdateSlotStatus(() => {
+    alert('Status updated Successfully');
 
+    // navigation.goBack();
+  });
   return (
     <View
       style={{
@@ -37,6 +53,27 @@ export default function Appointmentcard({
         borderRadius: 10,
         paddingVertical: 10,
       }}>
+      {/* <Modal animationType="slide" transparent={true} visible={modalVisible}>
+        <View
+          style={{
+            marginTop: 290,
+            marginLeft: 200,
+            width: 100,
+            height: 150,
+            backgroundColor: 'gold',
+            flexDirection: 'column',
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              setModalVisible(false);
+            }}>
+            <Text>Cencal</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text>Reschudle</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal> */}
       <View style={{flexDirection: 'row', flex: 1.6}}>
         <View style={{flex: 1}}>
           <Image
@@ -57,6 +94,53 @@ export default function Appointmentcard({
           <Text style={{color: 'black', fontSize: 12}}>
             {appointment.doctorSpeciality}
           </Text>
+        </View>
+
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'flex-end',
+            marginRight: 10,
+            marginTop: 5,
+          }}>
+          <TouchableOpacity
+            ref={buttonref}
+            onPress={() => {
+              setModalVisible(true);
+            }}>
+            {/* <Icon name="dots-three-horizontal" size={16} color={'black'} /> */}
+            <Menu>
+              <MenuTrigger>
+                <Icon name="dots-three-horizontal" size={16} color={'black'} />
+              </MenuTrigger>
+
+              <MenuOptions>
+                <MenuOption
+                  style={{padding: 5}}
+                  onSelect={() => {
+                    UpdateSlotStatus({
+                      id: appointment.id,
+                      status: 'CANCELLED',
+                    });
+                  }}>
+                  <Text style={{color: 'black', padding: 5}}>Cancel</Text>
+                </MenuOption>
+                <MenuOption
+                  onSelect={() => {
+                    navigation.navigate('BookApointment', {
+                      existing_appointment: appointment,
+                    });
+                  }}>
+                  <Text style={{color: 'black', padding: 5}}>Reschduled</Text>
+                </MenuOption>
+                {/* <MenuOption
+                  onSelect={() => alert(`Not called`)}
+                  disabled={true}
+                  text="Disabled"
+                /> */}
+              </MenuOptions>
+            </Menu>
+          </TouchableOpacity>
         </View>
       </View>
 
