@@ -99,7 +99,7 @@ export default function BookApointment(data: {route: any}) {
   }, [selecteddate, selectedclinic]);
 
   useEffect(() => {
-    console.log('selectedtime', selectedtime);
+    console.log('selectedtime', selectedclinic);
   }, [selectedtime]);
 
   async function getbookingavailability() {
@@ -107,7 +107,7 @@ export default function BookApointment(data: {route: any}) {
       console.log('selecteddate', selecteddate);
       let payload = {
         doctor_id: customerdata.doctor.id,
-        clinic_id: selectedclinic.clinic_id,
+        clinic_id: selectedclinic.id,
         date: new Date(selecteddate.senddate + 'T00:00:00Z').getTime(),
       };
 

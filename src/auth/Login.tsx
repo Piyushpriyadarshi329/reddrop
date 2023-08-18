@@ -6,6 +6,7 @@ import {
   Pressable,
   ScrollView,
   Button,
+  Image,
 } from 'react-native';
 import React, {useState} from 'react';
 import Color from './../asset/Color';
@@ -60,9 +61,15 @@ export default function Login() {
   }
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
+      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        <Image
+          style={{height: 200, width: 300, resizeMode: 'contain'}}
+          source={require('./../asset/image/CAREBOOK.jpg.png')}
+        />
+      </View>
       <FormProvider {...formMethods}>
         <ScrollView contentContainerStyle={{flex: 1, height: '100%'}}>
-          <View
+          {/* <View
             style={{flex: 3, justifyContent: 'center', alignItems: 'center'}}>
             <Text
               style={{
@@ -76,6 +83,10 @@ export default function Login() {
             <Text style={{color: 'gray', fontSize: 18, fontWeight: '500'}}>
               Please Signin to Continue
             </Text>
+          </View> */}
+
+          <View style={AuthStyles.authFieldRow}>
+            <Text style={AuthStyles.text}>Login</Text>
           </View>
 
           <View style={AuthStyles.loginContainer}>

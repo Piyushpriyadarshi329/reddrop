@@ -18,6 +18,7 @@ import {useForm, FormProvider} from 'react-hook-form';
 import {AuthStyles} from './authStyles';
 import {RHFTextInput} from '../component/RHFTextInput';
 import Auth from './Auth';
+import {Image} from 'react-native';
 interface RegisterForm {
   name: string;
   email: string;
@@ -54,7 +55,13 @@ export default function Register() {
   }
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
-      <View style={{flex: 3, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        <Image
+          style={{height: 200, width: 300, resizeMode: 'contain'}}
+          source={require('./../asset/image/CAREBOOK.jpg.png')}
+        />
+      </View>
+      {/* <View style={{flex: 3, justifyContent: 'center', alignItems: 'center'}}>
         <Text
           style={{
             textAlign: 'center',
@@ -67,6 +74,10 @@ export default function Register() {
         <Text style={{color: 'gray', fontSize: 18, fontWeight: '500'}}>
           Create Account
         </Text>
+      </View> */}
+
+      <View style={AuthStyles.authFieldRow}>
+        <Text style={AuthStyles.text}>Sign up</Text>
       </View>
 
       <View style={{flex: 6}}>

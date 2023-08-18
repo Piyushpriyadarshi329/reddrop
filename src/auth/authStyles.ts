@@ -15,4 +15,9 @@ export const AuthStyles = StyleSheet.create({
     flex: 1,
     color: 'black',
   },
+  text: {
+    marginLeft: 10,
+    flex: 1,
+    color: 'black',
+  },
 });
