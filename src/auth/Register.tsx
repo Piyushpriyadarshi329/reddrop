@@ -58,7 +58,7 @@ export default function Register() {
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
         <Image
           style={{height: 200, width: 300, resizeMode: 'contain'}}
-          source={require('./../asset/image/CAREBOOK.jpg.png')}
+          source={require('./../asset/image/logo.jpeg')}
         />
       </View>
       {/* <View style={{flex: 3, justifyContent: 'center', alignItems: 'center'}}>
