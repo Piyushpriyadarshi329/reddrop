@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "649954998737",
+    "project_id": "reddrop-813fa",
+    "storage_bucket": "reddrop-813fa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:649954998737:android:f247a8b6cd374a6c8ec8f0",
+        "android_client_info": {
+          "package_name": "com.reddrop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "649954998737-0po2pdgvh4vkaav1t0i7nbt7jl613ei0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnpEaL7SH45G-5fJcSImR1DxGje-7dcgU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "649954998737-0po2pdgvh4vkaav1t0i7nbt7jl613ei0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

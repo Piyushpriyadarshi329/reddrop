@@ -8,7 +8,7 @@ import {
   Button,
   Image,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Color from './../asset/Color';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -19,6 +19,8 @@ import {AuthStyles} from './authStyles';
 import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import {useForm, FormProvider} from 'react-hook-form';
 import {RHFTextInput} from '../component/RHFTextInput';
+import messaging from '@react-native-firebase/messaging';
+
 interface LoginForm {
   username: string;
   password: string;
@@ -27,6 +29,22 @@ export default function Login() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const formMethods = useForm<LoginForm>();
+  const [fcm_token, setfcm_token] = useState('');
+  useEffect(() => {
+    checkToken();
+  });
+
+  const checkToken = async () => {
+    try {
+      const fcmToken = await messaging().getToken();
+      if (fcmToken) {
+        console.log(fcmToken);
+        setfcm_token(fcmToken);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   async function submithandler(formValues: LoginForm) {
     try {
@@ -34,6 +52,7 @@ export default function Login() {
         email: formValues.username,
         password: formValues.password,
         usertype: 1,
+        fcm_token: fcm_token,
       };
 
       var res: any = await useLogin(payload);
@@ -53,6 +72,7 @@ export default function Login() {
         });
       }
     } catch (error) {
+      console.log('error', error);
       Toast.show({
         type: 'error',
         text1: 'Something went wrong',

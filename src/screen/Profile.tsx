@@ -15,6 +15,8 @@ import {useGetaddress} from '../customhook/useGetaddress';
 import {RootState} from '../redux/Store';
 import {updateuserdata} from './../redux/reducer/Authreducer';
 import {Button} from 'react-native';
+import Profilepicuploadmodel from '../component/Profilepicuploadmodel';
+import {VisibleDocument} from '../types';
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -27,6 +29,7 @@ export default function Profile() {
   const [state, setstate] = useState('');
   const [pincode, setpincode] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [picmodalVisible, setpicModalVisible] = useState(false); // profile pic
 
   useEffect(() => {
     getaddress();
@@ -75,8 +78,18 @@ export default function Profile() {
     }
   }
 
+  function uploadprofilpicfun(data: VisibleDocument | undefined) {
+    // updateCustomer({
+    //   profile_image_key: data?.fileKey,
+    // });
+  }
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
+      <Profilepicuploadmodel
+        modalVisible={picmodalVisible}
+        setModalVisible={setpicModalVisible}
+        onSubmit={uploadprofilpicfun}
+      />
       <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <View
           style={{
@@ -195,15 +208,20 @@ export default function Profile() {
         </View>
 
         <View style={{justifyContent: 'center', flex: 1}}>
-          <Image
-            style={{
-              width: 100,
-              height: 100,
-              borderRadius: 50,
-              marginTop: 10,
-            }}
-            source={require('./../asset/image/profile.png')}
-          />
+          <TouchableOpacity
+            onPress={() => {
+              setpicModalVisible(true);
+            }}>
+            <Image
+              style={{
+                width: 100,
+                height: 100,
+                borderRadius: 50,
+                marginTop: 10,
+              }}
+              source={require('./../asset/image/profile.png')}
+            />
+          </TouchableOpacity>
         </View>
       </View>
 

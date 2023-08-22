@@ -203,6 +203,11 @@ export interface AddAdressRequest {
 export interface GetAdressRequest {
   user_id?: string;
 }
+export interface VisibleDocument {
+  id: string;
+  fileKey: string;
+  presignedUrl: string;
+}
 
 export interface AddAdresstdto extends AddAdressRequest {
   id?: string;
