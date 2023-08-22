@@ -1,5 +1,5 @@
 import {View, Text} from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -15,6 +15,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Afterlogin from './Afterlogin';
 import Beforelogin from './Beforelogin';
 import {updateuserdata} from '../redux/reducer/Authreducer';
+import Splashscreen from './Splashscreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -22,9 +23,9 @@ export default function Auth() {
   const {Appstate} = useSelector((state: RootState) => state);
   const dispatch = useDispatch();
   console.log('Appstate', Appstate);
-  useEffect(() => {
-    getsayncdata();
-  }, []);
+  // useEffect(() => {
+  //   getsayncdata();
+  // }, []);
 
   async function getsayncdata() {
     try {
@@ -34,12 +35,29 @@ export default function Auth() {
 
         dispatch(updateuserdata(asyncdata));
       }
+      setshowsplash(false);
     } catch (error) {
       console.log(error);
     }
   }
 
-  return <>{Appstate.islogin ? <Afterlogin /> : <Beforelogin />}</>;
+  const [showsplash, setshowsplash] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      getsayncdata();
+    }, 1500);
+  }, []);
+
+  return (
+    <>
+      {showsplash ? (
+        <Splashscreen />
+      ) : (
+        <>{Appstate.islogin ? <Afterlogin /> : <Beforelogin />}</>
+      )}
+    </>
+  );
 }
 
 //  carebook_client=>doctor and clinic
