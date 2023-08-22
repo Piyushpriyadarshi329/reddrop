@@ -10,6 +10,7 @@ import {
   View,
   SectionList,
   StyleSheet,
+  ScrollView,
 } from 'react-native';
 import uuid from 'react-native-uuid';
 import Icon from 'react-native-vector-icons/Fontisto';
@@ -27,9 +28,11 @@ import {
   BookSlotRequest,
   ClinicDto,
   ClinicWithAddressAndImage,
+  Slot,
 } from '../../types';
 import {useGetBookingAvailability} from './useGetBookingAvailability';
 import Btn from '../../component/Btn';
+import SlotCard from './SlotCard';
 
 interface DateObj {
   date: number;
@@ -44,7 +47,9 @@ export default function BookApointment(data: {route: any}) {
   const [selecteddate, setselecteddate] = useState<DateObj | undefined>(
     undefined,
   );
-  const [selectedtime, setselectedtime] = useState<any>('');
+  const [selectedtime, setSelectedtime] = useState<
+    (Slot & {id: string}) | undefined
+  >(undefined);
   const [datelist, setdatelist] = useState<DateObj[]>([]);
 
   const [selectedclinic, setselectedclinic] = useState<
@@ -96,7 +101,7 @@ export default function BookApointment(data: {route: any}) {
     date: new Date(selecteddate?.senddate + 'T00:00:00Z').getTime(),
   });
 
-  const timeSlot = useMemo(
+  const timeSlots = useMemo(
     () =>
       bookingAvailability?.map(i => ({
         ...i,
@@ -120,8 +125,8 @@ export default function BookApointment(data: {route: any}) {
       let bookslotpayload: BookSlotRequest = {
         customer_id: Appstate.userid,
         doctor_clinic_id: selectedclinic?.clinic_doctor_id ?? '',
-        slot_index: selectedtime.index,
-        workingtime_id: selectedtime.id,
+        slot_index: selectedtime?.index ?? 0,
+        workingtime_id: selectedtime?.id ?? '',
         group_id: uuid.v4().toString(),
         payment_order_id: uuid.v4().toString(),
         appointment_date: Appointment_date,
@@ -223,13 +228,14 @@ export default function BookApointment(data: {route: any}) {
       </View>
 
       <View style={{flex: 1, flexDirection: 'row', marginHorizontal: 20}}>
-        {cliniclist?.map((i: any) => {
+        {cliniclist?.map(clinic => {
           return (
             <TouchableOpacity
+              key={clinic.id}
               style={{
                 flex: 1,
                 backgroundColor:
-                  selectedclinic?.clinic_doctor_id == i.clinic_doctor_id
+                  selectedclinic?.clinic_doctor_id == clinic.clinic_doctor_id
                     ? Color.primary
                     : Color.secondary,
                 justifyContent: 'center',
@@ -237,9 +243,9 @@ export default function BookApointment(data: {route: any}) {
                 borderRadius: 10,
               }}
               onPress={() => {
-                setselectedclinic(i);
+                setselectedclinic(clinic);
               }}>
-              <Text style={{textAlign: 'center'}}>{i.name}</Text>
+              <Text style={{textAlign: 'center'}}>{clinic.name}</Text>
             </TouchableOpacity>
           );
         })}
@@ -255,8 +261,9 @@ export default function BookApointment(data: {route: any}) {
         {datelist.map(i => {
           return (
             <DateCard
+              key={`${i.date}_${i.day}_${i.month}`}
               {...{
-                setselectedtime,
+                setselectedtime: setSelectedtime,
                 setselecteddate,
                 selecteddate,
                 i,
@@ -273,98 +280,49 @@ export default function BookApointment(data: {route: any}) {
           marginTop: 20,
           marginHorizontal: 20,
         }}>
-        {!!timeSlot?.length ? (
+        {!!timeSlots?.length ? (
           <>
-            <SectionList
-              sections={timeSlot}
-              keyExtractor={item => item.id}
-              renderItem={({item}) => {
-                return (
-                  <>
-                    {item?.status == 'BOOKED' || item?.status == 'NA' ? (
-                      <TouchableOpacity
-                        key={JSON.stringify(item?.id)}
-                        style={{
-                          flex: 1,
-                          borderWidth: 1,
-                          marginTop: 10,
-                          marginHorizontal: 5,
-                          borderRadius: 5,
-                          backgroundColor: 'lightgray',
-                        }}
-                        onPress={() => {
-                          if (item?.status == 'BOOKED') {
-                            alert('Already booked');
-                          } else if (item?.status == 'NA') {
-                            alert('Not availabile');
+            <ScrollView>
+              {timeSlots.map(timeSlot => (
+                <View key={timeSlot.workingtime_id}>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      textAlign: 'center',
+                      marginTop: 10,
+                      color: 'black',
+                      fontWeight: '600',
+                    }}>
+                    {timeSlot.title}
+                  </Text>
+                  <View
+                    style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
+                    {timeSlot.data.map(slot => (
+                      <View
+                        style={{width: '20%'}}
+                        id={`${slot?.id}_${slot.index}`}>
+                        <SlotCard
+                          slot={slot}
+                          isSelected={
+                            selectedtime?.id == slot.id &&
+                            selectedtime?.index == slot.index
                           }
-                        }}>
-                        <View style={{flex: 1}}>
-                          <Text
-                            style={{
-                              textAlign: 'center',
-                              color: 'white',
-                              fontSize: 16,
-                              padding: 5,
-                            }}>
-                            Slot- {item.index}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                    ) : (
-                      <TouchableOpacity
-                        key={JSON.stringify(item?.id)}
-                        style={{
-                          flex: 1,
-                          borderWidth: 1,
-                          marginTop: 10,
-                          marginHorizontal: 5,
-                          borderRadius: 5,
-
-                          backgroundColor:
-                            selectedtime.id == item.id &&
-                            selectedtime.index == item.index
-                              ? Color.primary
-                              : 'white',
-                        }}
-                        onPress={() => {
-                          console.log('item', item);
-                          setselectedtime(item);
-                        }}>
-                        <View style={{flex: 1}}>
-                          <Text
-                            style={{
-                              textAlign: 'center',
-                              color: 'black',
-                              fontSize: 16,
-                              padding: 5,
-                            }}>
-                            Slot- {item.index}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                    )}
-                  </>
-                );
-              }}
-              renderSectionHeader={({section: {title}}) => (
-                <Text
-                  style={{
-                    fontSize: 16,
-                    textAlign: 'center',
-                    marginTop: 10,
-                    color: 'black',
-                  }}>
-                  {title}
-                </Text>
-              )}
-            />
+                          onPress={slot => {
+                            setSelectedtime(slot);
+                          }}
+                        />
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              ))}
+            </ScrollView>
           </>
         ) : (
           <View
             style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
             <Text style={{color: 'black', fontSize: 16, fontWeight: '600'}}>
-              No Slot is available
+              No Slots available
             </Text>
           </View>
         )}

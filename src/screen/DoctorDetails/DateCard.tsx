@@ -16,6 +16,7 @@ export const DateCard = ({
   selecteddate: any;
   i: any;
 }) => {
+  const fontColor = selecteddate == i ? 'white' : 'black';
   return (
     <Pressable
       style={{flex: 1}}
@@ -25,8 +26,7 @@ export const DateCard = ({
       }}>
       <View
         style={{
-          flex: 1,
-          borderWidth: 0.5,
+          paddingVertical: 15,
           borderRadius: 10,
           borderColor: 'grey',
           marginHorizontal: 5,
@@ -34,7 +34,7 @@ export const DateCard = ({
         }}>
         <Text
           style={{
-            color: 'black',
+            color: fontColor,
             fontSize: 16,
             textAlign: 'center',
             marginTop: 3,
@@ -43,14 +43,14 @@ export const DateCard = ({
         </Text>
         <Text
           style={{
-            color: 'black',
+            color: fontColor,
             fontSize: 16,
             textAlign: 'center',
             marginTop: 3,
           }}>
           {i.date}
         </Text>
-        <Text style={{color: 'black', fontSize: 16, textAlign: 'center'}}>
+        <Text style={{color: fontColor, fontSize: 16, textAlign: 'center'}}>
           {monthNames[i.month]}
         </Text>
       </View>
