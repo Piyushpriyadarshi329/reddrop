@@ -28,7 +28,7 @@ export default function Doctorlist({route}: any) {
         <View style={{flex: 1, flexDirection: 'row', marginTop: 10}}>
           <ScrollView horizontal={true}>
             {topdoctorlist?.data?.map((i: any) => {
-              return <Doctor data={i} />;
+              return <Doctor details={i} />;
             })}
           </ScrollView>
         </View>
@@ -46,7 +46,7 @@ export default function Doctorlist({route}: any) {
         <View style={{flex: 1, flexDirection: 'row', marginTop: 10}}>
           <ScrollView horizontal={true}>
             {topdoctorlist?.data?.map((i: any) => {
-              return <Doctor data={i} />;
+              return <Doctor details={i} />;
             })}
           </ScrollView>
         </View>
