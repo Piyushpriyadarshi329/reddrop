@@ -26,7 +26,7 @@ export default function Doctor({details}: {details: DoctorDto}) {
   return (
     <TouchableOpacity
       onPress={clickhandler}
-      style={{padding: 10, backgroundColor: 'white'}}>
+      style={{padding: 10, backgroundColor: 'white', borderRadius: 10}}>
       <Image
         style={commonStyles.profileImage}
         source={

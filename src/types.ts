@@ -103,9 +103,12 @@ export interface CustomerDto {
   email: string;
   mobile: string;
   profile_image_key: string;
+  profile_image: string;
   active: boolean;
   address: string;
   is_agent: boolean;
+  gender: string;
+  age: number;
 }
 
 /** Clinic Controller */

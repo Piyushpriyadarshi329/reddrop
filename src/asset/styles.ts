@@ -2,13 +2,21 @@ import {StyleSheet} from 'react-native';
 
 export const commonStyles = StyleSheet.create({
   font: {color: 'black'},
+  font24: {fontSize: 24, color: 'black'},
   font20: {fontSize: 20, color: 'black'},
   font18: {fontSize: 18, color: 'black'},
   font16: {fontSize: 16, color: 'black'},
   font12: {fontSize: 12, color: 'black'},
+  weight700: {fontWeight: '700'},
   weight600: {fontWeight: '600'},
+  weight400: {fontWeight: '400'},
   justifyCenter: {
     justifyContent: 'center',
+  },
+  flex1Center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   flexRowAlignCenter: {
     flexDirection: 'row',
