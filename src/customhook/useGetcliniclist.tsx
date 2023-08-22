@@ -1,11 +1,15 @@
 import axios from 'axios';
 import {GETCLINICLIST_URL} from '../API_CONFIG';
 import {useQuery} from '@tanstack/react-query';
-import {ClinicDto, GetClinicsResponse} from '../types';
+import {
+  ClinicDto,
+  ClinicWithAddressAndImage,
+  GetClinicsResponse,
+} from '../types';
 
 export function useGetcliniclist(
   payload: any,
-  onSuccess?: (data: ClinicDto[] | undefined) => void,
+  onSuccess?: (data: ClinicWithAddressAndImage[] | undefined) => void,
 ) {
   return useQuery(
     ['CLINIC_LIST', payload],

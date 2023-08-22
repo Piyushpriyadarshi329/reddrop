@@ -124,6 +124,7 @@ export interface ClinicWithAddress extends ClinicDto {
 }
 export type ClinicWithAddressAndImage = ClinicWithAddress & {
   profile_image: string;
+  clinic_doctor_id?: string;
 };
 export type GetClinicsResponse = DataResponse<ClinicWithAddressAndImage[]>;
 

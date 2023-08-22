@@ -14,7 +14,14 @@ export default function Clinic({
 
   return (
     <TouchableOpacity
-      style={{padding: 10}}
+      style={{
+        padding: 10,
+        backgroundColor: 'white',
+        width: 130,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+      }}
       onPress={() => {
         navigation.navigate('Doctorlist', {data: details});
       }}>
@@ -30,7 +37,9 @@ export default function Clinic({
       />
       <View style={{paddingTop: 5}}>
         <Text style={commonStyles.font18}>{details.name}</Text>
-        <Address details={details.address} compact />
+        <View style={{width: '100%'}}>
+          <Address details={details.address} compact />
+        </View>
       </View>
     </TouchableOpacity>
   );

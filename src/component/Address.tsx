@@ -12,7 +12,9 @@ const Address = ({
 }) => {
   return (
     <View>
-      <Text style={commonStyles.font12}>{details.address_line1}</Text>
+      {!compact && (
+        <Text style={commonStyles.font12}>{details.address_line1}</Text>
+      )}
       {!compact && (
         <Text style={commonStyles.font}>{details.address_line2}</Text>
       )}

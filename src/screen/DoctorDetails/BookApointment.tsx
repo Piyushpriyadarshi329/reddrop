@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import {default as React, useEffect, useState} from 'react';
+import {default as React, useEffect, useState, useMemo} from 'react';
 import {
   Alert,
   Button,
@@ -23,33 +23,33 @@ import {useGetcliniclist} from '../../customhook/useGetcliniclist';
 import {usegetOccupiedSlots} from '../../customhook/usegetOccupiedSlots';
 import type {RootState} from '../../redux/Store';
 import {DateCard} from './DateCard';
-import {BookSlotRequest} from '../../types';
-import {useGetBookingAvailability} from '../../customhook/useGetBookingAvailability';
+import {
+  BookSlotRequest,
+  ClinicDto,
+  ClinicWithAddressAndImage,
+} from '../../types';
+import {useGetBookingAvailability} from './useGetBookingAvailability';
+import Btn from '../../component/Btn';
 
-interface TimeSlot {
-  time: any;
-  id: string;
-  booked: boolean;
-  index: number;
-  status: string;
+interface DateObj {
+  date: number;
+  month: number;
+  day: number;
+  senddate: string;
 }
-interface DayItem {}
+
 export default function BookApointment(data: {route: any}) {
   const navigation = useNavigation();
-
-  console.log('route==>', data?.route?.params?.existing_booking_id);
   const {Appstate, customerdata} = useSelector((state: RootState) => state);
-  const [selecteddate, setselecteddate] = useState<any>(null);
+  const [selecteddate, setselecteddate] = useState<DateObj | undefined>(
+    undefined,
+  );
   const [selectedtime, setselectedtime] = useState<any>('');
-  const [datelist, setdatelist] = useState<any>([]);
-  const [timeslot, settimeslot] = useState<TimeSlot[]>([]);
+  const [datelist, setdatelist] = useState<DateObj[]>([]);
 
-  const [selectedclinic, setselectedclinic] = useState<any>('');
-
-  const {data: getOccupiedSlotsres} = usegetOccupiedSlots({
-    dateString: selecteddate?.senddate,
-    doctor_clinic_id: selectedclinic.clinic_doctor_id,
-  });
+  const [selectedclinic, setselectedclinic] = useState<
+    ClinicWithAddressAndImage | undefined
+  >(undefined);
 
   const {mutate: bookSlot} = useBookslot({
     onSuccess: () => {
@@ -90,112 +90,36 @@ export default function BookApointment(data: {route: any}) {
     setdatelist(localdaylist);
   }, []);
 
-  useEffect(() => {
-    if (selecteddate) {
-      // createslot();
+  const {data: bookingAvailability} = useGetBookingAvailability({
+    doctor_id: customerdata.doctor.id,
+    clinic_id: selectedclinic?.id ?? '',
+    date: new Date(selecteddate?.senddate + 'T00:00:00Z').getTime(),
+  });
 
-      getbookingavailability();
-    }
-  }, [selecteddate, selectedclinic]);
-
-  useEffect(() => {
-    console.log('selectedtime', selectedclinic);
-  }, [selectedtime]);
-
-  async function getbookingavailability() {
-    try {
-      console.log('selecteddate', selecteddate);
-      let payload = {
-        doctor_id: customerdata.doctor.id,
-        clinic_id: selectedclinic.id,
-        date: new Date(selecteddate.senddate + 'T00:00:00Z').getTime(),
-      };
-
-      console.log('payload==', payload);
-
-      let getbookingavailabilityres: any = await useGetBookingAvailability(
-        payload,
-      );
-
-      // console.log('getbookingavailabilityres', getbookingavailabilityres.data);
-
-      let localtimeslot: any = [];
-
-      getbookingavailabilityres.data.map(i => {
-        localtimeslot.push({
-          ...i,
-          title:
-            showtimefromstring(i.fromtime) +
-            ' To ' +
-            showtimefromstring(i.totime),
-          data: i.slots.map(j => {
-            return {...j, id: i.workingtime_id};
-          }),
-        });
-      });
-
-      // console.log('localtimeslot', localtimeslot);
-
-      settimeslot([...localtimeslot]);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  // async function createslot() {
-  //   try {
-  //     let clinicDayAvailabilities = availabilitylist?.filter(
-  //       i =>
-  //         i.week_day == selecteddate.day &&
-  //         i.clinic_id == selectedclinic.clinic_id,
-  //     );
-
-  //     if (!!clinicDayAvailabilities?.length) {
-  //       var localtimeslot: TimeSlot[] = [];
-
-  //       clinicDayAvailabilities?.map(clinicDayAvailability => {
-  //         let filterbookedslot = getOccupiedSlotsres?.filter(
-  //           k => k.work_time_id == clinicDayAvailability.id,
-  //         );
-
-  //         let t1 = clinicDayAvailability.from_time;
-  //         let t2 = clinicDayAvailability.to_time;
-  //         let slot = clinicDayAvailability.no_of_slot;
-
-  //         let slotwiseTimes = getSlotwisetime(t1, t2, slot);
-
-  //         slotwiseTimes.map((slotTime, index) => {
-  //           localtimeslot.push({
-  //             time: slotTime,
-  //             id: clinicDayAvailability.id,
-  //             booked:
-  //               !!filterbookedslot?.length &&
-  //               filterbookedslot[0].occupiedSlots.includes(index),
-  //           });
-  //         });
-  //       });
-
-  //       // settimeslot([...localtimeslot]);
-  //     } else {
-  //       settimeslot([]);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-  // const {data: availabilitylist} = useGetavailability({
-  //   doctor_id: customerdata.doctor.id,
-  // });
+  const timeSlot = useMemo(
+    () =>
+      bookingAvailability?.map(i => ({
+        ...i,
+        title:
+          showtimefromstring(i.fromtime) +
+          ' To ' +
+          showtimefromstring(i.totime),
+        data: i.slots.map(j => {
+          return {...j, id: i.workingtime_id};
+        }),
+      })),
+    [bookingAvailability],
+  );
 
   async function bookapointmenthandler() {
     try {
       const Appointment_date = new Date(
-        `${selecteddate.senddate}T00:00:00Z`,
+        `${selecteddate?.senddate}T00:00:00Z`,
       ).getTime();
 
       let bookslotpayload: BookSlotRequest = {
         customer_id: Appstate.userid,
-        doctor_clinic_id: selectedclinic.clinic_doctor_id,
+        doctor_clinic_id: selectedclinic?.clinic_doctor_id ?? '',
         slot_index: selectedtime.index,
         workingtime_id: selectedtime.id,
         group_id: uuid.v4().toString(),
@@ -305,7 +229,7 @@ export default function BookApointment(data: {route: any}) {
               style={{
                 flex: 1,
                 backgroundColor:
-                  selectedclinic.clinic_doctor_id == i.clinic_doctor_id
+                  selectedclinic?.clinic_doctor_id == i.clinic_doctor_id
                     ? Color.primary
                     : Color.secondary,
                 justifyContent: 'center',
@@ -315,9 +239,7 @@ export default function BookApointment(data: {route: any}) {
               onPress={() => {
                 setselectedclinic(i);
               }}>
-              <Text style={{color: 'black', textAlign: 'center'}}>
-                {i.name}
-              </Text>
+              <Text style={{textAlign: 'center'}}>{i.name}</Text>
             </TouchableOpacity>
           );
         })}
@@ -351,34 +273,29 @@ export default function BookApointment(data: {route: any}) {
           marginTop: 20,
           marginHorizontal: 20,
         }}>
-        {timeslot.length > 0 ? (
+        {!!timeSlot?.length ? (
           <>
             <SectionList
-              sections={timeslot}
-              keyExtractor={(item, index) => item + index}
+              sections={timeSlot}
+              keyExtractor={item => item.id}
               renderItem={({item}) => {
-                // console.log('item', item);
                 return (
                   <>
                     {item?.status == 'BOOKED' || item?.status == 'NA' ? (
                       <TouchableOpacity
-                        key={JSON.stringify(item?.time)}
+                        key={JSON.stringify(item?.id)}
                         style={{
                           flex: 1,
                           borderWidth: 1,
                           marginTop: 10,
                           marginHorizontal: 5,
                           borderRadius: 5,
-
-                          // backgroundColor:
-                          //   selectedtime.item == item.item ? Color.primary : 'white',
                           backgroundColor: 'lightgray',
                         }}
                         onPress={() => {
                           if (item?.status == 'BOOKED') {
                             alert('Already booked');
                           } else if (item?.status == 'NA') {
-                            // setselectedtime(item);
                             alert('Not availabile');
                           }
                         }}>
@@ -396,7 +313,7 @@ export default function BookApointment(data: {route: any}) {
                       </TouchableOpacity>
                     ) : (
                       <TouchableOpacity
-                        key={JSON.stringify(item?.time)}
+                        key={JSON.stringify(item?.id)}
                         style={{
                           flex: 1,
                           borderWidth: 1,
@@ -454,115 +371,9 @@ export default function BookApointment(data: {route: any}) {
       </View>
       <View style={{flex: 1, marginTop: 10}}>
         <View style={{marginHorizontal: 80}}>
-          <Button
-            title="Book Apointment"
-            onPress={bookapointmenthandler}
-            color={Color.primary}
-          />
+          <Btn title="Book Apointment" onPress={bookapointmenthandler} />
         </View>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 10,
-    marginHorizontal: 16,
-  },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-  },
-  header: {
-    fontSize: 32,
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 24,
-  },
-});
-
-// {timeslot.map((i: any) => {
-//   return (
-//     <FlatList
-//       data={i.slots}
-//       keyExtractor={item => JSON.stringify(item)}
-//       renderItem={item => {
-//         console.log('item==>', item.item);
-//         return (
-//           <>
-//             {item.item?.status == 'BOOKED' ? (
-//               <TouchableOpacity
-//                 key={JSON.stringify(item.item?.time)}
-//                 style={{
-//                   flex: 1,
-//                   borderWidth: 1,
-//                   marginTop: 10,
-//                   marginHorizontal: 5,
-//                   borderRadius: 5,
-
-//                   // backgroundColor:
-//                   //   selectedtime.item == item.item ? Color.primary : 'white',
-//                   backgroundColor: 'lightgray',
-//                 }}
-//                 onPress={() => {
-//                   if (item.item?.status == 'BOOKED') {
-//                     alert('Already booked');
-//                   } else if (item.item?.status == 'NA') {
-//                     // setselectedtime(item);
-//                     alert('Not availabile');
-//                   }
-//                 }}>
-//                 <View style={{flex: 1}}>
-//                   <Text
-//                     style={{
-//                       textAlign: 'center',
-//                       color: 'white',
-//                       fontSize: 16,
-//                       padding: 5,
-//                     }}>
-//                     Slot- {item.item.index}
-//                   </Text>
-//                 </View>
-//               </TouchableOpacity>
-//             ) : (
-//               <TouchableOpacity
-//                 key={JSON.stringify(item.item?.time)}
-//                 style={{
-//                   flex: 1,
-//                   borderWidth: 1,
-//                   marginTop: 10,
-//                   marginHorizontal: 5,
-//                   borderRadius: 5,
-
-//                   backgroundColor:
-//                     selectedtime.item == item.item
-//                       ? Color.primary
-//                       : 'white',
-//                 }}
-//                 onPress={() => {
-//                   setselectedtime(item);
-//                 }}>
-//                 <View style={{flex: 1}}>
-//                   <Text
-//                     style={{
-//                       textAlign: 'center',
-//                       color: 'black',
-//                       fontSize: 16,
-//                       padding: 5,
-//                     }}>
-//                     Slot- {item.item.index}
-//                   </Text>
-//                 </View>
-//               </TouchableOpacity>
-//             )}
-//           </>
-//         );
-//       }}
-//       numColumns={4}
-//     />
-//   );
-// })}

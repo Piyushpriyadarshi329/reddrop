@@ -2,9 +2,12 @@ const Color = {
   red: '#c1242a',
   white: 'white',
   lightgray: 'lightgray',
-  primary: '#FFA263',
-  secondary: '#FFE0D0',
+  primary: '#246174',
+  secondary: '#396f7d',
   black: 'black',
+  text: {
+    primary: 'white',
+  },
 };
 
 export default Color;

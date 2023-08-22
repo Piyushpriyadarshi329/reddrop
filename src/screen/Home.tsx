@@ -40,7 +40,7 @@ export default function Home() {
           Top Doctors
         </Text>
         <View style={{flexDirection: 'row'}}>
-          <ScrollView horizontal={true}>
+          <ScrollView horizontal={true} contentContainerStyle={{gap: 10}}>
             {topdoctorlist?.data?.map(doctor => {
               return <Doctor details={doctor} />;
             })}
@@ -53,7 +53,7 @@ export default function Home() {
         </Text>
 
         <View style={{flexDirection: 'row'}}>
-          <ScrollView horizontal={true}>
+          <ScrollView horizontal={true} contentContainerStyle={{gap: 10}}>
             {topcliniclist?.map(clinic => {
               return <Clinic details={clinic} />;
             })}
