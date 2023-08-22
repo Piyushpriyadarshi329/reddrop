@@ -9,6 +9,7 @@ export function usegetOccupiedSlots(payload: GetOccupiedSlotsRequest) {
     () => axios.post<GetOccupiedSlotsResponse>(GETOCCUPIEDSLOTS_URL, payload),
     {
       select: data => data.data.data,
+      enabled: !!payload.doctor_clinic_id,
     },
   );
 }

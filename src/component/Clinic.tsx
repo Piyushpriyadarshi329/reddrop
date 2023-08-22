@@ -1,48 +1,46 @@
 import {View, Text, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/dist/Fontisto';
+import {ClinicDto, ClinicWithAddressAndImage} from '../types';
+import {commonStyles} from '../asset/styles';
+import Address from './Address';
 
-export default function Clinic({data}: any) {
+export default function Clinic({
+  details,
+}: {
+  details: ClinicWithAddressAndImage;
+}) {
   const navigation = useNavigation();
 
-  console.log('data', data);
-
   return (
-    <View style={{flex: 1, height: 140, width: 120, marginLeft: 5}}>
-      <TouchableOpacity
-        style={{flex: 1}}
-        onPress={() => {
-          navigation.navigate('Doctorlist', {data: data});
-        }}>
-        <Image
-          style={{
-            width: 100,
-            height: 90,
-            borderTopLeftRadius: 10,
-            borderTopRightRadius: 10,
-          }}
-          source={require('./../asset/image/Clinic.jpeg')}
-        />
-
-        <Text style={{color: 'black'}}>{data.name}</Text>
-        <Text style={{color: 'black', fontSize: 12}}>PHQ Hospital</Text>
-        <Text style={{color: 'black', fontSize: 12}}>Near Ring Road</Text>
-        <View style={{flexDirection: 'row', marginTop: 2}}>
-          <Text
-            style={{
-              color: 'black',
-              fontSize: 10,
-              fontWeight: '400',
-              marginTop: 2,
-              textAlign: 'right',
-              marginLeft: 40,
-            }}>
-            Bookings 320
-          </Text>
+    <TouchableOpacity
+      style={{
+        padding: 10,
+        backgroundColor: 'white',
+        width: 130,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+      }}
+      onPress={() => {
+        navigation.navigate('Doctorlist', {data: details});
+      }}>
+      <Image
+        style={commonStyles.profileImage}
+        source={
+          details.profile_image
+            ? {
+                uri: details.profile_image,
+              }
+            : require('./../asset/image/Clinic.jpeg')
+        }
+      />
+      <View style={{paddingTop: 5}}>
+        <Text style={commonStyles.font18}>{details.name}</Text>
+        <View style={{width: '100%'}}>
+          <Address details={details.address} compact />
         </View>
-        {/* <Text style={{color: 'black'}}>4.8</Text> */}
-      </TouchableOpacity>
-    </View>
+      </View>
+    </TouchableOpacity>
   );
 }

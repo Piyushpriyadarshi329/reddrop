@@ -17,6 +17,7 @@ import {updateuserdata} from './../redux/reducer/Authreducer';
 import {Button} from 'react-native';
 import Profilepicuploadmodel from '../component/Profilepicuploadmodel';
 import {VisibleDocument} from '../types';
+import {commonStyles} from '../asset/styles';
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -222,6 +223,10 @@ export default function Profile() {
               source={require('./../asset/image/profile.png')}
             />
           </TouchableOpacity>
+          <Image
+            style={commonStyles.profileImage}
+            source={require('./../asset/image/profile.png')}
+          />
         </View>
       </View>
 

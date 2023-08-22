@@ -14,7 +14,6 @@ export const DateCard = ({
   setselectedtime: any;
   setselecteddate: any;
   selecteddate: any;
-
   i: any;
 }) => {
   return (
