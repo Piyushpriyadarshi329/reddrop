@@ -11,28 +11,90 @@ export interface DoctorDto {
   mobile: string;
   email: string;
   active: boolean;
+  profile_image: string;
   profile_image_key: string;
   speciality: string;
   degree: string;
+  appointment_time: number;
+  fees: number;
+  about: string;
+  no_of_bookings?: number;
+  experience?: number;
+}
+
+export interface SpecialityDto {
+  id: string;
+  name: string;
+  doc_key: string;
 }
 
 export interface GetDotcorsListRequest {
   clinic_id?: string;
   doctor_id?: string;
-}
-export interface updateSlotsStatusRequest {
-  id?: string;
-  status?: string;
+  mobile?: string;
+  orderBy?: 'BOOKINGS' | 'NAME';
 }
 
-export type GetDoctorsListResponse = DataResponse<DoctorDto[]>;
+export type GetDoctorsListResponse = DataResponse<
+  (DoctorDto & {
+    profile_image: string;
+  })[]
+>;
+export type GetSpecialityListResponse = DataResponse<(SpecialityDto & {})[]>;
 
 export type AddDoctorRequest = Omit<DoctorDto, 'id'> & {
   password: string;
   clinic_id: string;
 };
-
 export type AddDoctorResponse = DataResponse<any>;
+
+export interface LinkDoctorRequest {
+  clinic_id: string;
+  doctor_id: string;
+}
+
+export type UpdateDoctorReqParams = {id: string};
+
+export type UpdateDoctorRequest = {
+  name?: string;
+  active?: boolean;
+  profile_image_key?: string;
+  speciality?: string;
+  degree?: string;
+  appointment_time?: number;
+  fees?: number;
+  about?: string;
+  no_of_bookings?: number;
+  experience?: number;
+};
+
+export type UpdateClinicReqParams = {id: string};
+export type UpdateClinicRequest = {
+  name?: string;
+  active?: boolean;
+  mobile?: string;
+  email?: string;
+  profile_image_key?: string;
+  address_id?: string;
+  about?: string;
+};
+
+export interface LeaveDto {
+  id: string;
+  doctor_id: string;
+  fromdate: number;
+  todate: number;
+  worktime_id: string;
+  created_datetime: string;
+  active: boolean;
+  fullday: boolean;
+  reason?: string;
+}
+export type AddLeaveRequest = Omit<
+  LeaveDto,
+  'id' | 'created_datetime' | 'active'
+>;
+export type GetLeaveRequest = {doctor_id: string};
 
 /** CusotmerController */
 export interface CustomerDto {
@@ -55,14 +117,22 @@ export interface ClinicDto {
   profile_image_key: string;
   active: boolean;
   address_id: string;
+  about: string;
 }
-export type GetClinicsResponse = DataResponse<ClinicDto[]>;
+export interface ClinicWithAddress extends ClinicDto {
+  address: AddressDto;
+}
+export type ClinicWithAddressAndImage = ClinicWithAddress & {
+  profile_image: string;
+};
+export type GetClinicsResponse = DataResponse<ClinicWithAddressAndImage[]>;
 
 /** UserController */
 export interface LoginRequest {
   email: string;
   password: string;
   userType: number;
+  fcm_token: string;
 }
 
 export type LoginResponse = DataResponse<any>;
@@ -104,13 +174,13 @@ export interface BookingDto {
   payment_order_id: string;
   agent_id?: string;
   appointment_date: number;
+  existing_booking_id?: string;
 }
 export type BookSlotRequest = Omit<
   BookingDto,
   'id' | 'created_datetime' | 'modified_datetime' | 'group_id' | 'status'
 > & {
   group_id?: string;
-  existing_booking_id?: string;
 };
 export type BookSlotResponse = DataResponse<any>;
 
@@ -137,7 +207,7 @@ export interface GetOccupiedSlotsRequest {
 }
 
 export interface OccupiedSlots {
-  dateString: string;
+  dateString: number;
   work_time_id: string;
   from_time: string;
   to_time: string;
@@ -155,10 +225,17 @@ export interface WorkingTimeDto {
   week_day: number;
   from_time: string;
   to_time: string;
-  week: number;
+  week?: number;
   no_of_slot: number;
 }
-
+export type AddAvailabilityRequest = Omit<
+  WorkingTimeDto,
+  'id' | 'week_day' | 'week'
+> & {
+  week_day: number[];
+  month_week?: number[];
+  all_weeks: boolean;
+};
 export interface OccupiedDto {
   work_time_id: string;
   doctor_clinic_id: string;
@@ -180,6 +257,8 @@ export interface GetAppointmentsRequest {
   customerId?: string;
   doctorId?: string;
   status?: BookingStatus;
+  appointment_date?: number;
+  from_date?: number;
 }
 export interface Appointmentdto extends BookingDto {
   customerName?: string;
@@ -188,9 +267,21 @@ export interface Appointmentdto extends BookingDto {
   doctorSpeciality?: string;
   clinic_name?: string;
   clinic_address?: string;
+  from_working_time?: string;
 }
 
+export interface AddressDto {
+  id: string;
+  address_line1: string;
+  address_line2: string;
+  city: string;
+  state: string;
+  pincode: string;
+  lat?: number;
+  lan?: number;
+}
 export interface AddAdressRequest {
+  id?: string;
   user_id?: string;
   address_line1?: string;
   address_line2?: string;
@@ -199,9 +290,14 @@ export interface AddAdressRequest {
   pincode?: number;
   lat?: number;
   lan?: number;
+  type: 'Clinic' | 'Doctor' | 'Customer';
 }
 export interface GetAdressRequest {
   user_id?: string;
+}
+export interface updateSlotsStatusRequest {
+  id?: string;
+  status?: string;
 }
 
 export interface AddAdresstdto extends AddAdressRequest {
@@ -217,4 +313,51 @@ export type GetAvailabilityRequest = {
   doctor_id?: string;
   clinic_id?: string;
 };
-export type GetAvailabilityResponse = DataResponse<WorkingTimeDto[]>;
+export type AvailabilityRes = WorkingTimeDto & {clinic_name: string};
+export type GetAvailabilityResponse = DataResponse<AvailabilityRes[]>;
+
+export type GetBookingAvailabilityRequest = {
+  doctor_id: string;
+  clinic_id: string;
+  date: number;
+};
+
+export interface BookingAvailability {
+  workingtime_id: string;
+  fromtime: string;
+  totime: string;
+  slots: Slot[];
+}
+export type GetBookingvavilabilityResponse = BookingAvailability[];
+
+export enum SlotStatus {
+  AVAILABLE = 'AVAILABLE',
+  BOOKED = 'BOOKED',
+  NA = 'NA',
+}
+
+export interface Slot {
+  index: number;
+  status: SlotStatus;
+}
+
+export interface GetBookingsSummaryRequest {
+  doctor_id: string;
+}
+export type GetBookingsSummaryResponse = DataResponse<
+  {clinic_id: string; count: number; appointment_date: number}[]
+>;
+
+export interface Document {
+  id: string;
+  fileName: string;
+  path: string;
+}
+
+export interface VisibleDocument {
+  id: string;
+  fileKey: string;
+  presignedUrl: string;
+}
+
+export type AddDocumentResponse = DataResponse<VisibleDocument>;

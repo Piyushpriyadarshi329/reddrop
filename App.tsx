@@ -8,9 +8,23 @@ import Color from './src/asset/Color';
 import Auth from './src/auth/Auth';
 import {store} from './src/redux/Store';
 import {MenuProvider} from 'react-native-popup-menu';
+import {ThemeProvider, createTheme} from '@rneui/themed';
 
 const queryClient = new QueryClient();
-
+const theme = createTheme({
+  mode: 'light',
+  lightColors: {
+    primary: 'red',
+  },
+  darkColors: {
+    primary: 'blue',
+  },
+  components: {
+    Button: {
+      raised: true,
+    },
+  },
+});
 export default function App() {
   const keyboardVerticalOffset = Platform.OS === 'ios' ? 40 : 0;
 
@@ -18,16 +32,18 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <MenuProvider>
         <Provider store={store}>
-          <Fragment>
-            <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
-              <StatusBar
-                backgroundColor={Color.primary}
-                barStyle="dark-content"
-              />
-              <Auth />
-            </SafeAreaView>
-          </Fragment>
-          <Toast />
+          <ThemeProvider theme={theme}>
+            <Fragment>
+              <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+                <StatusBar
+                  backgroundColor={Color.primary}
+                  barStyle="dark-content"
+                />
+                <Auth />
+              </SafeAreaView>
+            </Fragment>
+            <Toast />
+          </ThemeProvider>
         </Provider>
       </MenuProvider>
     </QueryClientProvider>

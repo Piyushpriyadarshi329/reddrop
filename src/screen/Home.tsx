@@ -1,74 +1,61 @@
-import {View, Text, TextInput, ScrollView} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import Doctor from '../component/Doctor';
-import Clinic from '../component/Clinic';
+import {SearchBar} from '@rneui/themed';
+import React from 'react';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {useGetdoctorlist} from '../customhook/useGetdoctorlist';
-import {useGetcliniclist} from '../customhook/useGetcliniclist';
-import {useSelector} from 'react-redux';
-import {RootState} from '../redux/Store';
 import Color from '../asset/Color';
+import {commonStyles} from '../asset/styles';
+import Clinic from '../component/Clinic';
+import Doctor from '../component/Doctor';
+import {useGetcliniclist} from '../customhook/useGetcliniclist';
+import {useGetdoctorlist} from '../customhook/useGetdoctorlist';
 
 export default function Home() {
-  const {Appstate, customerdata} = useSelector((state: RootState) => state);
-  // const [topcliniclist, settopcliniclist] = useState([]);
-  const {data: topdoctorlist} = useGetdoctorlist({});
+  const {data: topdoctorlist} = useGetdoctorlist({orderBy: 'BOOKINGS'});
   const {data: topcliniclist} = useGetcliniclist({});
 
   return (
-    <View style={{flex: 1, marginHorizontal: 10}}>
-      <View style={{flex: 0.4, marginTop: 10}}>
-        <View style={{flexDirection: 'row'}}>
-          <Icon name="map-marker-alt" size={16} color={Color.primary} />
-          <Text style={{color: Color.primary, marginLeft: 5}}>city</Text>
-        </View>
-        <Text style={{color: 'black', fontSize: 16}}>
-          Hi {Appstate.username}
-        </Text>
-      </View>
-
+    <View style={{flex: 1, marginHorizontal: 10, gap: 10}}>
       <View
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginHorizontal: 20,
-          marginBottom: 50,
-        }}>
-        <Text style={{color: 'black', fontSize: 14, marginTop: 5}}>
-          Some Nutrition Tip here
-        </Text>
-      </View>
-
-      <View style={{flex: 1.7, flexDirection: 'column', marginTop: -20}}>
-        <View>
-          <Text style={{fontSize: 16, fontWeight: '600', color: 'black'}}>
-            Top Doctors
-          </Text>
+        style={[
+          commonStyles.flexRowAlignCenter,
+          commonStyles.justifyCenter,
+          commonStyles.p10,
+        ]}>
+        <View
+          style={{
+            flexDirection: 'row',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            padding: 10,
+          }}>
+          <Icon name="map-marker-alt" size={16} color={Color.primary} />
+          <Text style={{color: Color.primary, marginLeft: 5}}>City</Text>
         </View>
-        <View style={{flex: 1, flexDirection: 'row', marginTop: 10}}>
+        <Text style={commonStyles.font20}>Welcome</Text>
+      </View>
+      <SearchBar round lightTheme containerStyle={styles.searhBarContainer} />
+      <View style={{flexDirection: 'column', gap: 10}}>
+        <Text style={[commonStyles.font16, commonStyles.weight600]}>
+          Top Doctors
+        </Text>
+        <View style={{flexDirection: 'row'}}>
           <ScrollView horizontal={true}>
-            {topdoctorlist?.data?.map((i: any) => {
-              return <Doctor data={i} />;
+            {topdoctorlist?.data?.map(doctor => {
+              return <Doctor details={doctor} />;
             })}
           </ScrollView>
         </View>
       </View>
-      <View style={{flex: 1.7, flexDirection: 'column', marginTop: -20}}>
-        <View>
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: '600',
-              color: 'black',
-              marginTop: 0,
-            }}>
-            Top Clinics
-          </Text>
-        </View>
-        <View style={{flex: 1, flexDirection: 'row', marginTop: 10}}>
+      <View style={{flexDirection: 'column', gap: 10}}>
+        <Text style={[commonStyles.font16, commonStyles.weight600]}>
+          Top Clinics
+        </Text>
+
+        <View style={{flexDirection: 'row'}}>
           <ScrollView horizontal={true}>
-            {topcliniclist?.map(j => {
-              return <Clinic data={j} />;
+            {topcliniclist?.map(clinic => {
+              return <Clinic details={clinic} />;
             })}
           </ScrollView>
         </View>
@@ -78,3 +65,13 @@ export default function Home() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  searhBarContainer: {
+    borderColor: undefined,
+    borderWidth: undefined,
+    backgroundColor: undefined,
+    borderTopColor: 'transparent',
+    borderBottomColor: 'transparent',
+  },
+});

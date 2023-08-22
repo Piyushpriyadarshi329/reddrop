@@ -3,16 +3,18 @@ import React from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {updatecustomerdata} from '../redux/reducer/Customerreducer';
+import {commonStyles} from '../asset/styles';
+import {DoctorDto} from '../types';
 
-export default function Doctor({data}: any) {
+export default function Doctor({details}: {details: DoctorDto}) {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  async function clickhandler() {
+  function clickhandler() {
     try {
       dispatch(
         updatecustomerdata({
-          doctor: data,
+          doctor: details,
         }),
       );
       navigation.navigate('BookApointment');
@@ -22,34 +24,26 @@ export default function Doctor({data}: any) {
   }
 
   return (
-    <View style={{flex: 1, height: 140, width: 120, marginLeft: 5}}>
-      <TouchableOpacity style={{flex: 1}} onPress={clickhandler}>
-        <Image
-          style={{
-            width: 100,
-            height: 100,
-            borderTopLeftRadius: 10,
-            borderTopRightRadius: 10,
-          }}
-          source={require('./../asset/image/doctor.webp')}
-        />
-
-        <Text style={{color: 'black'}}>Dr. {data.name}</Text>
-        <Text style={{color: 'black', fontSize: 12}}>Dental Specialist</Text>
-        <View style={{flexDirection: 'row', marginTop: 2}}>
-          <Text
-            style={{
-              color: 'black',
-              fontSize: 10,
-              fontWeight: '400',
-              marginTop: 5,
-              textAlign: 'right',
-              marginLeft: 40,
-            }}>
-            Bookings 320
+    <TouchableOpacity onPress={clickhandler} style={{padding: 10}}>
+      <Image
+        style={commonStyles.profileImage}
+        source={
+          details.profile_image
+            ? {
+                uri: details.profile_image,
+              }
+            : require('./../asset/image/doctor.webp')
+        }
+      />
+      <View style={{paddingTop: 5}}>
+        <Text style={commonStyles.font18}>Dr. {details.name}</Text>
+        <Text style={commonStyles.font12}>{details.speciality}</Text>
+        {!!details.no_of_bookings && (
+          <Text style={commonStyles.font12}>
+            Bookings {details.no_of_bookings}
           </Text>
-        </View>
-      </TouchableOpacity>
-    </View>
+        )}
+      </View>
+    </TouchableOpacity>
   );
 }

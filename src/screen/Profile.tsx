@@ -15,6 +15,7 @@ import {useGetaddress} from '../customhook/useGetaddress';
 import {RootState} from '../redux/Store';
 import {updateuserdata} from './../redux/reducer/Authreducer';
 import {Button} from 'react-native';
+import {commonStyles} from '../asset/styles';
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -196,12 +197,7 @@ export default function Profile() {
 
         <View style={{justifyContent: 'center', flex: 1}}>
           <Image
-            style={{
-              width: 100,
-              height: 100,
-              borderRadius: 50,
-              marginTop: 10,
-            }}
+            style={commonStyles.profileImage}
             source={require('./../asset/image/profile.png')}
           />
         </View>
