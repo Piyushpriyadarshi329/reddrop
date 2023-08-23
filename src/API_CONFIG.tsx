@@ -1,6 +1,6 @@
 // var BASE_URL = 'http://16.171.126.47:80/api/v1'; //UAT
 // var BASE_URL = 'http://192.168.29.230:5001/api/v1'; //UAT
-var BASE_URL = 'http://16.171.126.47:5000/api/v1'; //UAT
+var BASE_URL = 'http://192.168.29.230:5001/api/v1'; //UAT
 
 // var BASE_URL = 'http://43.204.45.2:5000/api/v1'; //prod
 
@@ -17,4 +17,5 @@ export const GETADDRESS_URL = BASE_URL + '/getaddress';
 export const GETBOOKINGAVAILABILITY_URL = BASE_URL + '/getBookingAvailability';
 export const UPDATESLOTSSTATUS_URL = BASE_URL + '/updateSlotsStatus';
 export const GETSPECIALITY_URL = BASE_URL + '/getSpeciality';
+export const GETLOCATION_URL = BASE_URL + '/getLocation';
 export const CUSTOMER_URL = BASE_URL + '/customer';

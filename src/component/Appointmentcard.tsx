@@ -14,15 +14,25 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
+import {Button, Dialog, Portal, PaperProvider} from 'react-native-paper';
 
 export default function Appointmentcard({
   appointment,
+  setModalVisible,
+  setselectedbookingid,
 }: {
   appointment: Appointmentdto;
+  setModalVisible: any;
+  setselectedbookingid: any;
 }) {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [modalVisible, setModalVisible] = useState(false);
+
+  const [visible, setVisible] = React.useState(false);
+
+  const showDialog = () => setVisible(true);
+
+  const hideDialog = () => setVisible(false);
 
   const buttonref = useRef(null);
 
@@ -40,8 +50,6 @@ export default function Appointmentcard({
   }
   const {mutate: UpdateSlotStatus} = useUpdateSlotStatus(() => {
     alert('Status updated Successfully');
-
-    // navigation.goBack();
   });
   return (
     <View
@@ -53,27 +61,6 @@ export default function Appointmentcard({
         borderRadius: 10,
         paddingVertical: 10,
       }}>
-      {/* <Modal animationType="slide" transparent={true} visible={modalVisible}>
-        <View
-          style={{
-            marginTop: 290,
-            marginLeft: 200,
-            width: 100,
-            height: 150,
-            backgroundColor: 'gold',
-            flexDirection: 'column',
-          }}>
-          <TouchableOpacity
-            onPress={() => {
-              setModalVisible(false);
-            }}>
-            <Text>Cencal</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text>Reschudle</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal> */}
       <View style={{flexDirection: 'row', flex: 1.6}}>
         <View style={{flex: 1}}>
           <Image
@@ -103,11 +90,7 @@ export default function Appointmentcard({
             marginRight: 10,
             marginTop: 5,
           }}>
-          <TouchableOpacity
-            ref={buttonref}
-            onPress={() => {
-              setModalVisible(true);
-            }}>
+          <TouchableOpacity ref={buttonref} onPress={() => {}}>
             {/* <Icon name="dots-three-horizontal" size={16} color={'black'} /> */}
             <Menu>
               <MenuTrigger>
@@ -118,10 +101,8 @@ export default function Appointmentcard({
                 <MenuOption
                   style={{padding: 5}}
                   onSelect={() => {
-                    UpdateSlotStatus({
-                      id: appointment.id,
-                      status: 'CANCELLED',
-                    });
+                    setModalVisible(true);
+                    setselectedbookingid(appointment.id);
                   }}>
                   <Text style={{color: 'black', padding: 5}}>Cancel</Text>
                 </MenuOption>

@@ -9,7 +9,9 @@ export default function DoctorlistSpecialitywise({route}: any) {
   const {data} = route.params;
 
   console.log('doctorlist data', data);
-  const {data: topdoctorlist} = useGetdoctorlist({clinic_id: data.id});
+  const {data: topdoctorlist} = useGetdoctorlist({speciality: data.name});
+
+  console.log('topdoctorlist specility', topdoctorlist);
 
   return (
     <View style={{flex: 1, marginHorizontal: 10}}>
@@ -26,11 +28,26 @@ export default function DoctorlistSpecialitywise({route}: any) {
           {data.name}
         </Text>
         <View style={{flex: 1, flexDirection: 'row', marginTop: 10}}>
-          <ScrollView horizontal={true}>
-            {topdoctorlist?.data?.map((i: any) => {
-              return <Doctor details={i} />;
-            })}
-          </ScrollView>
+          {topdoctorlist?.data.length == 0 ? (
+            <>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={{color: 'black', fontSize: 18, fontWeight: '700'}}>
+                  No Doctor are Availability
+                </Text>
+              </View>
+            </>
+          ) : (
+            <ScrollView horizontal={true}>
+              {topdoctorlist?.data?.map((i: any) => {
+                return <Doctor details={i} />;
+              })}
+            </ScrollView>
+          )}
         </View>
       </View>
 

@@ -5,7 +5,7 @@ import {GetDoctorsListResponse, GetDotcorsListRequest} from '../types';
 
 export function useGetdoctorlist(payload: GetDotcorsListRequest) {
   return useQuery(
-    ['DOCTORS'],
+    ['DOCTORS', payload],
     () => axios.post<GetDoctorsListResponse>(GETDOCTORLIST_URL, payload),
     {
       select: data => data.data,

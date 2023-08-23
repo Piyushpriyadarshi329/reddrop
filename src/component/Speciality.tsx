@@ -4,6 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import {ClinicDto, ClinicWithAddressAndImage, SpecialityDto} from '../types';
 import {commonStyles} from '../asset/styles';
 import Address from './Address';
+import {useGetdoctorlist} from '../customhook/useGetdoctorlist';
 
 export default function Speciality({details}: {details: SpecialityDto}) {
   const navigation = useNavigation();

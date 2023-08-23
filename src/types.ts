@@ -34,6 +34,7 @@ export interface GetDotcorsListRequest {
   doctor_id?: string;
   mobile?: string;
   orderBy?: 'BOOKINGS' | 'NAME';
+  speciality?: string;
 }
 
 export type GetDoctorsListResponse = DataResponse<
@@ -369,3 +370,9 @@ export interface VisibleDocument {
 }
 
 export type AddDocumentResponse = DataResponse<VisibleDocument>;
+
+export interface LocationDto {
+  id: string;
+  name: string;
+}
+export type GetLocationListResponse = DataResponse<(LocationDto & {})[]>;

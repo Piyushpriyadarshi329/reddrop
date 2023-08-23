@@ -1,16 +1,21 @@
 import React, {useState} from 'react';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {Modal, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import Color from '../asset/Color';
 import Appointmentcard from '../component/Appointmentcard';
 import {usegetAppointments} from '../customhook/usegetAppointments';
 import type {RootState} from './../redux/Store';
 import {commonStyles} from '../asset/styles';
+import {Button, Dialog, Portal, PaperProvider} from 'react-native-paper';
+import {useUpdateSlotStatus} from '../customhook/useUpdateSlotStatus';
 
 export default function Appointment() {
   const {Appstate} = useSelector((state: RootState) => state);
 
   const [selected, setselected] = useState('scheduled');
+  const [selectedbookingid, setselectedbookingid] = useState('');
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   const {data: appointments} = usegetAppointments({
     customerId: Appstate.userid,
@@ -18,8 +23,63 @@ export default function Appointment() {
   const scheduled = appointments?.data?.filter(i => i.status == 'BOOKED');
   const history = appointments?.data?.filter(i => i.status == 'COMPLETED');
 
+  const {mutate: UpdateSlotStatus} = useUpdateSlotStatus(() => {
+    alert('Status updated Successfully');
+  });
+
   return (
     <View style={{flex: 1, flexDirection: 'column'}}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginVertical: 200,
+            marginHorizontal: 50,
+            backgroundColor: 'lightgray',
+            borderRadius: 10,
+          }}>
+          <View style={{flex: 1}}></View>
+
+          <View
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={{color: 'black'}}>Do you want to cancel Booking?</Text>
+          </View>
+
+          <View style={{flex: 1, flexDirection: 'row'}}>
+            <Button
+              style={{marginHorizontal: 10, height: 40}}
+              textColor="black"
+              buttonColor={Color.primary}
+              onPress={() => {
+                setModalVisible(false);
+              }}>
+              Back
+            </Button>
+            <Button
+              style={{marginHorizontal: 10, height: 40}}
+              textColor="black"
+              buttonColor={Color.primary}
+              onPress={() => {
+                UpdateSlotStatus({
+                  id: selectedbookingid,
+                  status: 'CANCELLED',
+                });
+                setModalVisible(false);
+              }}>
+              OK
+            </Button>
+          </View>
+          <View style={{flex: 1}}></View>
+        </View>
+      </Modal>
       <View
         style={{
           flex: 1,
@@ -103,7 +163,11 @@ export default function Appointment() {
                   {history?.map((i: any) => {
                     return (
                       <>
-                        <Appointmentcard appointment={i} />
+                        <Appointmentcard
+                          appointment={i}
+                          setModalVisible={setModalVisible}
+                          setselectedbookingid={setselectedbookingid}
+                        />
                       </>
                     );
                   })}
@@ -122,7 +186,12 @@ export default function Appointment() {
                 <>
                   {scheduled?.map((i: any, index: number) => {
                     return (
-                      <Appointmentcard appointment={i} key={index.toString()} />
+                      <Appointmentcard
+                        appointment={i}
+                        setModalVisible={setModalVisible}
+                        setselectedbookingid={setselectedbookingid}
+                        key={index.toString()}
+                      />
                     );
                   })}
                 </>

@@ -20,6 +20,7 @@ import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import {useForm, FormProvider} from 'react-hook-form';
 import {RHFTextInput} from '../component/RHFTextInput';
 import messaging from '@react-native-firebase/messaging';
+import {RootState} from '../redux/Store';
 
 interface LoginForm {
   username: string;
@@ -30,6 +31,8 @@ export default function Login() {
   const dispatch = useDispatch();
   const formMethods = useForm<LoginForm>();
   const [fcm_token, setfcm_token] = useState('');
+  const cityId = useSelector((state: RootState) => state.Appstate.cityId);
+  console.log('cityId', cityId);
   useEffect(() => {
     checkToken();
   });

@@ -15,7 +15,7 @@ const Btn = (props: {title: string; onPress: () => void}) => {
         <Text
           style={{
             fontWeight: '600',
-            color: Color.text.primary,
+            color: 'white',
             textAlign: 'center',
           }}>
           {props.title}
