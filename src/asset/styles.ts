@@ -37,7 +37,7 @@ export const commonStyles = StyleSheet.create({
   },
   profileImage: {
     width: 100,
-    height: 100,
+    height: 90,
     borderRadius: 50,
     marginTop: 10,
   },

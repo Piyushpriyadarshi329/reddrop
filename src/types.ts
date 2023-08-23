@@ -26,6 +26,7 @@ export interface SpecialityDto {
   id: string;
   name: string;
   doc_key: string;
+  speciality_image: string;
 }
 
 export interface GetDotcorsListRequest {
@@ -347,6 +348,9 @@ export interface GetBookingsSummaryRequest {
 }
 export type GetBookingsSummaryResponse = DataResponse<
   {clinic_id: string; count: number; appointment_date: number}[]
+>;
+export type GetSpecialityResponse = DataResponse<
+  {doc_key: string; id: number; name: string; speciality_image: string}[]
 >;
 
 export interface Document {

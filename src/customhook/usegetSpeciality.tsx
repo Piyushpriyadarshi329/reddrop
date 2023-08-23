@@ -26,12 +26,16 @@ import {GETSPECIALITY_URL} from '../API_CONFIG';
 // }
 
 import {useQuery} from '@tanstack/react-query';
-import {GetDoctorsListResponse, GetDotcorsListRequest} from '../types';
+import {
+  GetDoctorsListResponse,
+  GetDotcorsListRequest,
+  GetSpecialityListResponse,
+} from '../types';
 
-export function usegetSpeciality(payload: GetDotcorsListRequest) {
+export function usegetSpeciality() {
   return useQuery(
-    ['DOCTORS'],
-    () => axios.post<GetDoctorsListResponse>(GETSPECIALITY_URL, payload),
+    [''],
+    () => axios.get<GetSpecialityListResponse>(GETSPECIALITY_URL),
     {
       select: data => data.data,
     },

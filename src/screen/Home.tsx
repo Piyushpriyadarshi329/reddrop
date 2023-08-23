@@ -6,12 +6,17 @@ import Color from '../asset/Color';
 import {commonStyles} from '../asset/styles';
 import Clinic from '../component/Clinic';
 import Doctor from '../component/Doctor';
+import Speciality from '../component/Speciality';
 import {useGetcliniclist} from '../customhook/useGetcliniclist';
 import {useGetdoctorlist} from '../customhook/useGetdoctorlist';
+import {usegetSpeciality} from '../customhook/usegetSpeciality';
 
 export default function Home() {
   const {data: topdoctorlist} = useGetdoctorlist({orderBy: 'BOOKINGS'});
   const {data: topcliniclist} = useGetcliniclist({});
+  const {data: Specialitylist} = usegetSpeciality();
+
+  console.log('Specialitylist', Specialitylist);
 
   return (
     <View style={{flex: 1, marginHorizontal: 10, gap: 10}}>
@@ -35,19 +40,20 @@ export default function Home() {
         <Text style={commonStyles.font20}>Welcome</Text>
       </View>
       <SearchBar round lightTheme containerStyle={styles.searhBarContainer} />
-      <View style={{flexDirection: 'column', gap: 10}}>
+
+      <View style={{flexDirection: 'column', gap: 5}}>
         <Text style={[commonStyles.font16, commonStyles.weight600]}>
           Top Doctors
         </Text>
         <View style={{flexDirection: 'row'}}>
-          <ScrollView horizontal={true} contentContainerStyle={{gap: 10}}>
+          <ScrollView horizontal={true} contentContainerStyle={{gap: 5}}>
             {topdoctorlist?.data?.map(doctor => {
               return <Doctor details={doctor} />;
             })}
           </ScrollView>
         </View>
       </View>
-      <View style={{flexDirection: 'column', gap: 10}}>
+      <View style={{flexDirection: 'column', gap: 5}}>
         <Text style={[commonStyles.font16, commonStyles.weight600]}>
           Top Clinics
         </Text>
@@ -56,6 +62,19 @@ export default function Home() {
           <ScrollView horizontal={true} contentContainerStyle={{gap: 10}}>
             {topcliniclist?.map(clinic => {
               return <Clinic details={clinic} />;
+            })}
+          </ScrollView>
+        </View>
+      </View>
+      <View style={{flexDirection: 'column', gap: 5}}>
+        <Text style={[commonStyles.font16, commonStyles.weight600]}>
+          Speciality
+        </Text>
+
+        <View style={{flexDirection: 'row'}}>
+          <ScrollView horizontal={true} contentContainerStyle={{gap: 10}}>
+            {Specialitylist?.data?.map(i => {
+              return <Speciality details={i} />;
             })}
           </ScrollView>
         </View>
