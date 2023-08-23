@@ -17,7 +17,7 @@ export default function Doctor({details}: {details: DoctorDto}) {
           doctor: details,
         }),
       );
-      navigation.navigate('BookApointment');
+      navigation.navigate('BookApointment', {id: details.id});
     } catch (error) {
       console.log(error);
     }

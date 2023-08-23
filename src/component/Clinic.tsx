@@ -1,8 +1,8 @@
-import {View, Text, Image, TouchableOpacity} from 'react-native';
+import {View, Text, Image, TouchableOpacity, Dimensions} from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {ClinicDto, ClinicWithAddressAndImage} from '../types';
-import {commonStyles} from '../asset/styles';
+import {commonStyles, profileImageStyles} from '../asset/styles';
 import Address from './Address';
 
 export default function Clinic({
@@ -11,7 +11,7 @@ export default function Clinic({
   details: ClinicWithAddressAndImage;
 }) {
   const navigation = useNavigation();
-
+  const dimension = Dimensions.get('window');
   return (
     <TouchableOpacity
       style={{

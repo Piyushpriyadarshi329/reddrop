@@ -2,14 +2,14 @@ import React from 'react';
 import {ScrollView, Text, TextInput, View, SafeAreaView} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Doctor from '../component/Doctor';
-import {useGetdoctorlist} from '../customhook/useGetdoctorlist';
+import {useGetDoctorList} from './DoctorDetails/useDoctorQuery';
 import Navbar from '../component/Navbar';
 
 export default function Doctorlist({route}: any) {
   const {data} = route.params;
 
   console.log('doctorlist data', data);
-  const {data: topdoctorlist} = useGetdoctorlist({clinic_id: data.id});
+  const {data: topdoctorlist} = useGetDoctorList({clinic_id: data.id});
 
   return (
     <View style={{flex: 1, marginHorizontal: 10}}>

@@ -8,15 +8,15 @@ import Clinic from '../component/Clinic';
 import Doctor from '../component/Doctor';
 import Speciality from '../component/Speciality';
 import {useGetcliniclist} from '../customhook/useGetcliniclist';
-import {useGetdoctorlist} from '../customhook/useGetdoctorlist';
 import {usegetSpeciality} from '../customhook/usegetSpeciality';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {useGetLocation} from '../customhook/useGetLocation';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateuserdata} from '../redux/reducer/Authreducer';
+import {useGetDoctorList} from './DoctorDetails/useDoctorQuery';
 
 export default function Home() {
-  const {data: topdoctorlist} = useGetdoctorlist({orderBy: 'BOOKINGS'});
+  const {data: topdoctorlist} = useGetDoctorList({orderBy: 'BOOKINGS'});
   const {data: topcliniclist} = useGetcliniclist({});
   const {data: Specialitylist} = usegetSpeciality();
   const {data: Locationlist} = useGetLocation();

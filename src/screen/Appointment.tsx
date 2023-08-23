@@ -28,7 +28,7 @@ export default function Appointment() {
   });
 
   return (
-    <View style={{flex: 1, flexDirection: 'column'}}>
+    <View style={{flex: 1, flexDirection: 'column', gap: 10}}>
       <Modal
         animationType="slide"
         transparent={true}

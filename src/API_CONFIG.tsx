@@ -7,6 +7,7 @@ var BASE_URL = 'http://192.168.29.230:5001/api/v1'; //UAT
 export const LOGIN_URL = BASE_URL + '/login';
 export const REGISTER_URL = BASE_URL + '/signup';
 export const GETDOCTORLIST_URL = BASE_URL + '/getdoctorlist';
+export const GET_DOCTOR = BASE_URL + '/getdoctor';
 export const GETAVAILABLITY_URL = BASE_URL + '/getavailability';
 export const BOOKSLOT_URL = BASE_URL + '/bookSlot';
 export const GETCLINICLIST_URL = BASE_URL + '/getcliniclist';

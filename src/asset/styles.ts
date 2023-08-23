@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, ScaledSize} from 'react-native';
 
 export const commonStyles = StyleSheet.create({
   font: {color: 'black'},
@@ -49,4 +49,11 @@ export const commonStyles = StyleSheet.create({
     borderRadius: 50,
     marginTop: 10,
   },
+});
+
+export const profileImageStyles = (dimension: ScaledSize) => ({
+  width: dimension.width * 0.2,
+  height: dimension.width * 0.2,
+  borderRadius: 50,
+  marginTop: 10,
 });
