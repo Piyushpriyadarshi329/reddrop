@@ -19,7 +19,7 @@ export default function Appointment() {
   const history = appointments?.data?.filter(i => i.status == 'COMPLETED');
 
   return (
-    <View style={{flex: 1, flexDirection: 'column'}}>
+    <View style={{flex: 1, flexDirection: 'column', gap: 10}}>
       <View
         style={{
           flex: 1,
