@@ -1,30 +1,25 @@
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Pressable,
-  ScrollView,
-  Button,
-  Image,
-} from 'react-native';
-import React, {useState, useEffect} from 'react';
-import Color from './../asset/Color';
+import messaging from '@react-native-firebase/messaging';
 import {useNavigation} from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import React, {useEffect, useState} from 'react';
+import {FormProvider, useForm} from 'react-hook-form';
+import {Image, Text, View} from 'react-native';
+import {Toast} from 'react-native-toast-message/lib/src/Toast';
+import Icon from 'react-native-vector-icons/AntDesign';
+import {useDispatch} from 'react-redux';
+import {commonStyles} from '../asset/styles';
+import Btn from '../component/Btn';
+import {RHFTextInput} from '../component/RHFTextInput';
 import {useLogin} from '../customhook/useLogin';
-import {useSelector, useDispatch} from 'react-redux';
+import {validateEmailOrPhone} from '../utils/validations';
+import Color from './../asset/Color';
 import {updateuserdata} from './../redux/reducer/Authreducer';
 import {AuthStyles} from './authStyles';
-import {Toast} from 'react-native-toast-message/lib/src/Toast';
-import {useForm, FormProvider} from 'react-hook-form';
-import {RHFTextInput} from '../component/RHFTextInput';
-import messaging from '@react-native-firebase/messaging';
 
 interface LoginForm {
   username: string;
   password: string;
 }
+
 export default function Login() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -80,90 +75,63 @@ export default function Login() {
     }
   }
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
-      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+    <View style={{flex: 1, backgroundColor: 'white', paddingHorizontal: 20}}>
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: 100,
+        }}>
         <Image
           style={{height: 200, width: 300, resizeMode: 'contain'}}
           source={require('./../asset/image/logo.jpeg')}
         />
+
+        <View style={AuthStyles.authFieldRow}>
+          <Text
+            style={[
+              AuthStyles.text,
+              {fontSize: 20, fontWeight: '600', color: Color.primary},
+            ]}>
+            Login
+          </Text>
+        </View>
       </View>
       <FormProvider {...formMethods}>
-        <ScrollView contentContainerStyle={{flex: 1, height: '100%'}}>
-          {/* <View
-            style={{flex: 3, justifyContent: 'center', alignItems: 'center'}}>
-            <Text
-              style={{
-                textAlign: 'center',
-                color: 'black',
-                fontSize: 20,
-                fontWeight: '700',
-              }}>
-              Welcome To Carebook
-            </Text>
-            <Text style={{color: 'gray', fontSize: 18, fontWeight: '500'}}>
-              Please Signin to Continue
-            </Text>
-          </View> */}
-
-          <View style={AuthStyles.authFieldRow}>
-            <Text style={AuthStyles.text}>Login</Text>
+        <View style={AuthStyles.loginContainer}>
+          <View style={commonStyles.flexRowAlignCenter}>
+            <Icon name="user" size={20} color="black" />
+            <RHFTextInput
+              name="username"
+              placeholder="Email/Phone"
+              keyboardType="default"
+              required
+              rules={{validate: validateEmailOrPhone}}
+            />
           </View>
 
-          <View style={AuthStyles.loginContainer}>
-            <View style={AuthStyles.authFieldRow}>
-              <Icon name="user" size={20} color="black" />
-              <RHFTextInput
-                name="username"
-                style={AuthStyles.textInput}
-                placeholder="Email or Phone"
-              />
-            </View>
-
-            <View style={AuthStyles.authFieldRow}>
-              <Icon name="key" size={20} color="black" />
-              <RHFTextInput
-                name="password"
-                style={AuthStyles.textInput}
-                placeholder="Password"
-                secureTextEntry={true}
-              />
-            </View>
-
-            <View
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginTop: 20,
-              }}>
-              <Button
-                title="Submit"
-                onPress={formMethods.handleSubmit(submithandler)}
-                color={Color.primary}
-              />
-            </View>
+          <View style={commonStyles.flexRowAlignCenter}>
+            <Icon name="key" size={20} color="black" />
+            <RHFTextInput
+              name="password"
+              secureTextEntry
+              placeholder="Password"
+              keyboardType="default"
+              required
+            />
           </View>
 
           <View
             style={{
-              flex: 6,
-              justifyContent: 'flex-end',
-              marginBottom: 30,
               alignItems: 'center',
+              marginTop: 30,
             }}>
-            <View style={{flexDirection: 'row'}}>
-              <Text style={{color: Color.black}}>Don't have an account?</Text>
-              <Pressable
-                onPress={() => {
-                  navigation.navigate('Register');
-                }}>
-                <Text style={{color: Color.primary, marginLeft: 5}}>
-                  Sign up
-                </Text>
-              </Pressable>
-            </View>
+            <Btn
+              title={'Login'}
+              onPress={formMethods.handleSubmit(submithandler)}
+            />
           </View>
-        </ScrollView>
+        </View>
       </FormProvider>
     </View>
   );

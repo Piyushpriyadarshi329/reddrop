@@ -1,38 +1,32 @@
 import {useNavigation} from '@react-navigation/native';
-import {default as React, useEffect, useState, useMemo} from 'react';
+import {default as React, useEffect, useMemo, useState} from 'react';
 import {
   Alert,
-  Button,
-  FlatList,
   Image,
+  ScrollView,
   Text,
   TouchableOpacity,
   View,
-  SectionList,
-  StyleSheet,
-  ScrollView,
+  FlatList,
 } from 'react-native';
 import uuid from 'react-native-uuid';
-import Icon from 'react-native-vector-icons/Fontisto';
 import {useSelector} from 'react-redux';
-import {getSlotwisetime, showtime, showtimefromstring} from '../../Appfunction';
+import Icon from 'react-native-vector-icons/Ionicons';
+import {showtimefromstring} from '../../Appfunction';
 import Color from '../../asset/Color';
+import Address from '../../component/Address';
+import Btn from '../../component/Btn';
 import Navbar from '../../component/Navbar';
 import {useBookslot} from '../../customhook/useBookslot';
-import {useGetavailability} from '../../customhook/useGetavailability';
 import {useGetcliniclist} from '../../customhook/useGetcliniclist';
-import {usegetOccupiedSlots} from '../../customhook/usegetOccupiedSlots';
 import type {RootState} from '../../redux/Store';
+import {BookSlotRequest, ClinicWithAddressAndImage, Slot} from '../../types';
 import {DateCard} from './DateCard';
-import {
-  BookSlotRequest,
-  ClinicDto,
-  ClinicWithAddressAndImage,
-  Slot,
-} from '../../types';
-import {useGetBookingAvailability} from './useGetBookingAvailability';
-import Btn from '../../component/Btn';
 import SlotCard from './SlotCard';
+import {useGetDoctor} from './useDoctorQuery';
+import {useGetBookingAvailability} from './useGetBookingAvailability';
+import openMap from 'react-native-open-maps';
+import {commonStyles} from '../../asset/styles';
 
 interface DateObj {
   date: number;
@@ -41,7 +35,7 @@ interface DateObj {
   senddate: string;
 }
 
-export default function BookApointment(data: {route: any}) {
+export default function BookApointment(props: {route: any}) {
   const navigation = useNavigation();
   const {Appstate, customerdata} = useSelector((state: RootState) => state);
   const [selecteddate, setselecteddate] = useState<DateObj | undefined>(
@@ -51,7 +45,7 @@ export default function BookApointment(data: {route: any}) {
     (Slot & {id: string}) | undefined
   >(undefined);
   const [datelist, setdatelist] = useState<DateObj[]>([]);
-
+  const {data: doctorDetails} = useGetDoctor(props.route.params?.id);
   const [selectedclinic, setselectedclinic] = useState<
     ClinicWithAddressAndImage | undefined
   >(undefined);
@@ -73,7 +67,7 @@ export default function BookApointment(data: {route: any}) {
   useEffect(() => {
     let localdaylist = [];
 
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 15; i++) {
       let d = new Date();
       d.setDate(d.getDate() + i);
 
@@ -93,6 +87,7 @@ export default function BookApointment(data: {route: any}) {
     }
 
     setdatelist(localdaylist);
+    setselecteddate(localdaylist?.[0]);
   }, []);
 
   const {data: bookingAvailability} = useGetBookingAvailability({
@@ -131,9 +126,9 @@ export default function BookApointment(data: {route: any}) {
         payment_order_id: uuid.v4().toString(),
         appointment_date: Appointment_date,
       };
-      if (data?.route?.params?.existing_appointment) {
+      if (props?.route?.params?.existing_appointment) {
         bookslotpayload.existing_booking_id =
-          data?.route?.params?.existing_appointment.id;
+          props?.route?.params?.existing_appointment.id;
       }
 
       console.log('bookslotpayload', bookslotpayload);
@@ -144,194 +139,199 @@ export default function BookApointment(data: {route: any}) {
     }
   }
   return (
-    <View style={{flex: 1, flexDirection: 'column'}}>
+    <>
       <Navbar title="Doctor Details" />
-      <View style={{flex: 2, flexDirection: 'row', marginHorizontal: 10}}>
-        <View style={{flex: 1.5}}>
-          <Image
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'column',
+          gap: 10,
+          marginHorizontal: 20,
+        }}>
+        <View style={{flexDirection: 'row', marginHorizontal: 10}}>
+          <View style={{flex: 1.5}}>
+            <Image
+              style={{
+                flex: 1,
+                resizeMode: 'contain',
+                width: 130,
+                borderTopLeftRadius: 10,
+                borderTopRightRadius: 10,
+              }}
+              source={
+                doctorDetails?.profile_image
+                  ? {
+                      uri: doctorDetails?.profile_image,
+                    }
+                  : require('../../asset/image/doctor.webp')
+              }
+            />
+          </View>
+
+          <View style={{flex: 2}}>
+            <Text style={[commonStyles.font20, commonStyles.weight700]}>
+              Dr.{doctorDetails?.name}
+            </Text>
+            <Text style={commonStyles.font18}>{doctorDetails?.speciality}</Text>
+            <View style={{flexDirection: 'column', marginTop: 5}}>
+              <Text style={commonStyles.font16}>
+                Bookings: {doctorDetails?.no_of_bookings}
+              </Text>
+              <Text style={commonStyles.font16}>
+                Degree: {doctorDetails?.degree}
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={{marginTop: 15}}>
+          <Text
             style={{
-              flex: 1,
-              resizeMode: 'contain',
-              width: 130,
-              borderTopLeftRadius: 10,
-              borderTopRightRadius: 10,
-            }}
-            source={require('../../asset/image/doctor.webp')}
+              color: 'black',
+              textAlign: 'left',
+              fontSize: 16,
+              fontWeight: '800',
+            }}>
+            About
+          </Text>
+          <Text
+            style={{
+              color: 'black',
+              textAlign: 'left',
+              fontSize: 14,
+              fontWeight: 'normal',
+            }}>
+            {doctorDetails?.about}
+          </Text>
+        </View>
+
+        <View style={{flex: 1, flexDirection: 'row'}}>
+          {cliniclist?.map(clinic => {
+            return (
+              <View key={clinic.id} style={{flex: 1}}>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor:
+                      selectedclinic?.clinic_doctor_id ==
+                      clinic.clinic_doctor_id
+                        ? Color.primary
+                        : Color.secondary,
+                    borderRadius: 10,
+                    height: '100%',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  onPress={() => {
+                    setselectedclinic(clinic);
+                  }}>
+                  <Text style={{textAlign: 'center'}}>{clinic.name}</Text>
+                  <Address details={clinic.address} compact={true} />
+                </TouchableOpacity>
+                {true && (
+                  <TouchableOpacity
+                    style={{
+                      right: 0,
+                      position: 'absolute',
+                      top: 0,
+                      height: '100%',
+                    }}
+                    onPress={() =>
+                      openMap({
+                        latitude: clinic.address.lat,
+                        longitude: clinic.address.lan,
+                      })
+                    }>
+                    <View
+                      style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        paddingHorizontal: 10,
+                        height: '100%',
+                      }}>
+                      <Icon name="navigate" size={20} />
+                    </View>
+                  </TouchableOpacity>
+                )}
+              </View>
+            );
+          })}
+        </View>
+        <View>
+          <FlatList
+            horizontal
+            data={datelist}
+            renderItem={({item: i}) => (
+              <DateCard
+                key={`${i.date}_${i.day}_${i.month}`}
+                {...{
+                  setselectedtime: setSelectedtime,
+                  setselecteddate,
+                  selecteddate,
+                  i,
+                }}
+              />
+            )}
           />
         </View>
 
-        <View style={{flex: 2}}>
-          <Text
-            style={{
-              color: 'black',
-              fontSize: 14,
-              fontWeight: '700',
-            }}>
-            Dr.{customerdata.doctor.name}
-          </Text>
-          <Text
-            style={{
-              color: 'black',
-              fontSize: 13,
-              fontWeight: '600',
-            }}>
-            {'{{spilization}}'}
-          </Text>
-          <View style={{flexDirection: 'row', marginTop: 5}}>
-            <Text
-              style={{
-                color: 'black',
-                fontSize: 14,
-                fontWeight: '600',
-                marginTop: 3,
-                marginRight: 5,
-              }}>
-              ____ Booking
-            </Text>
-          </View>
-          <View style={{flexDirection: 'row', marginTop: 5}}>
-            <Icon name="map-marker-alt" size={20} color="black" />
-
-            <Text
-              style={{
-                color: 'black',
-                fontSize: 14,
-                fontWeight: '600',
-                marginTop: 3,
-                marginRight: 5,
-              }}>
-              ________ KM Away
-            </Text>
-          </View>
-        </View>
-      </View>
-
-      <View style={{flex: 2, marginTop: 15, marginHorizontal: 20}}>
-        <Text
+        <View
           style={{
-            color: 'black',
-            textAlign: 'left',
-            fontSize: 16,
-            fontWeight: '800',
+            flex: 4,
+            flexDirection: 'column',
           }}>
-          About
-        </Text>
-        <Text
-          style={{
-            color: 'black',
-            textAlign: 'left',
-            fontSize: 14,
-            fontWeight: 'normal',
-          }}>
-          .......................................
-        </Text>
-      </View>
-
-      <View style={{flex: 1, flexDirection: 'row', marginHorizontal: 20}}>
-        {cliniclist?.map(clinic => {
-          return (
-            <TouchableOpacity
-              key={clinic.id}
-              style={{
-                flex: 1,
-                backgroundColor:
-                  selectedclinic?.clinic_doctor_id == clinic.clinic_doctor_id
-                    ? Color.primary
-                    : Color.secondary,
-                justifyContent: 'center',
-                marginHorizontal: 10,
-                borderRadius: 10,
-              }}
-              onPress={() => {
-                setselectedclinic(clinic);
-              }}>
-              <Text style={{textAlign: 'center'}}>{clinic.name}</Text>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-
-      <View
-        style={{
-          flex: 1.4,
-          flexDirection: 'row',
-          marginHorizontal: 20,
-          marginTop: 10,
-        }}>
-        {datelist.map(i => {
-          return (
-            <DateCard
-              key={`${i.date}_${i.day}_${i.month}`}
-              {...{
-                setselectedtime: setSelectedtime,
-                setselecteddate,
-                selecteddate,
-                i,
-              }}
-            />
-          );
-        })}
-      </View>
-
-      <View
-        style={{
-          flex: 4,
-          flexDirection: 'column',
-          marginTop: 20,
-          marginHorizontal: 20,
-        }}>
-        {!!timeSlots?.length ? (
-          <>
-            <ScrollView>
-              {timeSlots.map(timeSlot => (
-                <View key={timeSlot.workingtime_id}>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      textAlign: 'center',
-                      marginTop: 10,
-                      color: 'black',
-                      fontWeight: '600',
-                    }}>
-                    {timeSlot.title}
-                  </Text>
-                  <View
-                    style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
-                    {timeSlot.data.map(slot => (
-                      <View
-                        style={{width: '20%'}}
-                        id={`${slot?.id}_${slot.index}`}>
-                        <SlotCard
-                          slot={slot}
-                          isSelected={
-                            selectedtime?.id == slot.id &&
-                            selectedtime?.index == slot.index
-                          }
-                          onPress={slot => {
-                            setSelectedtime(slot);
-                          }}
-                        />
-                      </View>
-                    ))}
+          {!!timeSlots?.length ? (
+            <>
+              <ScrollView>
+                {timeSlots.map(timeSlot => (
+                  <View key={timeSlot.workingtime_id}>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        textAlign: 'center',
+                        marginTop: 10,
+                        color: 'black',
+                        fontWeight: '600',
+                      }}>
+                      {timeSlot.title}
+                    </Text>
+                    <View
+                      style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
+                      {timeSlot.data.map(slot => (
+                        <View
+                          style={{width: '20%'}}
+                          id={`${slot?.id}_${slot.index}`}>
+                          <SlotCard
+                            slot={slot}
+                            isSelected={
+                              selectedtime?.id == slot.id &&
+                              selectedtime?.index == slot.index
+                            }
+                            onPress={slot => {
+                              setSelectedtime(slot);
+                            }}
+                          />
+                        </View>
+                      ))}
+                    </View>
                   </View>
-                </View>
-              ))}
-            </ScrollView>
-          </>
-        ) : (
-          <View
-            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Text style={{color: 'black', fontSize: 16, fontWeight: '600'}}>
-              No Slots available
-            </Text>
+                ))}
+              </ScrollView>
+            </>
+          ) : (
+            <View
+              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={{color: 'black', fontSize: 16, fontWeight: '600'}}>
+                No Slots available
+              </Text>
+            </View>
+          )}
+        </View>
+        <View style={{flex: 1, marginTop: 10}}>
+          <View style={{marginHorizontal: 80}}>
+            <Btn title="Book Apointment" onPress={bookapointmenthandler} />
           </View>
-        )}
-      </View>
-      <View style={{flex: 1, marginTop: 10}}>
-        <View style={{marginHorizontal: 80}}>
-          <Btn title="Book Apointment" onPress={bookapointmenthandler} />
         </View>
       </View>
-    </View>
+    </>
   );
 }

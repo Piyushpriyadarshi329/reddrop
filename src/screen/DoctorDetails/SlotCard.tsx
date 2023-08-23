@@ -71,7 +71,7 @@ const SlotCard = ({
             fontSize: 16,
             padding: 5,
           }}>
-          Slot- {slot.index}
+          {slot.index}
         </Text>
       </View>
     </TouchableOpacity>

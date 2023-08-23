@@ -7,10 +7,10 @@ import {commonStyles} from '../asset/styles';
 import Clinic from '../component/Clinic';
 import Doctor from '../component/Doctor';
 import {useGetcliniclist} from '../customhook/useGetcliniclist';
-import {useGetdoctorlist} from '../customhook/useGetdoctorlist';
+import {useGetDoctorList} from './DoctorDetails/useDoctorQuery';
 
 export default function Home() {
-  const {data: topdoctorlist} = useGetdoctorlist({orderBy: 'BOOKINGS'});
+  const {data: topdoctorlist} = useGetDoctorList({orderBy: 'BOOKINGS'});
   const {data: topcliniclist} = useGetcliniclist({});
 
   return (

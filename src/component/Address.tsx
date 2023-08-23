@@ -11,7 +11,7 @@ const Address = ({
   compact?: boolean;
 }) => {
   return (
-    <View>
+    <View style={{justifyContent: 'center', alignItems: 'center'}}>
       {!compact && (
         <Text style={commonStyles.font12}>{details.address_line1}</Text>
       )}

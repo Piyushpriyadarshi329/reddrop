@@ -19,7 +19,7 @@ export const DateCard = ({
   const fontColor = selecteddate == i ? 'white' : 'black';
   return (
     <Pressable
-      style={{flex: 1}}
+      style={{minWidth: 75}}
       onPress={() => {
         setselectedtime('');
         setselecteddate(i);
@@ -37,7 +37,6 @@ export const DateCard = ({
             color: fontColor,
             fontSize: 16,
             textAlign: 'center',
-            marginTop: 3,
           }}>
           {weekdayNames[i.day]}
         </Text>
@@ -46,7 +45,6 @@ export const DateCard = ({
             color: fontColor,
             fontSize: 16,
             textAlign: 'center',
-            marginTop: 3,
           }}>
           {i.date}
         </Text>

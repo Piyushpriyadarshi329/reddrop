@@ -17,5 +17,8 @@ const Color = {
   white: 'white',
   lightgray: 'lightgray',
   black: 'black',
+  text: {
+    primary: 'white',
+  },
 };
 export default Color;
