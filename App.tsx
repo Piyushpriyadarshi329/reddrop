@@ -45,7 +45,7 @@ export default function App() {
             <Fragment>
               <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
                 <StatusBar
-                  backgroundColor={Color.primary}
+                  backgroundColor={Color.tertiary}
                   barStyle="dark-content"
                 />
                 <Auth />

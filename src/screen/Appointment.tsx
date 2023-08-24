@@ -85,7 +85,7 @@ export default function Appointment() {
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: Color.primary,
+          backgroundColor: Color.tertiary,
         }}>
         <Text style={[commonStyles.font24, commonStyles.weight700]}>
           Appointments
@@ -106,8 +106,9 @@ export default function Appointment() {
             setselected('scheduled');
           }}
           style={{
-            backgroundColor:
-              selected == 'scheduled' ? Color.primary : Color.secondary,
+            borderBottomColor:
+              selected == 'scheduled' ? Color.primary : Color.tertiary,
+            borderBottomWidth: 1,
             flex: 1,
             padding: 10,
             borderRadius: 10,
@@ -129,8 +130,9 @@ export default function Appointment() {
             setselected('history');
           }}
           style={{
-            backgroundColor:
-              selected == 'history' ? Color.primary : Color.secondary,
+            borderBottomColor:
+              selected == 'history' ? Color.primary : Color.tertiary,
+            borderBottomWidth: 1,
             flex: 1,
             padding: 10,
             borderRadius: 10,
