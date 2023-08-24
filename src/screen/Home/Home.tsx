@@ -8,19 +8,19 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import Color from '../asset/Color';
-import {commonStyles} from '../asset/styles';
-import Clinic from '../component/Clinic';
-import Doctor from '../component/Doctor';
-import Speciality from '../component/Speciality';
-import {useGetLocation} from '../customhook/useGetLocation';
-import {useGetcliniclist} from '../customhook/useGetcliniclist';
-import {usegetSpeciality} from '../customhook/usegetSpeciality';
-import {SpecialityDto} from '../types';
-import {sliceIntoChunks} from '../utils/jsMethods';
-import {useGetDoctorList} from './DoctorDetails/useDoctorQuery';
 import {useSelector} from 'react-redux';
-import {RootState} from '../redux/Store';
+import Color from '../../asset/Color';
+import {commonStyles} from '../../asset/styles';
+import Clinic from '../../component/Clinic';
+import Doctor from '../../component/Doctor';
+import Speciality from '../../component/Speciality';
+import {useGetLocation} from '../../customhook/useGetLocation';
+import {useGetcliniclist} from '../../customhook/useGetcliniclist';
+import {usegetSpeciality} from '../../customhook/usegetSpeciality';
+import {RootState} from '../../redux/Store';
+import {SpecialityDto} from '../../types';
+import {sliceIntoChunks} from '../../utils/jsMethods';
+import {useGetDoctorList} from '../DoctorDetails/useDoctorQuery';
 
 export default function Home() {
   const {username, userid} = useSelector((root: RootState) => root.Appstate);
@@ -28,7 +28,6 @@ export default function Home() {
   const {data: topcliniclist} = useGetcliniclist({});
   const {data: Specialitylist} = usegetSpeciality();
   const {data: Locationlist} = useGetLocation();
-
   return (
     <View style={{flex: 1, marginHorizontal: 10, gap: 10}}>
       <View

@@ -1,9 +1,8 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
-import Color from '../asset/Color';
-import {Appointmentdto} from '../types';
-
+import Color from '../../asset/Color';
+import {Appointmentdto} from '../../types';
 import openMap from 'react-native-open-maps';
 import {
   Menu,
@@ -12,9 +11,9 @@ import {
   MenuTrigger,
 } from 'react-native-popup-menu';
 import Icon from 'react-native-vector-icons/Entypo';
-import {commonStyles} from '../asset/styles';
-import {useGetDoctor} from '../screen/DoctorDetails/useDoctorQuery';
-import {getTimeStringFromDBTime} from '../utils/dateMethods';
+import {commonStyles} from '../../asset/styles';
+import {useGetDoctor} from '../DoctorDetails/useDoctorQuery';
+import {getTimeStringFromDBTime} from '../../utils/dateMethods';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default function Appointmentcard({
@@ -26,7 +25,7 @@ export default function Appointmentcard({
   setModalVisible: any;
   setselectedbookingid: any;
 }) {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const {data: doctorDetails} = useGetDoctor(appointment.doctor_id ?? '');
 
   return (
@@ -54,7 +53,7 @@ export default function Appointmentcard({
                 ? {
                     uri: doctorDetails?.profile_image,
                   }
-                : require('./../asset/image/doctor.webp')
+                : require('../../asset/image/doctor.webp')
             }
           />
         </View>

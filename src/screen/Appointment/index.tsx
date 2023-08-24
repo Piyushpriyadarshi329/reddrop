@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import {Modal, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {Button} from 'react-native-paper';
 import {useSelector} from 'react-redux';
-import Color from '../asset/Color';
-import Appointmentcard from '../component/Appointmentcard';
-import {usegetAppointments} from '../customhook/usegetAppointments';
-import type {RootState} from './../redux/Store';
-import {commonStyles} from '../asset/styles';
-import {Button, Dialog, Portal, PaperProvider} from 'react-native-paper';
-import {useUpdateSlotStatus} from '../customhook/useUpdateSlotStatus';
+import Color from '../../asset/Color';
+import {commonStyles} from '../../asset/styles';
+import {useUpdateSlotStatus} from '../../customhook/useUpdateSlotStatus';
+import type {RootState} from '../../redux/Store';
+import Appointmentcard from './Appointmentcard';
+import {useGetAppointments} from './useAppointmentQuery';
 
 export default function Appointment() {
   const {Appstate} = useSelector((state: RootState) => state);
@@ -17,11 +17,11 @@ export default function Appointment() {
 
   const [modalVisible, setModalVisible] = useState(false);
 
-  const {data: appointments} = usegetAppointments({
+  const {data: appointments} = useGetAppointments({
     customerId: Appstate.userid,
   });
-  const scheduled = appointments?.data?.filter(i => i.status == 'BOOKED');
-  const history = appointments?.data?.filter(i => i.status == 'COMPLETED');
+  const scheduled = appointments?.filter(i => i.status == 'BOOKED');
+  const history = appointments?.filter(i => i.status == 'COMPLETED');
 
   const {mutate: UpdateSlotStatus} = useUpdateSlotStatus(() => {
     alert('Status updated Successfully');

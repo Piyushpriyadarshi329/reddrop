@@ -3,7 +3,7 @@ import React from 'react';
 import BookApointment from '../../screen/DoctorDetails/BookApointment';
 import Doctorlist from '../../screen/Doctorlist';
 import DoctorlistSpecialitywise from '../../screen/DoctorlistSpecialitywise';
-import Home from '../../screen/Home';
+import Home from '../../screen/Home/Home';
 
 export default function Homestack() {
   const Stack = createNativeStackNavigator();
