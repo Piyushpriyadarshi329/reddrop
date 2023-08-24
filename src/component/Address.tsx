@@ -7,20 +7,24 @@ const Address = ({
   details,
   compact,
 }: {
-  details: AddressDto;
+  details: AddressDto | undefined;
   compact?: boolean;
 }) => {
   return (
     <View style={{justifyContent: 'center', alignItems: 'center'}}>
       {!compact && (
-        <Text style={commonStyles.font12}>{details.address_line1}</Text>
+        <Text style={commonStyles.font16}>{details?.address_line1}</Text>
       )}
       {!compact && (
-        <Text style={commonStyles.font}>{details.address_line2}</Text>
+        <Text style={commonStyles.font}>{details?.address_line2}</Text>
       )}
-      <Text style={commonStyles.font}>{details.city}</Text>
-      {!compact && <Text style={commonStyles.font}>{details.state}</Text>}
-      {!compact && <Text style={commonStyles.font}>{details.pincode}</Text>}
+      <Text style={commonStyles.font}>{details?.city}</Text>
+      {!compact && (
+        <Text style={commonStyles.font}>
+          {details?.state}
+          {!!details?.pincode && ` - ${details?.pincode}`}
+        </Text>
+      )}
     </View>
   );
 };

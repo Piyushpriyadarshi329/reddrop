@@ -26,15 +26,15 @@ export interface SpecialityDto {
   id: string;
   name: string;
   doc_key: string;
-  speciality_image: string;
 }
 
 export interface GetDotcorsListRequest {
   clinic_id?: string;
   doctor_id?: string;
+  speciality?: string;
+  city?: string;
   mobile?: string;
   orderBy?: 'BOOKINGS' | 'NAME';
-  speciality?: string;
 }
 
 export type GetDoctorsListResponse = DataResponse<
@@ -125,7 +125,7 @@ export interface ClinicDto {
   about: string;
 }
 export interface ClinicWithAddress extends ClinicDto {
-  address: AddressDto;
+  address: ShowAddress;
 }
 export type ClinicWithAddressAndImage = ClinicWithAddress & {
   profile_image: string;
@@ -271,11 +271,22 @@ export interface Appointmentdto extends BookingDto {
   customer_image_key?: string;
   doctorsName?: string;
   doctorSpeciality?: string;
+  doctor_id?: string;
   clinic_name?: string;
-  clinic_address?: string;
   from_working_time?: string;
+  address: ShowAddress;
 }
 
+export interface ShowAddress {
+  id: string;
+  address_line1: string;
+  address_line2: string;
+  city: string;
+  state: string;
+  pincode: string;
+  lat?: number;
+  lan?: number;
+}
 export interface AddressDto {
   id: string;
   address_line1: string;
@@ -353,9 +364,6 @@ export interface GetBookingsSummaryRequest {
 export type GetBookingsSummaryResponse = DataResponse<
   {clinic_id: string; count: number; appointment_date: number}[]
 >;
-export type GetSpecialityResponse = DataResponse<
-  {doc_key: string; id: number; name: string; speciality_image: string}[]
->;
 
 export interface Document {
   id: string;
@@ -370,9 +378,3 @@ export interface VisibleDocument {
 }
 
 export type AddDocumentResponse = DataResponse<VisibleDocument>;
-
-export interface LocationDto {
-  id: string;
-  name: string;
-}
-export type GetLocationListResponse = DataResponse<(LocationDto & {})[]>;

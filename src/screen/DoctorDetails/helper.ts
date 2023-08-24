@@ -15,6 +15,7 @@ export const monthNames = [
 
 export const weekdayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 import {useState, useEffect} from 'react';
+import {SlotStatus} from '../../types';
 export interface DateObj {
   date: number;
   month: number;
@@ -49,4 +50,15 @@ export const useDateList = () => {
     setdatelist(localdaylist);
   }, []);
   return datelist;
+};
+
+export const getSlotColor = (status: SlotStatus) => {
+  switch (status) {
+    case SlotStatus.AVAILABLE:
+      return 'white';
+    case SlotStatus.BOOKED:
+      return 'pink';
+    case SlotStatus.NA:
+      return 'lightgrey';
+  }
 };

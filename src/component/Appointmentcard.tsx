@@ -1,20 +1,21 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useState, useRef} from 'react';
-import {Image, Modal, Text, TouchableOpacity, View} from 'react-native';
-import {useDispatch} from 'react-redux';
+import React from 'react';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
 import Color from '../asset/Color';
-import {updatecustomerdata} from '../redux/reducer/Customerreducer';
 import {Appointmentdto} from '../types';
-import {useUpdateSlotStatus} from '../customhook/useUpdateSlotStatus';
 
-import Icon from 'react-native-vector-icons/Entypo';
+import openMap from 'react-native-open-maps';
 import {
   Menu,
-  MenuOptions,
   MenuOption,
+  MenuOptions,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import {Button, Dialog, Portal, PaperProvider} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/Entypo';
+import {commonStyles} from '../asset/styles';
+import {useGetDoctor} from '../screen/DoctorDetails/useDoctorQuery';
+import {getTimeStringFromDBTime} from '../utils/dateMethods';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default function Appointmentcard({
   appointment,
@@ -26,31 +27,8 @@ export default function Appointmentcard({
   setselectedbookingid: any;
 }) {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
+  const {data: doctorDetails} = useGetDoctor(appointment.doctor_id ?? '');
 
-  const [visible, setVisible] = React.useState(false);
-
-  const showDialog = () => setVisible(true);
-
-  const hideDialog = () => setVisible(false);
-
-  const buttonref = useRef(null);
-
-  async function clickhandler() {
-    try {
-      dispatch(
-        updatecustomerdata({
-          doctor: appointment,
-        }),
-      );
-      navigation.navigate('BookApointment');
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  const {mutate: UpdateSlotStatus} = useUpdateSlotStatus(() => {
-    alert('Status updated Successfully');
-  });
   return (
     <View
       style={{
@@ -71,15 +49,21 @@ export default function Appointmentcard({
               marginTop: 10,
               marginLeft: 10,
             }}
-            source={require('./../asset/image/doctor.webp')}
+            source={
+              doctorDetails?.profile_image
+                ? {
+                    uri: doctorDetails?.profile_image,
+                  }
+                : require('./../asset/image/doctor.webp')
+            }
           />
         </View>
         <View style={{flex: 2, marginTop: 10}}>
-          <Text style={{color: 'black', fontSize: 16, fontWeight: '600'}}>
-            Dr. {appointment.doctorsName}
-          </Text>
-          <Text style={{color: 'black', fontSize: 12}}>
+          <Text style={commonStyles.caption}>
             {appointment.doctorSpeciality}
+          </Text>
+          <Text style={[commonStyles.font18, commonStyles.weight700]}>
+            Dr. {appointment.doctorsName}
           </Text>
         </View>
 
@@ -90,63 +74,91 @@ export default function Appointmentcard({
             marginRight: 10,
             marginTop: 5,
           }}>
-          <TouchableOpacity ref={buttonref} onPress={() => {}}>
-            {/* <Icon name="dots-three-horizontal" size={16} color={'black'} /> */}
-            <Menu>
-              <MenuTrigger>
-                <Icon name="dots-three-horizontal" size={16} color={'black'} />
-              </MenuTrigger>
+          <Menu>
+            <MenuTrigger>
+              <Icon name="dots-three-horizontal" size={16} color={'black'} />
+            </MenuTrigger>
 
-              <MenuOptions>
-                <MenuOption
-                  style={{padding: 5}}
-                  onSelect={() => {
-                    setModalVisible(true);
-                    setselectedbookingid(appointment.id);
-                  }}>
-                  <Text style={{color: 'black', padding: 5}}>Cancel</Text>
-                </MenuOption>
-                <MenuOption
-                  onSelect={() => {
-                    navigation.navigate('BookApointment', {
-                      existing_appointment: appointment,
-                    });
-                  }}>
-                  <Text style={{color: 'black', padding: 5}}>Reschduled</Text>
-                </MenuOption>
-                {/* <MenuOption
-                  onSelect={() => alert(`Not called`)}
-                  disabled={true}
-                  text="Disabled"
-                /> */}
-              </MenuOptions>
-            </Menu>
-          </TouchableOpacity>
+            <MenuOptions>
+              <MenuOption
+                style={{padding: 5}}
+                onSelect={() => {
+                  setModalVisible(true);
+                  setselectedbookingid(appointment.id);
+                }}>
+                <Text style={{color: 'black', padding: 5}}>Cancel</Text>
+              </MenuOption>
+              <MenuOption
+                onSelect={() => {
+                  navigation.navigate('BookApointment', {
+                    existing_appointment: appointment,
+                  });
+                }}>
+                <Text style={{color: 'black', padding: 5}}>Reschduled</Text>
+              </MenuOption>
+            </MenuOptions>
+          </Menu>
         </View>
       </View>
 
-      <View style={{flexDirection: 'row', flex: 0.6, marginTop: 5}}>
-        <Text style={{flex: 1, marginLeft: 20, fontSize: 14, color: 'black'}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flex: 0.6,
+          marginTop: 5,
+          gap: 15,
+          marginHorizontal: 15,
+        }}>
+        <Text style={commonStyles.font18}>
           {new Date(Number(appointment.appointment_date)).toDateString()}
         </Text>
-        <Text style={{flex: 1, marginLeft: 20, color: 'black'}}>
-          Slot: {appointment.slot_index}
+        <Text style={commonStyles.font18}>
+          {getTimeStringFromDBTime(appointment.from_working_time)}
         </Text>
+        <View
+          style={[commonStyles.flexRowAlignCenter, {alignSelf: 'flex-end'}]}>
+          <Text style={commonStyles.font16}>Slot:</Text>
+          <Text style={commonStyles.font24}>{appointment.slot_index}</Text>
+        </View>
       </View>
 
-      <View style={{flexDirection: 'row', flex: 0.7, marginTop: -5}}>
-        <View style={{flexDirection: 'column', flex: 1}}>
-          <Text style={{flex: 1, marginLeft: 20, color: 'black'}}>
-            Ring Road
+      <View style={{flexDirection: 'row', flex: 0.7, marginTop: 10}}>
+        <View style={{flexDirection: 'column', flex: 1, marginHorizontal: 15}}>
+          <Text style={[commonStyles.font18, commonStyles.weight600]}>
+            {appointment.address.address_line1}
           </Text>
-          <Text style={{flex: 1, marginLeft: 20, color: 'black'}}>
-            Warje,pune
+          <Text style={commonStyles.font16}>
+            {appointment.address.address_line2}
           </Text>
+          <Text style={commonStyles.font16}>{appointment.address.city}</Text>
         </View>
-
-        <View style={{flex: 1}}>
-          <Text style={{color: 'black'}}>Status:{appointment.status}</Text>
-        </View>
+        {appointment.address.lan && appointment.address.lat && (
+          <TouchableOpacity
+            style={{
+              right: 0,
+              position: 'absolute',
+              top: 0,
+              height: '100%',
+            }}
+            onPress={() =>
+              openMap({
+                latitude: appointment.address.lat,
+                longitude: appointment.address.lan,
+              })
+            }>
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                paddingHorizontal: 10,
+                height: '100%',
+              }}>
+              <Ionicons name="navigate" size={20} />
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
