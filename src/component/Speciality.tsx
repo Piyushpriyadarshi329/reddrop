@@ -1,10 +1,8 @@
-import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
-import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {ClinicDto, ClinicWithAddressAndImage, SpecialityDto} from '../types';
+import React from 'react';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {commonStyles} from '../asset/styles';
-import Address from './Address';
-import {useGetdoctorlist} from '../customhook/useGetdoctorlist';
+import {SpecialityDto} from '../types';
 
 export default function Speciality({details}: {details: SpecialityDto}) {
   const navigation = useNavigation();
@@ -45,7 +43,6 @@ const styles = StyleSheet.create({
   image: {
     width: 60,
     height: 60,
-    borderRadius: 50,
     marginTop: 10,
   },
 });
