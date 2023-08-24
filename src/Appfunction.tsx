@@ -13,7 +13,7 @@ export function showtime(timestamp: number) {
 
   return ('0' + hour).slice(-2) + ':' + ('0' + min).slice(-2) + ' ' + am_pm;
 }
-export function showtimefromstring(time: string) {
+export function showTimeFromString(time: string) {
   let hour = Number(time.substring(0, 2));
 
   let am_pm = 'AM';

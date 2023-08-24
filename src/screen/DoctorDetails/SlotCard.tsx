@@ -15,7 +15,7 @@ import {
 import uuid from 'react-native-uuid';
 import Icon from 'react-native-vector-icons/Fontisto';
 import {useSelector} from 'react-redux';
-import {getSlotwisetime, showtime, showtimefromstring} from '../../Appfunction';
+import {getSlotwisetime, showtime, showTimeFromString} from '../../Appfunction';
 import Color from '../../asset/Color';
 import Navbar from '../../component/Navbar';
 import {useBookslot} from '../../customhook/useBookslot';

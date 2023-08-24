@@ -26,18 +26,26 @@ export default function Doctor({details}: {details: DoctorDto}) {
   return (
     <TouchableOpacity
       onPress={clickhandler}
-      style={{padding: 10, backgroundColor: 'white', borderRadius: 10}}>
-      <Image
-        style={commonStyles.profileImage}
-        source={
-          details.profile_image
-            ? {
-                uri: details.profile_image,
-              }
-            : require('./../asset/image/doctor.webp')
-        }
-      />
-      <View style={{paddingTop: 5}}>
+      style={{
+        padding: 10,
+        width: 130,
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        borderRadius: 10,
+      }}>
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Image
+          style={commonStyles.profileImage}
+          source={
+            details.profile_image
+              ? {
+                  uri: details.profile_image,
+                }
+              : require('./../asset/image/doctor.webp')
+          }
+        />
+      </View>
+      <View style={{paddingTop: 5, flex: 1}}>
         <Text style={commonStyles.font18}>Dr. {details.name}</Text>
         <Text style={commonStyles.font12}>{details.speciality}</Text>
         {!!details.no_of_bookings && (

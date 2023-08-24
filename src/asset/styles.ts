@@ -6,10 +6,13 @@ export const commonStyles = StyleSheet.create({
   font20: {fontSize: 20, color: 'black'},
   font18: {fontSize: 18, color: 'black'},
   font16: {fontSize: 16, color: 'black'},
+  font14: {fontSize: 14, color: 'black'},
   font12: {fontSize: 12, color: 'black'},
+  weight800: {fontWeight: '800'},
   weight700: {fontWeight: '700'},
   weight600: {fontWeight: '600'},
   weight400: {fontWeight: '400'},
+  caption: {fontSize: 16, color: 'grey'},
   justifyCenter: {
     justifyContent: 'center',
   },
@@ -44,7 +47,7 @@ export const commonStyles = StyleSheet.create({
     gap: 10,
   },
   profileImage: {
-    width: 100,
+    width: 90,
     height: 90,
     borderRadius: 50,
     marginTop: 10,
