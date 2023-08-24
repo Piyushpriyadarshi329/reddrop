@@ -65,6 +65,9 @@ export default function Appointmentcard({
           <Text style={[commonStyles.font18, commonStyles.weight700]}>
             Dr. {appointment.doctorsName}
           </Text>
+          <Text style={[commonStyles.font16, commonStyles.weight600]}>
+            Dr. {appointment.clinic_name}
+          </Text>
         </View>
 
         <View
