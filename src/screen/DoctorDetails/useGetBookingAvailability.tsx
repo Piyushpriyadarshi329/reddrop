@@ -21,7 +21,7 @@ export function useGetBookingAvailability(
     {
       select: data => data.data.data,
       enabled: !!payload.clinic_id && !!payload.doctor_id && !!payload.date,
-      staleTime: Infinity,
+      staleTime: 1000,
     },
   );
 }

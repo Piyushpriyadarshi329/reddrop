@@ -9,6 +9,7 @@ export function useGetAppointments(payload: GetAppointmentsRequest) {
     () => axios.post<GetAppointmentResponse>(GETAPPOINTMENTS_URL, payload),
     {
       select: data => data.data.data,
+      staleTime: 1000,
     },
   );
 }
