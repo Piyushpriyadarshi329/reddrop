@@ -15,6 +15,7 @@ import Color from './../asset/Color';
 import {updateuserdata} from './../redux/reducer/Authreducer';
 import {AuthStyles} from './authStyles';
 import {RootState} from '../redux/Store';
+import {Pressable} from 'react-native';
 
 interface LoginForm {
   username: string;
@@ -136,6 +137,23 @@ export default function Login() {
           </View>
         </View>
       </FormProvider>
+      <View
+        style={{
+          flex: 6,
+          justifyContent: 'flex-end',
+          marginBottom: 30,
+          alignItems: 'center',
+        }}>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={{color: Color.black}}>Don't have an account?</Text>
+          <Pressable
+            onPress={() => {
+              navigation.navigate('Register');
+            }}>
+            <Text style={{color: Color.primary, marginLeft: 5}}>Sign up</Text>
+          </Pressable>
+        </View>
+      </View>
     </View>
   );
 }
