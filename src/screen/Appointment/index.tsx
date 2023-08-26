@@ -110,7 +110,6 @@ export default function Appointment() {
               selected == 'scheduled' ? Color.primary : Color.tertiary,
             borderBottomWidth: 1,
             flex: 1,
-            padding: 10,
             borderRadius: 10,
           }}>
           <Text
@@ -134,7 +133,6 @@ export default function Appointment() {
               selected == 'history' ? Color.primary : Color.tertiary,
             borderBottomWidth: 1,
             flex: 1,
-            padding: 10,
             borderRadius: 10,
           }}>
           <Text
