@@ -4,6 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import {ClinicDto, ClinicWithAddressAndImage} from '../types';
 import {commonStyles, profileImageStyles} from '../asset/styles';
 import Address from './Address';
+import {homeStyles} from '../screen/Home/Home';
 
 export default function Clinic({
   details,
@@ -14,14 +15,16 @@ export default function Clinic({
   const dimension = Dimensions.get('window');
   return (
     <TouchableOpacity
-      style={{
-        padding: 10,
-        backgroundColor: 'white',
-        width: 130,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 10,
-      }}
+      style={[
+        {
+          padding: 10,
+          backgroundColor: 'white',
+          width: 130,
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderRadius: 10,
+        },
+      ]}
       onPress={() => {
         navigation.navigate('Doctorlist', {data: details});
       }}>

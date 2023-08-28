@@ -76,6 +76,7 @@ const style = StyleSheet.create({
     gap: 10,
     paddingHorizontal: 20,
     backgroundColor: Color.tertiary,
+    paddingTop: 20,
   },
   imageContainer: {
     flex: 1,

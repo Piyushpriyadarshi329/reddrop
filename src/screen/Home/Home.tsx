@@ -58,7 +58,7 @@ export default function Home() {
           <SearchBar
             round
             lightTheme
-            containerStyle={styles.searhBarContainer}
+            containerStyle={homeStyles.searhBarContainer}
           />
         </View>
       </View>
@@ -109,7 +109,7 @@ export default function Home() {
   );
 }
 
-const styles = StyleSheet.create({
+export const homeStyles = StyleSheet.create({
   searhBarContainer: {
     borderColor: undefined,
     borderWidth: undefined,
@@ -117,5 +117,15 @@ const styles = StyleSheet.create({
     borderTopColor: 'transparent',
     borderBottomColor: 'transparent',
     padding: 0,
+  },
+  shadowProp: {
+    // shadowColor: '#171717',
+    // shadowColor: 'green',
+    shadowOffset: {width: -2, height: 4},
+    // shadowOpacity: 0.2,
+    shadowOpacity: 1,
+    shadowRadius: 3,
+    elevation: 20,
+    shadowColor: '#52006A',
   },
 });

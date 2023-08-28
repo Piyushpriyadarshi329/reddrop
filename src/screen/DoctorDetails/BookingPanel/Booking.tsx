@@ -1,19 +1,8 @@
-import React, {useMemo, useState, useEffect} from 'react';
-import {
-  Alert,
-  FlatList,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import openMap from 'react-native-open-maps';
+import React, {useEffect, useMemo, useState} from 'react';
+import {Alert, FlatList, ScrollView, Text, View} from 'react-native';
 import uuid from 'react-native-uuid';
-import Icon from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
 import {showTimeFromString} from '../../../Appfunction';
-import Color from '../../../asset/Color';
-import Address from '../../../component/Address';
 import Btn from '../../../component/Btn';
 import {useBookslot as useBookSlot} from '../../../customhook/useBookslot';
 import {useGetcliniclist as useGetClinicsList} from '../../../customhook/useGetcliniclist';
@@ -28,7 +17,7 @@ import {DateCard} from '../DateCard';
 import SlotCard from '../SlotCard';
 import {DateObj, useDateList} from '../helper';
 import {useGetBookingAvailability} from '../useGetBookingAvailability';
-import {commonStyles} from '../../../asset/styles';
+import ClinicButton from './ClinicButton';
 export interface BookingProps {
   doctorId: string;
   existingAppointment: Appointmentdto;
@@ -109,59 +98,18 @@ const Booking = ({
   useEffect(() => {
     dateList && dateList.length && setSelectedDate(dateList[0]);
   }, [dateList]);
+
   return (
     <View style={{flex: 1, position: 'relative'}}>
       <ScrollView style={{height: '100%'}}>
         <View style={{flexDirection: 'row', height: 60}}>
-          {clinicsList?.map(clinic => {
-            return (
-              <View key={clinic.id} style={{flex: 1}}>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor:
-                      selectedClinic?.clinic_doctor_id ==
-                      clinic.clinic_doctor_id
-                        ? Color.primary
-                        : Color.secondary,
-                    borderRadius: 10,
-                    height: '100%',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  onPress={() => {
-                    setSelectedClinic(clinic);
-                  }}>
-                  <Text style={{textAlign: 'center'}}>{clinic.name}</Text>
-                  <Address details={clinic.address} compact={true} />
-                </TouchableOpacity>
-                {true && (
-                  <TouchableOpacity
-                    style={{
-                      right: 0,
-                      position: 'absolute',
-                      top: 0,
-                      height: '100%',
-                    }}
-                    onPress={() =>
-                      openMap({
-                        latitude: clinic.address.lat,
-                        longitude: clinic.address.lan,
-                      })
-                    }>
-                    <View
-                      style={{
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        paddingHorizontal: 10,
-                        height: '100%',
-                      }}>
-                      <Icon name="navigate" size={20} />
-                    </View>
-                  </TouchableOpacity>
-                )}
-              </View>
-            );
-          })}
+          {clinicsList?.map(clinic => (
+            <ClinicButton
+              clinic={clinic}
+              selectedClinic={selectedClinic}
+              setSelectedClinic={setSelectedClinic}
+            />
+          ))}
         </View>
         <View style={{marginTop: 10}}>
           <FlatList

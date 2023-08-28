@@ -2,6 +2,7 @@ import {default as React} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {commonStyles} from '../../asset/styles';
 import {DoctorDto} from '../../types';
+import ShadowWrapper, {shadowStyles} from '../../component/ShadowWrapper';
 
 const DoctorDetails = ({
   doctorDetails,
@@ -21,29 +22,36 @@ const DoctorDetails = ({
       {doctorDetails?.degree && (
         <Text style={commonStyles.caption}>{doctorDetails?.degree}</Text>
       )}
-      <View style={style.detailsCardContainer}>
-        <View style={style.detailsCard}>
-          <Text style={commonStyles.caption}>Experience</Text>
-          <Text style={[commonStyles.font18, commonStyles.weight600]}>
-            {doctorDetails?.experience
-              ? `${doctorDetails?.experience + ' Yrs'}`
-              : ''}
-          </Text>
-        </View>
-        <View
-          style={{
-            borderLeftWidth: 1,
-            borderColor: 'grey',
-            height: '80%',
-            alignSelf: 'center',
-          }}
-        />
-        <View style={style.detailsCard}>
-          <Text style={commonStyles.caption}>Patients</Text>
-          <Text style={[commonStyles.font18, commonStyles.weight600]}>
-            {doctorDetails?.no_of_bookings || 'Newly Joined'}
-          </Text>
-        </View>
+      <View
+        style={{
+          marginTop: 10,
+        }}>
+        <ShadowWrapper>
+          <View style={style.detailsCardContainer}>
+            <View style={style.detailsCard}>
+              <Text style={commonStyles.caption}>Experience</Text>
+              <Text style={[commonStyles.font18, commonStyles.weight600]}>
+                {doctorDetails?.experience
+                  ? `${doctorDetails?.experience + ' Yrs'}`
+                  : ''}
+              </Text>
+            </View>
+            <View
+              style={{
+                borderLeftWidth: 1,
+                borderColor: 'grey',
+                height: '80%',
+                alignSelf: 'center',
+              }}
+            />
+            <View style={style.detailsCard}>
+              <Text style={commonStyles.caption}>Patients</Text>
+              <Text style={[commonStyles.font18, commonStyles.weight600]}>
+                {doctorDetails?.no_of_bookings || 'Newly Joined'}
+              </Text>
+            </View>
+          </View>
+        </ShadowWrapper>
       </View>
       <View style={{paddingVertical: 20}}>
         <Text style={[commonStyles.font18, commonStyles.weight800]}>About</Text>
@@ -57,7 +65,6 @@ export default DoctorDetails;
 
 const style = StyleSheet.create({
   detailsCardContainer: {
-    marginTop: 10,
     flexDirection: 'row',
     borderRadius: 10,
     borderWidth: 1,

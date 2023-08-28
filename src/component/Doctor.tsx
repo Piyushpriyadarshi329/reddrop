@@ -5,6 +5,7 @@ import {useDispatch} from 'react-redux';
 import {updatecustomerdata} from '../redux/reducer/Customerreducer';
 import {commonStyles} from '../asset/styles';
 import {DoctorDto} from '../types';
+import {homeStyles} from '../screen/Home/Home';
 
 export default function Doctor({details}: {details: DoctorDto}) {
   const navigation = useNavigation();
@@ -26,13 +27,15 @@ export default function Doctor({details}: {details: DoctorDto}) {
   return (
     <TouchableOpacity
       onPress={clickhandler}
-      style={{
-        padding: 10,
-        width: 130,
-        justifyContent: 'center',
-        backgroundColor: 'white',
-        borderRadius: 10,
-      }}>
+      style={[
+        {
+          padding: 10,
+          width: 130,
+          justifyContent: 'center',
+          backgroundColor: 'white',
+          borderRadius: 10,
+        },
+      ]}>
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <Image
           style={commonStyles.profileImage}

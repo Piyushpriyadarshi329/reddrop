@@ -4,6 +4,8 @@ import Color from '../../asset/Color';
 import {Slot, SlotStatus} from '../../types';
 import {getSlotColor} from './helper';
 import {Tooltip, lightColors} from '@rneui/themed';
+import {Shadow} from 'react-native-shadow-2';
+import ShadowWrapper, {shadowStyles} from '../../component/ShadowWrapper';
 
 const ControlledTooltip: React.FC<any> = props => {
   const [open, setOpen] = useState(false);
@@ -18,6 +20,10 @@ const ControlledTooltip: React.FC<any> = props => {
       }}
       withPointer={false}
       withOverlay={false}
+      containerStyle={{
+        flex: 1,
+        backgroundColor: 'pink',
+      }}
       {...props}
     />
   );
@@ -34,63 +40,62 @@ const SlotCard = ({
   isSelected?: boolean;
   onPress: (slot: Slot & {id: string}) => void;
 }) => {
-  return slot.status != SlotStatus.AVAILABLE ? (
-    <ControlledTooltip
-      popover={
-        <Text>
-          {!!(SlotStatus.NA === slot.status)
-            ? 'Doctor is on Leave'
-            : 'Booked Already'}
-        </Text>
-      }
-      width={200}
-      backgroundColor={getSlotColor(slot.status)}>
-      <View
-        style={{
-          flex: 1,
-          marginTop: 10,
-          marginHorizontal: 5,
-          borderRadius: 5,
-          backgroundColor: isSelected
-            ? Color.primary
-            : getSlotColor(slot.status),
-        }}>
-        <Text
+  return (
+    <ShadowWrapper containerStyle={shadowStyles.flexMargin}>
+      {slot.status != SlotStatus.AVAILABLE ? (
+        <ControlledTooltip
+          popover={
+            <Text>
+              {!!(SlotStatus.NA === slot.status)
+                ? 'Doctor is on Leave'
+                : 'Booked Already'}
+            </Text>
+          }>
+          <View
+            style={{
+              padding: 5,
+              flex: 1,
+              borderRadius: 5,
+              backgroundColor: isSelected
+                ? Color.primary
+                : getSlotColor(slot.status),
+            }}>
+            <Text
+              style={{
+                textAlign: 'center',
+                color: 'black',
+                fontSize: 16,
+              }}>
+              {slot.index}
+            </Text>
+          </View>
+        </ControlledTooltip>
+      ) : (
+        <TouchableOpacity
           style={{
-            textAlign: 'center',
-            color: 'black',
-            fontSize: 16,
             padding: 5,
+            alignSelf: 'stretch',
+            borderRadius: 5,
+            backgroundColor: isSelected
+              ? Color.primary
+              : getSlotColor(slot.status),
+          }}
+          onPress={() => {
+            onPress(slot);
           }}>
-          {slot.index}
-        </Text>
-      </View>
-    </ControlledTooltip>
-  ) : (
-    <TouchableOpacity
-      style={{
-        flex: 1,
-        marginTop: 10,
-        marginHorizontal: 5,
-        borderRadius: 5,
-        backgroundColor: isSelected ? Color.primary : getSlotColor(slot.status),
-      }}
-      disabled={slot.status !== SlotStatus.AVAILABLE}
-      onPress={() => {
-        onPress(slot);
-      }}>
-      <View style={{flex: 1}}>
-        <Text
-          style={{
-            textAlign: 'center',
-            color: 'black',
-            fontSize: 16,
-            padding: 5,
-          }}>
-          {slot.index}
-        </Text>
-      </View>
-    </TouchableOpacity>
+          <View>
+            <Text
+              style={{
+                textAlign: 'center',
+                color: 'black',
+                fontSize: 16,
+              }}>
+              {slot.index}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      )}
+    </ShadowWrapper>
   );
 };
 
