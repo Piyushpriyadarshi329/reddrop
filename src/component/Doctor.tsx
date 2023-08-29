@@ -1,11 +1,11 @@
 import {useNavigation} from '@react-navigation/native';
+import {Text} from '@rneui/themed';
 import React from 'react';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {Image, TouchableOpacity, View} from 'react-native';
 import {useDispatch} from 'react-redux';
-import {updatecustomerdata} from '../redux/reducer/Customerreducer';
 import {commonStyles} from '../asset/styles';
+import {updatecustomerdata} from '../redux/reducer/Customerreducer';
 import {DoctorDto} from '../types';
-import {homeStyles} from '../screen/Home/Home';
 import ShadowWrapper from './ShadowWrapper';
 
 export default function Doctor({details}: {details: DoctorDto}) {

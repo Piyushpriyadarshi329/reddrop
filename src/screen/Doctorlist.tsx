@@ -1,9 +1,9 @@
+import {Text} from '@rneui/themed';
 import React from 'react';
-import {ScrollView, Text, TextInput, View, SafeAreaView} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import {SafeAreaView, ScrollView, View} from 'react-native';
 import Doctor from '../component/Doctor';
-import {useGetDoctorList} from './DoctorDetails/useDoctorQuery';
 import Navbar from '../component/Navbar';
+import {useGetDoctorList} from './DoctorDetails/useDoctorQuery';
 
 export default function Doctorlist({route}: any) {
   const {data} = route.params;

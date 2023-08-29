@@ -1,8 +1,8 @@
-import {View, Text, Modal, TouchableOpacity} from 'react-native';
 import React from 'react';
-import Color from '../asset/Color';
-import Entypo from 'react-native-vector-icons/Entypo';
+import {Modal, TouchableOpacity, View} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Color from '../asset/Color';
 import {VisibleDocument} from '../types';
 
 export default function Profilepicuploadmodel({

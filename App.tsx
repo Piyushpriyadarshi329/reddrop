@@ -1,15 +1,14 @@
+import {ThemeProvider, createTheme} from '@rneui/themed';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
-import React, {Fragment, useState, useEffect} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {Platform, StatusBar} from 'react-native';
+import {MenuProvider} from 'react-native-popup-menu';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 import {Provider} from 'react-redux';
 import Color from './src/asset/Color';
 import Auth from './src/auth/Auth';
 import {store} from './src/redux/Store';
-import {MenuProvider} from 'react-native-popup-menu';
-import Splashscreen from './src/auth/Splashscreen';
-import {ThemeProvider, createTheme} from '@rneui/themed';
 
 const queryClient = new QueryClient();
 const theme = createTheme({
@@ -23,6 +22,11 @@ const theme = createTheme({
   components: {
     Button: {
       raised: true,
+    },
+    Text: {
+      style: {
+        fontFamily: 'Poppins-Medium',
+      },
     },
   },
 });

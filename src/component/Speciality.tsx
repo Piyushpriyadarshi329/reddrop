@@ -1,6 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
+import {Text} from '@rneui/themed';
 import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {commonStyles} from '../asset/styles';
 import {SpecialityDto} from '../types';
 

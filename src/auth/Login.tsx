@@ -1,8 +1,9 @@
 import messaging from '@react-native-firebase/messaging';
 import {useNavigation} from '@react-navigation/native';
+import {Text} from '@rneui/themed';
 import React, {useEffect, useState} from 'react';
 import {FormProvider, useForm} from 'react-hook-form';
-import {Image, Text, View} from 'react-native';
+import {Image, Pressable, View} from 'react-native';
 import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {useDispatch, useSelector} from 'react-redux';
@@ -10,12 +11,11 @@ import {commonStyles} from '../asset/styles';
 import Btn from '../component/Btn';
 import {RHFTextInput} from '../component/RHFTextInput';
 import {useLogin} from '../customhook/useLogin';
+import {RootState} from '../redux/Store';
 import {validateEmailOrPhone} from '../utils/validations';
 import Color from './../asset/Color';
 import {updateuserdata} from './../redux/reducer/Authreducer';
 import {AuthStyles} from './authStyles';
-import {RootState} from '../redux/Store';
-import {Pressable} from 'react-native';
 
 interface LoginForm {
   username: string;

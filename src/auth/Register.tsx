@@ -1,24 +1,14 @@
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Pressable,
-  Button,
-} from 'react-native';
-import React, {useState} from 'react';
-import Color from '../asset/Color';
 import {useNavigation} from '@react-navigation/native';
-import type {RootState} from '../redux/Store';
-import {useSelector, useDispatch} from 'react-redux';
+import {Text} from '@rneui/themed';
+import React from 'react';
+import {FormProvider, useForm} from 'react-hook-form';
+import {Button, Image, Pressable, View} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useRegister} from '../customhook/useRegister';
-import {useForm, FormProvider} from 'react-hook-form';
-import {AuthStyles} from './authStyles';
+import Color from '../asset/Color';
 import {RHFTextInput} from '../component/RHFTextInput';
-import Auth from './Auth';
-import {Image} from 'react-native';
+import {useRegister} from '../customhook/useRegister';
+import {AuthStyles} from './authStyles';
 interface RegisterForm {
   name: string;
   email: string;
