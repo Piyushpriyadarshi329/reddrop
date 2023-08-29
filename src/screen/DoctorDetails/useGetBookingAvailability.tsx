@@ -13,11 +13,13 @@ export function useGetBookingAvailability(
 ) {
   return useQuery(
     ['AVAILABILITY', payload],
-    () =>
-      axios.post<DataResponse<GetBookingvavilabilityResponse>>(
+    () => {
+      console.log('getting Availability');
+      return axios.post<DataResponse<GetBookingvavilabilityResponse>>(
         GETBOOKINGAVAILABILITY_URL,
         payload,
-      ),
+      );
+    },
     {
       select: data => data.data.data,
       enabled: !!payload.clinic_id && !!payload.doctor_id && !!payload.date,

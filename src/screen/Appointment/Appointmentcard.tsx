@@ -53,7 +53,7 @@ export default function Appointmentcard({
                 ? {
                     uri: doctorDetails?.profile_image,
                   }
-                : require('../../asset/image/doctor.webp')
+                : require('../../asset/image/doctor.png')
             }
           />
         </View>

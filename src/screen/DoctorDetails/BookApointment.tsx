@@ -29,7 +29,7 @@ export default function BookApointment(props: {route: any}) {
                 ? {
                     uri: doctorDetails?.profile_image,
                   }
-                : require('../../asset/image/doctor.webp')
+                : require('../../asset/image/doctor.png')
             }
           />
         </View>

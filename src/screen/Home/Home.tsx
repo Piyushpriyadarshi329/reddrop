@@ -59,6 +59,7 @@ export default function Home() {
             round
             lightTheme
             containerStyle={homeStyles.searhBarContainer}
+            placeholder="Search Doctors and Clinics"
           />
         </View>
       </View>
@@ -67,26 +68,24 @@ export default function Home() {
           <Text style={[commonStyles.font16, commonStyles.weight600]}>
             Top Doctors
           </Text>
-          <View style={{flexDirection: 'row'}}>
-            <ScrollView horizontal={true} contentContainerStyle={{gap: 10}}>
-              {topdoctorlist?.data?.map(doctor => {
-                return <Doctor details={doctor} key={doctor.id} />;
-              })}
-            </ScrollView>
-          </View>
+          <ScrollView horizontal={true} contentContainerStyle={{gap: 10}}>
+            {topdoctorlist?.data?.map(doctor => {
+              return <Doctor details={doctor} key={doctor.id} />;
+            })}
+          </ScrollView>
         </View>
         <View style={{flexDirection: 'column', gap: 5}}>
           <Text style={[commonStyles.font16, commonStyles.weight600]}>
             Top Clinics
           </Text>
 
-          <View style={{flexDirection: 'row'}}>
-            <ScrollView horizontal={true} contentContainerStyle={{gap: 10}}>
-              {topcliniclist?.map(clinic => {
-                return <Clinic details={clinic} key={clinic.id} />;
-              })}
-            </ScrollView>
-          </View>
+          <ScrollView
+            horizontal={true}
+            contentContainerStyle={{gap: 10, height: '100%'}}>
+            {topcliniclist?.map(clinic => {
+              return <Clinic details={clinic} key={clinic.id} />;
+            })}
+          </ScrollView>
         </View>
         <View style={{flexDirection: 'column', gap: 5}}>
           <Text style={[commonStyles.font16, commonStyles.weight400]}>
@@ -117,15 +116,5 @@ export const homeStyles = StyleSheet.create({
     borderTopColor: 'transparent',
     borderBottomColor: 'transparent',
     padding: 0,
-  },
-  shadowProp: {
-    // shadowColor: '#171717',
-    // shadowColor: 'green',
-    shadowOffset: {width: -2, height: 4},
-    // shadowOpacity: 0.2,
-    shadowOpacity: 1,
-    shadowRadius: 3,
-    elevation: 20,
-    shadowColor: '#52006A',
   },
 });
