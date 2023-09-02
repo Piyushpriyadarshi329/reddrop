@@ -1,15 +1,8 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  TextInput,
-  KeyboardAvoidingView,
-  ScrollView,
-  Image,
-} from 'react-native';
+import {Text} from '@rneui/themed';
 import React, {useState} from 'react';
-import Doctor from '../component/Doctor';
+import {ScrollView, TextInput, View} from 'react-native';
 import Color from '../asset/Color';
+import Doctor from '../component/Doctor';
 
 export default function Doctorlistcategorywise() {
   // Allergy and immunology

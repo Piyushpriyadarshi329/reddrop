@@ -1,10 +1,9 @@
-import {View, Text, Image, TouchableOpacity, Dimensions} from 'react-native';
-import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {ClinicDto, ClinicWithAddressAndImage} from '../types';
-import {commonStyles, profileImageStyles} from '../asset/styles';
-import Address from './Address';
-import {homeStyles} from '../screen/Home/Home';
+import {Text} from '@rneui/themed';
+import React from 'react';
+import {Image, TouchableOpacity, View} from 'react-native';
+import {commonStyles} from '../asset/styles';
+import {ClinicWithAddressAndImage} from '../types';
 import ShadowWrapper from './ShadowWrapper';
 
 export default function Clinic({
