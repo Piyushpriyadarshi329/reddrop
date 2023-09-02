@@ -75,7 +75,7 @@ export default function Register() {
           <View style={AuthStyles.authFieldRow}>
             <Icon name="user" size={20} color="black" />
             <RHFTextInput
-              name={'fullname'}
+              name={'name'}
               placeholder="Full Name"
               style={AuthStyles.textInput}
             />
