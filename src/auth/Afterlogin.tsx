@@ -36,12 +36,27 @@ export default function Afterlogin() {
           tabBarActiveTintColor: Color.primary,
           tabBarInactiveTintColor: 'gray',
         })}>
-        <Tab.Screen name={AppPages.HomeStack} component={Homestack} />
+        <Tab.Screen
+          name={AppPages.HomeStack}
+          options={{
+            title: 'Home',
+          }}
+          component={Homestack}
+        />
         <Tab.Screen
           name={AppPages.AppointmentStack}
           component={Apointmentstack}
+          options={{
+            title: 'Appointments',
+          }}
         />
-        <Tab.Screen name={AppPages.ProfileStack} component={ProfileStack} />
+        <Tab.Screen
+          name={AppPages.ProfileStack}
+          component={ProfileStack}
+          options={{
+            title: 'Profile',
+          }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );

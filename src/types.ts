@@ -26,7 +26,6 @@ export interface SpecialityDto {
   id: string;
   name: string;
   doc_key: string;
-  speciality_image?: string;
 }
 export interface LocationDto {
   id: string;
@@ -41,6 +40,7 @@ export interface GetDotcorsListRequest {
   city?: string;
   mobile?: string;
   orderBy?: 'BOOKINGS' | 'NAME';
+  doctor_name_search_string?: string;
 }
 
 export type GetDoctorsListResponse = DataResponse<
