@@ -1,8 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
+import {Text} from '@rneui/themed';
 import React from 'react';
 import {Image, TouchableOpacity, View} from 'react-native';
-import Color from '../../asset/Color';
-import {Appointmentdto} from '../../types';
 import openMap from 'react-native-open-maps';
 import {
   Menu,
@@ -11,10 +10,12 @@ import {
   MenuTrigger,
 } from 'react-native-popup-menu';
 import Icon from 'react-native-vector-icons/Entypo';
-import {commonStyles} from '../../asset/styles';
-import {useGetDoctor} from '../DoctorDetails/useDoctorQuery';
-import {getTimeStringFromDBTime} from '../../utils/dateMethods';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Color from '../../asset/Color';
+import {commonStyles} from '../../asset/styles';
+import {Appointmentdto} from '../../types';
+import {getTimeStringFromDBTime} from '../../utils/dateMethods';
+import {useGetDoctor} from '../DoctorDetails/useDoctorQuery';
 
 export default function Appointmentcard({
   appointment,

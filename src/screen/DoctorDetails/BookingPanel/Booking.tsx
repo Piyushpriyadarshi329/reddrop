@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {Alert, FlatList, ScrollView, Text, View} from 'react-native';
+import {Alert, FlatList, Image, ScrollView, Text, View} from 'react-native';
 import uuid from 'react-native-uuid';
 import {useSelector} from 'react-redux';
 import {showTimeFromString} from '../../../Appfunction';
@@ -50,11 +50,12 @@ const Booking = ({
     },
   });
 
-  const {data: bookingAvailability} = useGetBookingAvailability({
-    doctor_id: doctorId,
-    clinic_id: selectedClinic?.id ?? '',
-    date: new Date(selectedDate?.senddate + 'T00:00:00Z').getTime(),
-  });
+  const {data: bookingAvailability, isLoading: isSlotsLoading} =
+    useGetBookingAvailability({
+      doctor_id: doctorId,
+      clinic_id: selectedClinic?.id ?? '',
+      date: new Date(selectedDate?.senddate + 'T00:00:00Z').getTime(),
+    });
 
   const timeSlots = useMemo(
     () =>
@@ -129,50 +130,67 @@ const Booking = ({
           />
         </View>
         <View style={{flexDirection: 'column'}}>
-          {!!timeSlots?.length ? (
-            <>
-              {timeSlots.map(timeSlot => (
-                <View key={timeSlot.workingtime_id}>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      textAlign: 'center',
-                      marginTop: 10,
-                      color: 'black',
-                      fontWeight: '600',
-                    }}>
-                    {timeSlot.title}
-                  </Text>
-                  <View
-                    style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
-                    {timeSlot.data.map(slot => (
-                      <View
-                        style={{width: '20%'}}
-                        id={`${slot?.id}_${slot.index}`}>
-                        <SlotCard
-                          slot={slot}
-                          isSelected={
-                            selectedTime?.id == slot.id &&
-                            selectedTime?.index == slot.index
-                          }
-                          onPress={slot => {
-                            setSelectedTime(slot);
-                          }}
-                        />
-                      </View>
-                    ))}
-                  </View>
-                </View>
-              ))}
-            </>
-          ) : (
+          {isSlotsLoading && (
             <View
-              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={{color: 'black', fontSize: 16, fontWeight: '600'}}>
-                No Slots available
-              </Text>
+              style={{
+                alignItems: 'center',
+                paddingTop: 20,
+              }}>
+              <Image
+                source={require('../../../asset/image/Carebook_loader.gif')}
+                style={{width: 100, height: 100}}
+              />
             </View>
           )}
+          {!isSlotsLoading &&
+            (!!timeSlots?.length ? (
+              <>
+                {timeSlots.map(timeSlot => (
+                  <View key={timeSlot.workingtime_id}>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        textAlign: 'center',
+                        marginTop: 10,
+                        color: 'black',
+                        fontWeight: '600',
+                      }}>
+                      {timeSlot.title}
+                    </Text>
+                    <View
+                      style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
+                      {timeSlot.data.map(slot => (
+                        <View
+                          style={{width: '20%'}}
+                          id={`${slot?.id}_${slot.index}`}>
+                          <SlotCard
+                            slot={slot}
+                            isSelected={
+                              selectedTime?.id == slot.id &&
+                              selectedTime?.index == slot.index
+                            }
+                            onPress={slot => {
+                              setSelectedTime(slot);
+                            }}
+                          />
+                        </View>
+                      ))}
+                    </View>
+                  </View>
+                ))}
+              </>
+            ) : (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={{color: 'black', fontSize: 16, fontWeight: '600'}}>
+                  No Slots available
+                </Text>
+              </View>
+            ))}
         </View>
       </ScrollView>
       {selectedTime && (
