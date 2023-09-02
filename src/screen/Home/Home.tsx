@@ -1,5 +1,5 @@
 import {SearchBar} from '@rneui/themed';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   View,
   FlatList,
+  TouchableNativeFeedback,
+  Pressable,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useSelector} from 'react-redux';
@@ -22,13 +24,27 @@ import {RootState} from '../../redux/Store';
 import {SpecialityDto} from '../../types';
 import {sliceIntoChunks} from '../../utils/jsMethods';
 import {useGetDoctorList} from '../DoctorDetails/useDoctorQuery';
+import Search from './Search';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {AppPages} from '../../appPages';
+import {TouchableRipple} from 'react-native-paper';
+import {useModalMethods} from '../../utils/useModalMethods';
+import LocationModal from './LocationSelect';
 
 export default function Home() {
-  const {username, userid} = useSelector((root: RootState) => root.Appstate);
+  const {username, userid, cityId} = useSelector(
+    (root: RootState) => root.Appstate,
+  );
+  const navigation = useNavigation<NavigationProp<any>>();
   const {data: topdoctorlist} = useGetDoctorList({orderBy: 'BOOKINGS'});
   const {data: topcliniclist} = useGetcliniclist({});
   const {data: Specialitylist} = usegetSpeciality();
-  const {data: Locationlist} = useGetLocation();
+  const locatinModalMethods = useModalMethods();
+  const {data: locationList} = useGetLocation();
+  const cityName = useMemo(
+    () => locationList?.find(l => l.id == cityId)?.name,
+    [cityId, locationList],
+  );
   return (
     <View style={{flex: 1, marginHorizontal: 10, gap: 10}}>
       <View
@@ -38,6 +54,7 @@ export default function Home() {
           commonStyles.p10,
         ]}>
         <TouchableOpacity
+          onPress={locatinModalMethods.open}
           style={{
             flexDirection: 'row',
             position: 'absolute',
@@ -46,7 +63,7 @@ export default function Home() {
             alignItems: 'center',
           }}>
           <Icon name="map-marker-alt" size={16} color={Color.primary} />
-          <Text style={{marginLeft: 10, color: Color.primary}}>Pune</Text>
+          <Text style={{marginLeft: 10, color: Color.primary}}>{cityName}</Text>
         </TouchableOpacity>
         <Text style={commonStyles.font18}>Home</Text>
       </View>
@@ -55,14 +72,21 @@ export default function Home() {
           <Text style={commonStyles.font20}>Hello {username}👋</Text>
           <Text style={commonStyles.caption}>How are you today ?</Text>
         </View>
-        <View>
+        <Pressable
+          onPress={() => {
+            navigation.navigate(AppPages.Search);
+          }}>
           <SearchBar
             round
             lightTheme
             containerStyle={homeStyles.searhBarContainer}
             placeholder="Search Doctors and Clinics"
+            onFocus={() => {
+              navigation.navigate(AppPages.Search);
+            }}
+            disabled
           />
-        </View>
+        </Pressable>
       </View>
       <ScrollView contentContainerStyle={{gap: 10}}>
         <View style={{flexDirection: 'column', gap: 5}}>
@@ -107,6 +131,7 @@ export default function Home() {
           </View>
         </View>
       </ScrollView>
+      <LocationModal modalMethods={locatinModalMethods} />
     </View>
   );
 }

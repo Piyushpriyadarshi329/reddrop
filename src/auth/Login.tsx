@@ -27,8 +27,7 @@ export default function Login() {
   const dispatch = useDispatch();
   const formMethods = useForm<LoginForm>();
   const [fcm_token, setfcm_token] = useState('');
-  const cityId = useSelector((state: RootState) => state.Appstate.cityId);
-  console.log('cityId', cityId);
+
   useEffect(() => {
     checkToken();
   });

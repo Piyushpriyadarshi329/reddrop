@@ -5,6 +5,7 @@ import BookApointment from '../../screen/DoctorDetails';
 import DoctorsList from '../../screen/Home/DoctorList';
 import DoctorlistSpecialitywise from '../../screen/Home/DoctorList/DoctorlistSpecialitywise';
 import Home from '../../screen/Home/Home';
+import Search from '../../screen/Home/Search';
 
 export default function Homestack() {
   const Stack = createNativeStackNavigator();
@@ -14,6 +15,11 @@ export default function Homestack() {
       <Stack.Screen
         name={AppPages.Home}
         component={Home}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name={AppPages.Search}
+        component={Search}
         options={{headerShown: false}}
       />
       <Stack.Screen

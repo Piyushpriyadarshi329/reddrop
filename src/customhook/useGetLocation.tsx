@@ -11,7 +11,7 @@ export function useGetLocation() {
     [],
     () => axios.get<GetLocationListResponse>(GETLOCATION_URL),
     {
-      select: data => data.data,
+      select: data => data.data.data,
     },
   );
 }

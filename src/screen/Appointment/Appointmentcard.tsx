@@ -123,13 +123,13 @@ export default function Appointmentcard({
 
       <View style={{flexDirection: 'row', flex: 0.7, marginTop: 10}}>
         <View style={{flexDirection: 'column', flex: 1, marginHorizontal: 15}}>
-          <Text style={[commonStyles.font18, commonStyles.weight600]}>
+          <Text style={[commonStyles.font16, commonStyles.weight600]}>
             {appointment.address.address_line1}
           </Text>
-          <Text style={commonStyles.font16}>
+          <Text style={commonStyles.font14}>
             {appointment.address.address_line2}
           </Text>
-          <Text style={commonStyles.font16}>{appointment.address.city}</Text>
+          <Text style={commonStyles.font14}>{appointment.address.city}</Text>
         </View>
         {appointment.address.lan && appointment.address.lat && (
           <TouchableOpacity

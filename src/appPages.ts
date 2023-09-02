@@ -1,6 +1,7 @@
 export const AppPages = {
   HomeStack: 'HomeStack',
   Home: 'Home',
+  Search: 'Search',
   BookApointment: 'BookApointment',
   Doctorlist: 'Doctorlist',
   DoctorlistSpecialitywise: 'DoctorlistSpecialitywise',

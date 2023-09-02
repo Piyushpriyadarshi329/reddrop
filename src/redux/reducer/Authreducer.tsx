@@ -6,14 +6,14 @@ export interface CounterState {
   userid: string;
   islogin: boolean;
   username: string;
-  cityId: number;
+  cityId: string;
 }
 
 const initialState: CounterState = {
   userid: '',
   islogin: false,
   username: '',
-  cityId: 0,
+  cityId: '',
 };
 
 export const Appstate = createSlice({
