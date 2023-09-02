@@ -3,6 +3,7 @@ import {GETDOCTORLIST_URL, GET_DOCTOR} from '../../API_CONFIG';
 import {useQuery} from '@tanstack/react-query';
 import {
   DoctorDto,
+  GetDoctorResponse,
   GetDoctorsListResponse,
   GetDotcorsListRequest,
 } from '../../types';
@@ -20,12 +21,17 @@ export function useGetDoctorList(payload: GetDotcorsListRequest) {
 
 export const useGetDoctor = (
   id: string,
-  onSuccess?: (p?: DoctorDto) => void,
+  onSuccess?: (
+    p?: DoctorDto & {
+      profile_image: string;
+      fees?: number | undefined;
+    },
+  ) => void,
 ) => {
   const {axiosAlert} = useAlert();
   return useQuery(
     ['DOCTOR', id],
-    () => axios.post<GetDoctorsListResponse>(GET_DOCTOR, {id}),
+    () => axios.post<GetDoctorResponse>(GET_DOCTOR, {id}),
     {
       select: data => data.data.data,
       onSuccess: onSuccess,

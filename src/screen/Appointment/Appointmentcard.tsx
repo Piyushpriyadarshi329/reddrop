@@ -36,7 +36,7 @@ export default function Appointmentcard({
         flex: 1,
         marginHorizontal: 10,
         marginTop: 10,
-        backgroundColor: Color.secondary,
+        backgroundColor: 'white',
         borderRadius: 10,
         paddingVertical: 10,
       }}>
@@ -67,17 +67,10 @@ export default function Appointmentcard({
             Dr. {appointment.doctorsName}
           </Text>
           <Text style={[commonStyles.font16, commonStyles.weight600]}>
-            Dr. {appointment.clinic_name}
+            {appointment.clinic_name}
           </Text>
         </View>
-
-        <View
-          style={{
-            flex: 1,
-            alignItems: 'flex-end',
-            marginRight: 10,
-            marginTop: 5,
-          }}>
+        <View style={{paddingHorizontal: 10}}>
           <Menu>
             <MenuTrigger>
               <Icon name="dots-three-horizontal" size={16} color={'black'} />
@@ -110,10 +103,10 @@ export default function Appointmentcard({
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
-          flex: 0.6,
-          marginTop: 5,
-          gap: 15,
           marginHorizontal: 15,
+          backgroundColor: '#f5f9fa',
+          borderRadius: 10,
+          paddingHorizontal: 10,
         }}>
         <Text style={commonStyles.font18}>
           {new Date(Number(appointment.appointment_date)).toDateString()}

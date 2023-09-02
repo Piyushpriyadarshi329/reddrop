@@ -1,7 +1,7 @@
 import {useFormContext, Controller} from 'react-hook-form';
 import {StyleSheet, KeyboardTypeOptions} from 'react-native';
 import {ValidationErrors} from '../../asset/constants';
-import {Input} from 'react-native-elements';
+import {Input} from '@rneui/themed';
 import {Text} from 'react-native';
 
 export const RHFTextInput = (props: {

@@ -1,7 +1,8 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View} from 'react-native';
+import {Text} from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import Color from '../asset/Color';
+import Color, {Pallet3} from '../asset/Color';
 import {useNavigation} from '@react-navigation/native';
 
 const Navbar = (props: {
@@ -18,11 +19,13 @@ const Navbar = (props: {
       style={{
         flexDirection: 'row',
         padding: 10,
-        paddingBottom: 10,
+        paddingBottom: 20,
         alignItems: 'center',
         justifyContent: 'center',
         gap: 20,
-        backgroundColor: props.bgc,
+        backgroundColor: props.bgc || Pallet3.primary,
+        borderBottomRightRadius: 20,
+        borderBottomLeftRadius: 20,
       }}>
       {!props.asFullScreenModal && !props.blockBack && (
         <View
@@ -31,13 +34,13 @@ const Navbar = (props: {
           <Icon
             name="keyboard-arrow-left"
             size={24}
-            style={{color: Color.primary}}
+            style={{color: Pallet3.textOnPrimary}}
           />
         </View>
       )}
       <Text
         style={{
-          color: 'black',
+          color: Pallet3.textOnPrimary,
           fontSize: 20,
           fontWeight: '800',
           textAlign: 'center',
@@ -48,7 +51,7 @@ const Navbar = (props: {
         <View
           style={{position: 'absolute', right: 20, top: 10}}
           onTouchEnd={() => navigation.goBack()}>
-          <Icon name="close" size={24} style={{color: Color.primary}} />
+          <Icon name="close" size={24} style={{color: Pallet3.textOnPrimary}} />
         </View>
       )}
       <View style={{position: 'absolute', right: 10}}>

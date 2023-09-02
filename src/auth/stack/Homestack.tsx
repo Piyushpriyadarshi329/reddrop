@@ -2,8 +2,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import {AppPages} from '../../appPages';
 import BookApointment from '../../screen/DoctorDetails';
-import Doctorlist from '../../screen/Doctorlist';
-import DoctorlistSpecialitywise from '../../screen/DoctorlistSpecialitywise';
+import DoctorsList from '../../screen/Home/DoctorList';
+import DoctorlistSpecialitywise from '../../screen/Home/DoctorList/DoctorlistSpecialitywise';
 import Home from '../../screen/Home/Home';
 
 export default function Homestack() {
@@ -23,7 +23,7 @@ export default function Homestack() {
       />
       <Stack.Screen
         name={AppPages.Doctorlist}
-        component={Doctorlist}
+        component={DoctorsList}
         options={{headerShown: false}}
       />
       <Stack.Screen

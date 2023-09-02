@@ -1,40 +1,40 @@
 import {useState} from 'react';
-import {
-  Button,
-  Image,
-  Text,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {MenuProvider} from 'react-native-popup-menu';
 import {useDispatch, useSelector} from 'react-redux';
-import {commonStyles, profileImageStyles} from '../../asset/styles';
-import Profilepicuploadmodel from '../../component/Profilepicuploadmodel';
+import {commonStyles} from '../../asset/styles';
+import Navbar from '../../component/Navbar';
+import ProfilePicUploadModel from '../../component/Profilepicuploadmodel';
 import {RootState} from '../../redux/Store';
 import {VisibleDocument} from '../../types';
-import {updateuserdata} from '../../redux/reducer/Authreducer';
-import {useGetCustomer} from './useCustomerQuery';
-import EditButton from '../../component/EditButton';
-import {MenuProvider} from 'react-native-popup-menu';
-import Navbar from '../../component/Navbar';
-import {useNavigation} from '@react-navigation/native';
+import {getAge} from '../../utils/dateMethods';
 import AboutMenuOptions from './MenuOptions';
+import {useGetCustomer, useUpdateCustomer} from './useCustomerQuery';
+import {ProfileModal} from './Edit/Modal';
 
 export default function Profile() {
-  const dispatch = useDispatch();
-  const Appstate = useSelector((state: RootState) => state.Appstate);
-  const [picmodalVisible, setpicModalVisible] = useState(false); // profile pic
-  const {data: customer} = useGetCustomer(Appstate.userid);
-  function uploadprofilpicfun(data: VisibleDocument | undefined) {}
+  const AppState = useSelector((state: RootState) => state.Appstate);
+  const [picmodalVisible, setpicModalVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const {data: customer} = useGetCustomer(AppState.userid);
+  const {mutate: updateCustomer} = useUpdateCustomer(AppState.userid);
+  function onUploadPic(data: VisibleDocument | undefined) {
+    updateCustomer({
+      profile_image_key: data?.fileKey,
+    });
+  }
   return (
     <MenuProvider>
+      <Navbar
+        title="Profile"
+        endAdornment={
+          <AboutMenuOptions
+            setEditMode={() => setEditModalVisible(true)}
+            onLogout={() => {}}
+          />
+        }
+      />
       <View style={{flex: 1, backgroundColor: 'white', paddingHorizontal: 20}}>
-        <Navbar
-          title="Profile"
-          endAdornment={
-            <AboutMenuOptions setEditMode={() => {}} onLogout={() => {}} />
-          }
-        />
         <View style={styles.imageContainer}>
           <TouchableOpacity onPress={() => setpicModalVisible(true)}>
             <Image
@@ -51,14 +51,30 @@ export default function Profile() {
             <Text style={[commonStyles.font24, commonStyles.weight700]}>
               {customer?.name}
             </Text>
-            <Text style={commonStyles.caption}>{customer?.age}</Text>
+            {customer?.dob && (
+              <Text style={commonStyles.caption}>
+                {getAge(Number(customer.dob))}
+              </Text>
+            )}
+            {customer?.gender && (
+              <Text style={commonStyles.caption}>
+                {getAge(Number(customer.gender))}
+              </Text>
+            )}
             <Text style={commonStyles.caption}>{customer?.mobile}</Text>
           </View>
         </View>
-        <Profilepicuploadmodel
+        <ProfileModal
+          {...{
+            editMode: editModalVisible,
+            setEditMode: setEditModalVisible,
+            details: customer,
+          }}
+        />
+        <ProfilePicUploadModel
           modalVisible={picmodalVisible}
           setModalVisible={setpicModalVisible}
-          onSubmit={uploadprofilpicfun}
+          onSubmit={onUploadPic}
         />
       </View>
     </MenuProvider>

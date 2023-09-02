@@ -8,6 +8,12 @@ export const Pallet2 = {
   secondary: '#0FC385ff',
   tertiary: '#D1F2EFff',
 };
+export const Pallet3 = {
+  primary: '#0093d8',
+  textOnPrimary: 'white',
+  secondary: '#0FC385ff',
+  tertiary: '#D1F2EFff',
+};
 
 const Color = {
   red: '#c1242a',

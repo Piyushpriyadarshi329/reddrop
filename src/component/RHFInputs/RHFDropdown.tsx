@@ -1,10 +1,8 @@
-import {useFormContext, Controller} from 'react-hook-form';
-import {StyleSheet, KeyboardTypeOptions, View} from 'react-native';
-import {ValidationErrors} from '../../asset/constants';
-import {Input} from 'react-native-elements';
-import {Text} from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
 import {useState} from 'react';
+import {Controller, useFormContext} from 'react-hook-form';
+import {Text, View} from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
+import {ValidationErrors} from '../../asset/constants';
 
 export const RHFDropdown = (props: {
   name: string;

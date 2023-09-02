@@ -3,7 +3,7 @@ import React from 'react';
 import {View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {commonStyles} from '../../asset/styles';
-import Color from '../../asset/Color';
+import Color, {Pallet3} from '../../asset/Color';
 import MenuOptionsComponent from '../../component/MenuOptionsComponent';
 
 const AboutMenuOptions = ({
@@ -37,7 +37,7 @@ const AboutMenuOptions = ({
   }
   return (
     <MenuOptionsComponent options={options}>
-      <Icon name="menu" size={26} />
+      <Icon name="menu" size={26} color={Pallet3.textOnPrimary} />
     </MenuOptionsComponent>
   );
 };

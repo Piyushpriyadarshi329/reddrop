@@ -26,6 +26,7 @@ export interface SpecialityDto {
   id: string;
   name: string;
   doc_key: string;
+  speciality_image?: string;
 }
 export interface LocationDto {
   id: string;
@@ -125,8 +126,18 @@ export interface CustomerDto {
   address: string;
   is_agent: boolean;
   gender: string;
-  age: number;
+  dob: string;
 }
+export type UpdateCustomerRequest = {
+  name?: string;
+  email?: string;
+  mobile?: string;
+  profile_image_key?: string;
+  address?: string;
+  is_agent?: boolean;
+  gender?: string;
+  dob?: string;
+};
 
 /** Clinic Controller */
 export interface ClinicDto {

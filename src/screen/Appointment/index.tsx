@@ -1,5 +1,12 @@
-import React, {useState} from 'react';
-import {Modal, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import React, {useState, useMemo} from 'react';
+import {
+  Modal,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+} from 'react-native';
 import {Button} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import Color from '../../asset/Color';
@@ -8,23 +15,35 @@ import {useUpdateSlotStatus} from '../../customhook/useUpdateSlotStatus';
 import type {RootState} from '../../redux/Store';
 import Appointmentcard from './Appointmentcard';
 import {useGetAppointments} from './useAppointmentQuery';
+import Navbar from '../../component/Navbar';
+import {useAlert} from '../../utils/useShowAlert';
+import {BookingStatus} from '../../types';
 
 export default function Appointment() {
-  const {Appstate} = useSelector((state: RootState) => state);
-
-  const [selected, setselected] = useState('scheduled');
+  const userid = useSelector((state: RootState) => state.Appstate.userid);
+  const {successAlert} = useAlert();
+  const [selected, setselected] = useState<
+    'scheduled' | 'history' | 'cancelled'
+  >('scheduled');
   const [selectedbookingid, setselectedbookingid] = useState('');
 
   const [modalVisible, setModalVisible] = useState(false);
 
   const {data: appointments} = useGetAppointments({
-    customerId: Appstate.userid,
+    customerId: userid,
   });
-  const scheduled = appointments?.filter(i => i.status == 'BOOKED');
-  const history = appointments?.filter(i => i.status == 'COMPLETED');
-
+  const data = useMemo(() => {
+    switch (selected) {
+      case 'cancelled':
+        return appointments?.filter(i => i.status == BookingStatus.CANCELLED);
+      case 'history':
+        return appointments?.filter(i => i.status == BookingStatus.COMPLETED);
+      case 'scheduled':
+        return appointments?.filter(i => i.status == BookingStatus.BOOKED);
+    }
+  }, [selected, appointments]);
   const {mutate: UpdateSlotStatus} = useUpdateSlotStatus(() => {
-    alert('Status updated Successfully');
+    successAlert('Updated Profile.');
   });
 
   return (
@@ -80,17 +99,7 @@ export default function Appointment() {
           <View style={{flex: 1}}></View>
         </View>
       </Modal>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: Color.tertiary,
-        }}>
-        <Text style={[commonStyles.font24, commonStyles.weight700]}>
-          Appointments
-        </Text>
-      </View>
+      <Navbar title="Appointments" />
 
       <View
         style={{
@@ -105,101 +114,86 @@ export default function Appointment() {
           onPress={() => {
             setselected('scheduled');
           }}
-          style={{
-            borderBottomColor:
-              selected == 'scheduled' ? Color.primary : Color.tertiary,
-            borderBottomWidth: 1,
-            flex: 1,
-            borderRadius: 10,
-          }}>
-          <Text
-            style={{
-              fontWeight: '700',
-              fontSize: 16,
-              color: 'black',
-              padding: 5,
-              textAlign: 'center',
-            }}>
-            Scheduled
-          </Text>
+          style={[
+            style.tabButton,
+            {
+              borderBottomColor:
+                selected == 'scheduled' ? Color.primary : Color.tertiary,
+            },
+          ]}>
+          <Text style={style.tabText}>Scheduled</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => {
             setselected('history');
           }}
-          style={{
-            borderBottomColor:
-              selected == 'history' ? Color.primary : Color.tertiary,
-            borderBottomWidth: 1,
-            flex: 1,
-            borderRadius: 10,
-          }}>
-          <Text
-            style={{
-              fontWeight: '700',
-              fontSize: 16,
-              color: 'black',
-              padding: 5,
-              textAlign: 'center',
-            }}>
-            History
-          </Text>
+          style={[
+            style.tabButton,
+            {
+              borderBottomColor:
+                selected == 'history' ? Color.primary : Color.tertiary,
+            },
+          ]}>
+          <Text style={style.tabText}>History</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setselected('cancelled');
+          }}
+          style={[
+            style.tabButton,
+            {
+              borderBottomColor:
+                selected == 'cancelled' ? Color.primary : Color.tertiary,
+            },
+          ]}>
+          <Text style={style.tabText}>Cancelled</Text>
         </TouchableOpacity>
       </View>
 
       <View style={{flex: 12, marginTop: 10}}>
         <ScrollView>
-          {selected == 'history' ? (
-            <>
-              {!history?.length ? (
-                <View style={commonStyles.flex1Center}>
-                  <Text style={[commonStyles.font18, commonStyles.weight600]}>
-                    No Records Found
-                  </Text>
-                </View>
-              ) : (
-                <>
-                  {history?.map((i: any) => {
-                    return (
-                      <>
-                        <Appointmentcard
-                          appointment={i}
-                          setModalVisible={setModalVisible}
-                          setselectedbookingid={setselectedbookingid}
-                        />
-                      </>
-                    );
-                  })}
-                </>
-              )}
-            </>
-          ) : (
-            <>
-              {!scheduled?.length ? (
-                <View style={commonStyles.flex1Center}>
-                  <Text style={[commonStyles.font18, commonStyles.weight600]}>
-                    No Records Found
-                  </Text>
-                </View>
-              ) : (
-                <>
-                  {scheduled?.map((i: any, index: number) => {
-                    return (
+          <>
+            {!data?.length ? (
+              <View style={commonStyles.flex1Center}>
+                <Text style={[commonStyles.font18, commonStyles.weight600]}>
+                  No Records Found
+                </Text>
+              </View>
+            ) : (
+              <>
+                {data?.map((i: any) => {
+                  return (
+                    <>
                       <Appointmentcard
                         appointment={i}
                         setModalVisible={setModalVisible}
                         setselectedbookingid={setselectedbookingid}
-                        key={index.toString()}
                       />
-                    );
-                  })}
-                </>
-              )}
-            </>
-          )}
+                    </>
+                  );
+                })}
+              </>
+            )}
+          </>
         </ScrollView>
       </View>
     </View>
   );
 }
+
+const style = StyleSheet.create({
+  tabButton: {
+    borderBottomWidth: 1,
+    flex: 1,
+    borderRadius: 10,
+  },
+  tabText: {
+    fontWeight: '700',
+    fontSize: 16,
+    color: 'black',
+    padding: 5,
+    textAlign: 'center',
+  },
+});

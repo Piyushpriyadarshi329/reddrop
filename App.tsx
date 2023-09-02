@@ -6,7 +6,7 @@ import {MenuProvider} from 'react-native-popup-menu';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 import {Provider} from 'react-redux';
-import Color from './src/asset/Color';
+import Color, {Pallet3} from './src/asset/Color';
 import Auth from './src/auth/Auth';
 import {store} from './src/redux/Store';
 
@@ -49,7 +49,7 @@ export default function App() {
             <Fragment>
               <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
                 <StatusBar
-                  backgroundColor={Color.tertiary}
+                  backgroundColor={Pallet3.primary}
                   barStyle="dark-content"
                 />
                 <Auth />

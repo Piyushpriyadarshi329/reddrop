@@ -6,9 +6,9 @@ import {Button, Image, Pressable, View} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Color from '../asset/Color';
-import {RHFTextInput} from '../component/RHFTextInput';
 import {useRegister} from '../customhook/useRegister';
 import {AuthStyles} from './authStyles';
+import {RHFTextInput} from '../component/RHFInputs/RHFTextInput';
 interface RegisterForm {
   name: string;
   email: string;

@@ -7,6 +7,6 @@ export const AppPages = {
   AppointmentStack: 'AppointmentStack',
   Appointment: 'Appointment',
   Payment: 'Payment',
-  ProfileStack: 'Profile',
+  ProfileStack: 'ProfileStack',
   Profile: 'Profile',
 };

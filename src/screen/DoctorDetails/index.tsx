@@ -1,7 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import {default as React, useState} from 'react';
 import {Image, ScrollView, StyleSheet, View} from 'react-native';
-import Color from '../../asset/Color';
+import Color, {Pallet3} from '../../asset/Color';
 import Btn from '../../component/Btn';
 import Navbar from '../../component/Navbar';
 import BookingPanel from './BookingPanel/BookingPanel';
@@ -20,7 +20,7 @@ export default function BookApointment(props: {route: any}) {
   };
   return (
     <>
-      <Navbar title="Doctor Details" bgc={Color.tertiary} />
+      <Navbar title="Doctor Details" />
       <View style={style.container}>
         <View style={style.imageContainer}>
           <Image
@@ -76,8 +76,9 @@ const style = StyleSheet.create({
     flexDirection: 'column',
     gap: 10,
     paddingHorizontal: 20,
-    backgroundColor: Color.tertiary,
-    paddingTop: 20,
+    backgroundColor: Pallet3.primary,
+    paddingTop: 40,
+    marginTop: -20,
   },
   imageContainer: {
     flex: 1,

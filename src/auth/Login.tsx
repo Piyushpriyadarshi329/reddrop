@@ -9,13 +9,13 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {useDispatch, useSelector} from 'react-redux';
 import {commonStyles} from '../asset/styles';
 import Btn from '../component/Btn';
-import {RHFTextInput} from '../component/RHFTextInput';
 import {useLogin} from '../customhook/useLogin';
 import {RootState} from '../redux/Store';
 import {validateEmailOrPhone} from '../utils/validations';
 import Color from './../asset/Color';
 import {updateuserdata} from './../redux/reducer/Authreducer';
 import {AuthStyles} from './authStyles';
+import {RHFTextInput} from '../component/RHFInputs/RHFTextInput';
 
 interface LoginForm {
   username: string;

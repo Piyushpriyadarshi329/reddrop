@@ -7,7 +7,7 @@ import {VisibleDocument} from '../types';
 import ModalCloseOnEscape from '../utils/ModalCloseOnEscape';
 import {useAddDocumentMutation} from '../customhook/useDocumentQuery';
 
-export default function Profilepicuploadmodel({
+export default function ProfilePicUploadModel({
   modalVisible,
   setModalVisible,
   onSubmit,

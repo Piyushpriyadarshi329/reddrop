@@ -2,7 +2,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import {AppPages} from '../../appPages';
 import BookApointment from '../../screen/DoctorDetails';
-import Doctorlist from '../../screen/Doctorlist';
+import DoctorsList from '../../screen/Home/DoctorList';
 import Profile from '../../screen/Profile';
 
 export default function ProfileStack() {
@@ -22,7 +22,7 @@ export default function ProfileStack() {
       />
       <Stack.Screen
         name={AppPages.Doctorlist}
-        component={Doctorlist}
+        component={DoctorsList}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

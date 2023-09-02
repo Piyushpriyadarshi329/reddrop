@@ -8,17 +8,19 @@ import {
 } from 'react-native';
 import {HorizontalLine} from './HorizontalLine';
 import {animateMove, getNextState} from './helper';
+import {Button} from '@rneui/base';
 
 const {height} = Dimensions.get('window');
+// 30
 export enum DrawerState {
-  Open = height - 230,
+  Open = height - 120,
   Peek = 230,
   Closed = 0,
 }
 interface BottomDrawerProps {
   children?: React.ReactNode;
   initialState: DrawerState;
-  onDrawerStateChange: (nextState: DrawerState) => void;
+  onDrawerStateChange?: (nextState: DrawerState) => void;
 }
 const BottomDrawer = ({
   children,
@@ -38,6 +40,7 @@ const BottomDrawer = ({
     {moveY}: PanResponderGestureState,
   ) => {
     const val = movementValue(moveY);
+    console.log('val', val);
     animateMove(y, val);
   };
 
@@ -46,9 +49,17 @@ const BottomDrawer = ({
     {moveY}: PanResponderGestureState,
   ) => {
     const valueToMove = movementValue(moveY);
+    console.log('valueToMove', valueToMove);
     const nextState = getNextState(state, valueToMove, margin);
+    console.log(
+      'DrawerState: ',
+      DrawerState.Closed,
+      DrawerState.Peek,
+      DrawerState.Open,
+    );
+    console.log('nextState', nextState);
     setState(nextState);
-    animateMove(y, nextState, onDrawerStateChange(nextState));
+    animateMove(y, nextState, onDrawerStateChange?.(nextState));
   };
 
   const onMoveShouldSetPanResponder = (
@@ -71,7 +82,7 @@ const BottomDrawer = ({
         {
           width: '100%',
           height: height,
-          backgroundColor: '#ff1',
+          backgroundColor: 'white',
           borderRadius: 25,
           position: 'absolute',
           bottom: -height + 30,
