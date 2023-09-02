@@ -9,7 +9,7 @@ import {DoctorDto} from '../types';
 import ShadowWrapper from './ShadowWrapper';
 
 export default function Doctor({details}: {details: DoctorDto}) {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const dispatch = useDispatch();
 
   function clickhandler() {

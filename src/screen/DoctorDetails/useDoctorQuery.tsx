@@ -13,7 +13,7 @@ export function useGetDoctorList(payload: GetDotcorsListRequest) {
     ['DOCTORS', payload],
     () => axios.post<GetDoctorsListResponse>(GETDOCTORLIST_URL, payload),
     {
-      select: data => data.data,
+      select: data => data.data.data,
     },
   );
 }
@@ -27,7 +27,7 @@ export const useGetDoctor = (
     ['DOCTOR', id],
     () => axios.post<GetDoctorsListResponse>(GET_DOCTOR, {id}),
     {
-      select: data => data.data.data?.[0],
+      select: data => data.data.data,
       onSuccess: onSuccess,
       onError: e => {
         axiosAlert(e);

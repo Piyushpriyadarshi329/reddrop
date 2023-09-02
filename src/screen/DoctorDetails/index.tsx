@@ -12,7 +12,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 export default function BookApointment(props: {route: any}) {
   const navigation = useNavigation();
   const DoctorBookingStack = createNativeStackNavigator();
-
+  props.route.params;
   const {data: doctorDetails} = useGetDoctor(props.route.params?.id);
   const onBookingSuccess = () => {
     navigation.goBack();

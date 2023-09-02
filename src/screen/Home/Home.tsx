@@ -69,7 +69,7 @@ export default function Home() {
             Top Doctors
           </Text>
           <ScrollView horizontal={true} contentContainerStyle={{gap: 10}}>
-            {topdoctorlist?.data?.map(doctor => {
+            {topdoctorlist?.map(doctor => {
               return <Doctor details={doctor} key={doctor.id} />;
             })}
           </ScrollView>
