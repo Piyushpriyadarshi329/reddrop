@@ -1,16 +1,11 @@
-import {View, Text} from 'react-native';
 import React from 'react';
 
-import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Home from '../screen/Home/Home';
-import Profile from '../screen/Profile';
-import Appointment from '../screen/Appointment';
+import {NavigationContainer} from '@react-navigation/native';
 import Apointmentstack from './stack/Apointmentstack';
-import {useSelector, useDispatch} from 'react-redux';
-import type {RootState} from '../redux/Store';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {AppPages} from '../appPages';
 import Color from '../asset/Color';
 import Homestack from './stack/Homestack';
 import ProfileStack from './stack/ProfileStack';
@@ -18,36 +13,35 @@ import ProfileStack from './stack/ProfileStack';
 const Tab = createBottomTabNavigator();
 
 export default function Afterlogin() {
-  const Appstate = useSelector((state: RootState) => state);
-
-  console.log('Appstate', Appstate);
-
   return (
     <NavigationContainer>
       <Tab.Navigator
-        // screenOptions={{ headerShown: false }}
         screenOptions={({route}) => ({
           headerShown: false,
           tabBarIcon: ({focused, color, size}) => {
-            let iconName;
-
-            if (route.name === 'Home') {
-              iconName = focused ? 'home' : 'home';
+            let iconName = '';
+            if (route.name === AppPages.HomeStack) {
+              iconName = 'home';
             } else if (route.name === 'Appointment') {
               iconName = focused ? 'ios-list' : 'ios-list-outline';
             } else if (route.name === 'Profile') {
-              iconName = focused ? 'ios-person' : 'ios-person';
+              iconName = 'ios-person';
             }
-
-            // You can return any component that you like here!
-            return <Ionicons name={iconName} size={size} color={color} />;
+            return iconName ? (
+              <Ionicons name={iconName} size={size} color={color} />
+            ) : (
+              <></>
+            );
           },
           tabBarActiveTintColor: Color.primary,
           tabBarInactiveTintColor: 'gray',
         })}>
-        <Tab.Screen name="Home" component={Homestack} />
-        <Tab.Screen name="Appointment" component={Apointmentstack} />
-        <Tab.Screen name="Profile" component={ProfileStack} />
+        <Tab.Screen name={AppPages.HomeStack} component={Homestack} />
+        <Tab.Screen
+          name={AppPages.AppointmentStack}
+          component={Apointmentstack}
+        />
+        <Tab.Screen name={AppPages.ProfileStack} component={ProfileStack} />
       </Tab.Navigator>
     </NavigationContainer>
   );

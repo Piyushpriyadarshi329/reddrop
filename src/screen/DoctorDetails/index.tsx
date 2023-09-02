@@ -8,6 +8,7 @@ import BookingPanel from './BookingPanel/BookingPanel';
 import DoctorDetails from './DoctorDetails';
 import {useGetDoctor} from './useDoctorQuery';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {AppPages} from '../../appPages';
 
 export default function BookApointment(props: {route: any}) {
   const navigation = useNavigation();

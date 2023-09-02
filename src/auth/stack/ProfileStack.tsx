@@ -1,8 +1,6 @@
-import {View, Text} from 'react-native';
-import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Home from '../../screen/Home/Home';
+import React from 'react';
+import {AppPages} from '../../appPages';
 import BookApointment from '../../screen/DoctorDetails';
 import Doctorlist from '../../screen/Doctorlist';
 import Profile from '../../screen/Profile';
@@ -13,17 +11,17 @@ export default function ProfileStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Profile"
+        name={AppPages.Profile}
         component={Profile}
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="BookApointment"
+        name={AppPages.BookApointment}
         component={BookApointment}
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="Doctorlist"
+        name={AppPages.Doctorlist}
         component={Doctorlist}
         options={{headerShown: false}}
       />

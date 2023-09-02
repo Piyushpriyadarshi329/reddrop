@@ -5,13 +5,14 @@ import {Image, TouchableOpacity, View} from 'react-native';
 import {commonStyles} from '../asset/styles';
 import {ClinicWithAddressAndImage} from '../types';
 import ShadowWrapper from './ShadowWrapper';
+import {AppPages} from '../appPages';
 
 export default function Clinic({
   details,
 }: {
   details: ClinicWithAddressAndImage;
 }) {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   return (
     <ShadowWrapper>
       <TouchableOpacity
@@ -26,7 +27,7 @@ export default function Clinic({
           },
         ]}
         onPress={() => {
-          navigation.navigate('Doctorlist', {data: details});
+          navigation.navigate(AppPages.Doctorlist, {data: details});
         }}>
         <Image
           style={commonStyles.profileImage}

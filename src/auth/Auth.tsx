@@ -20,12 +20,8 @@ import Splashscreen from './Splashscreen';
 const Tab = createBottomTabNavigator();
 
 export default function Auth() {
-  const {Appstate} = useSelector((state: RootState) => state);
+  const isLoggedIn = useSelector((state: RootState) => state.Appstate.islogin);
   const dispatch = useDispatch();
-  console.log('Appstate', Appstate);
-  // useEffect(() => {
-  //   getsayncdata();
-  // }, []);
 
   async function getsayncdata() {
     try {
@@ -54,7 +50,7 @@ export default function Auth() {
       {showsplash ? (
         <Splashscreen />
       ) : (
-        <>{Appstate.islogin ? <Afterlogin /> : <Beforelogin />}</>
+        <>{isLoggedIn ? <Afterlogin /> : <Beforelogin />}</>
       )}
     </>
   );

@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  FlatList,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useSelector} from 'react-redux';
@@ -94,9 +95,11 @@ export default function Home() {
           <View style={{gap: 10}}>
             {sliceIntoChunks(Specialitylist?.data, 3)?.map(
               (chunk: SpecialityDto[]) => (
-                <View style={{flex: 1, flexDirection: 'row', gap: 10}}>
+                <View
+                  style={{flex: 1, flexDirection: 'row', gap: 10}}
+                  key={`speciality_row_${chunk[0].id}`}>
                   {chunk.map(item => (
-                    <Speciality details={item} />
+                    <Speciality details={item} key={item.id} />
                   ))}
                 </View>
               ),

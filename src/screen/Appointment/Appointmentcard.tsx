@@ -16,6 +16,7 @@ import {commonStyles} from '../../asset/styles';
 import {Appointmentdto} from '../../types';
 import {getTimeStringFromDBTime} from '../../utils/dateMethods';
 import {useGetDoctor} from '../DoctorDetails/useDoctorQuery';
+import {AppPages} from '../../appPages';
 
 export default function Appointmentcard({
   appointment,
@@ -93,7 +94,7 @@ export default function Appointmentcard({
               </MenuOption>
               <MenuOption
                 onSelect={() => {
-                  navigation.navigate('BookApointment', {
+                  navigation.navigate(AppPages.BookApointment, {
                     existing_appointment: appointment,
                   });
                 }}>

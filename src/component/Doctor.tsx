@@ -7,6 +7,7 @@ import {commonStyles} from '../asset/styles';
 import {updatecustomerdata} from '../redux/reducer/Customerreducer';
 import {DoctorDto} from '../types';
 import ShadowWrapper from './ShadowWrapper';
+import {AppPages} from '../appPages';
 
 export default function Doctor({details}: {details: DoctorDto}) {
   const navigation = useNavigation<any>();
@@ -19,7 +20,7 @@ export default function Doctor({details}: {details: DoctorDto}) {
           doctor: details,
         }),
       );
-      navigation.navigate('BookApointment', {id: details.id});
+      navigation.navigate(AppPages.BookApointment, {id: details.id});
     } catch (error) {
       console.log(error);
     }

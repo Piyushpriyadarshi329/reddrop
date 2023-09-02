@@ -1,9 +1,9 @@
-import React from 'react';
-
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import React from 'react';
+import {AppPages} from '../../appPages';
 import Appointment from '../../screen/Appointment';
-import Payment from '../../screen/Payment';
 import BookApointment from '../../screen/DoctorDetails';
+import Payment from '../../screen/Payment';
 
 export default function Apointmentstack() {
   const Apointmentstack = createNativeStackNavigator();
@@ -11,18 +11,18 @@ export default function Apointmentstack() {
   return (
     <Apointmentstack.Navigator>
       <Apointmentstack.Screen
-        name="Appointment"
+        name={AppPages.Appointment}
         component={Appointment}
         options={{headerShown: false}}
       />
 
       <Apointmentstack.Screen
-        name="BookApointment"
+        name={AppPages.BookApointment}
         component={BookApointment}
         options={{headerShown: false}}
       />
       <Apointmentstack.Screen
-        name="Payment"
+        name={AppPages.Payment}
         component={Payment}
         options={{headerShown: false}}
       />

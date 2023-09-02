@@ -4,9 +4,10 @@ import React from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {commonStyles} from '../asset/styles';
 import {SpecialityDto} from '../types';
+import {AppPages} from '../appPages';
 
 export default function Speciality({details}: {details: SpecialityDto}) {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
   return (
     <TouchableOpacity
@@ -18,7 +19,7 @@ export default function Speciality({details}: {details: SpecialityDto}) {
         borderRadius: 10,
       }}
       onPress={() => {
-        navigation.navigate('DoctorlistSpecialitywise', {data: details});
+        navigation.navigate(AppPages.DoctorlistSpecialitywise, {data: details});
       }}>
       <View style={{flex: 1}}>
         <Image

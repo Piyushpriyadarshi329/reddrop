@@ -7,6 +7,7 @@ import {commonStyles} from '../../asset/styles';
 import {RootState} from '../../redux/Store';
 import {useGetAppointments} from '../Appointment/useAppointmentQuery';
 import {useGetDoctor} from '../DoctorDetails/useDoctorQuery';
+import {AppPages} from '../../appPages';
 
 const AppointmentFloatingButton = () => {
   const {username, userid} = useSelector((root: RootState) => root.Appstate);
@@ -25,7 +26,8 @@ const AppointmentFloatingButton = () => {
         width: '100%',
         backgroundColor: Color.tertiary,
       }}>
-      <TouchableOpacity onPress={() => navigation.navigate('Appointment')}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate(AppPages.Appointment)}>
         <View style={{flexDirection: 'row', width: '100%'}}>
           <Image
             style={{width: 50, height: 50, borderRadius: 50}}
