@@ -22,9 +22,9 @@ export default function Afterlogin() {
             let iconName = '';
             if (route.name === AppPages.HomeStack) {
               iconName = 'home';
-            } else if (route.name === 'Appointment') {
+            } else if (route.name === AppPages.AppointmentStack) {
               iconName = focused ? 'ios-list' : 'ios-list-outline';
-            } else if (route.name === 'Profile') {
+            } else if (route.name === AppPages.ProfileStack) {
               iconName = 'ios-person';
             }
             return iconName ? (

@@ -4,6 +4,8 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Color from '../asset/Color';
 import {VisibleDocument} from '../types';
+import ModalCloseOnEscape from '../utils/ModalCloseOnEscape';
+import {useAddDocumentMutation} from '../customhook/useDocumentQuery';
 
 export default function Profilepicuploadmodel({
   modalVisible,
@@ -14,24 +16,23 @@ export default function Profilepicuploadmodel({
   setModalVisible: any;
   onSubmit: (p: VisibleDocument | undefined) => void;
 }) {
-  // const {mutate: addDocument} = useAddDocumentMutation({
-  //   onSuccess: data => {
-  //     onSubmit(data);
-  //   },
-  // }
-  // );
-  async function openfolder() {
+  const {mutate: addDocument} = useAddDocumentMutation({
+    onSuccess: data => {
+      onSubmit(data);
+    },
+  });
+  function openfolder() {
     ImagePicker.openPicker({
       width: 600,
       height: 800,
       cropping: true,
       includeBase64: true,
     }).then(image => {
-      // addDocument(image);
+      addDocument(image);
       setModalVisible(false);
     });
   }
-  async function opencamera() {
+  function opencamera() {
     ImagePicker.openCamera({
       width: 600,
       height: 800,
@@ -51,6 +52,7 @@ export default function Profilepicuploadmodel({
       onRequestClose={() => {
         setModalVisible(!modalVisible);
       }}>
+      <ModalCloseOnEscape setVisible={setModalVisible} />
       <View style={{flex: 1, justifyContent: 'flex-end'}}>
         <View
           style={{

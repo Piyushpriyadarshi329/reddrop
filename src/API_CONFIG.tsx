@@ -20,3 +20,4 @@ export const UPDATESLOTSSTATUS_URL = BASE_URL + '/updateSlotsStatus';
 export const GETSPECIALITY_URL = BASE_URL + '/getSpeciality';
 export const GETLOCATION_URL = BASE_URL + '/getLocation';
 export const CUSTOMER_URL = BASE_URL + '/customer';
+export const DOCUMENT = BASE_URL + '/document';
