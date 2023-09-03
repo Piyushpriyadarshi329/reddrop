@@ -38,9 +38,10 @@ const LocationModal = (p: {modalMethods: IModalMethods}) => {
     [searchedText, locationList],
   );
   const setLocation = (location: LocationDto) => {
+    const cityName = locationList?.find(l => l.id == location.id)?.name;
     dispatch(
       updateuserdata({
-        cityId: location.id,
+        cityName: cityName,
       }),
     );
     p.modalMethods.close();

@@ -289,9 +289,10 @@ export interface OccupiedDto {
 export interface GetAppointmentsRequest {
   customerId?: string;
   doctorId?: string;
-  status?: BookingStatus;
+  status?: BookingStatus[];
   appointment_date?: number;
   from_date?: number;
+  to_date?: number;
 }
 export interface Appointmentdto extends BookingDto {
   customerName?: string;

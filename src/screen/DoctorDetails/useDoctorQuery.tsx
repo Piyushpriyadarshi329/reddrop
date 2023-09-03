@@ -8,11 +8,18 @@ import {
   GetDotcorsListRequest,
 } from '../../types';
 import {useAlert} from '../../utils/useShowAlert';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../redux/Store';
 
 export function useGetDoctorList(payload: GetDotcorsListRequest) {
+  const cityName = useSelector((root: RootState) => root.Appstate.cityName);
   return useQuery(
-    ['DOCTORS', payload],
-    () => axios.post<GetDoctorsListResponse>(GETDOCTORLIST_URL, payload),
+    ['DOCTORS', cityName, payload],
+    () =>
+      axios.post<GetDoctorsListResponse>(GETDOCTORLIST_URL, {
+        ...payload,
+        city: cityName,
+      }),
     {
       select: data => data.data.data,
     },

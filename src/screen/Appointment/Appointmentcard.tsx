@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {Text} from '@rneui/themed';
-import React from 'react';
+import React, {useState} from 'react';
 import {Image, TouchableOpacity, View} from 'react-native';
 import openMap from 'react-native-open-maps';
 import {
@@ -11,24 +11,29 @@ import {
 } from 'react-native-popup-menu';
 import Icon from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Color from '../../asset/Color';
+import {AppPages} from '../../appPages';
 import {commonStyles} from '../../asset/styles';
+import {ConfirmationModal} from '../../component/ConfirmationModal';
 import {Appointmentdto} from '../../types';
 import {getTimeStringFromDBTime} from '../../utils/dateMethods';
 import {useGetDoctor} from '../DoctorDetails/useDoctorQuery';
-import {AppPages} from '../../appPages';
+import {useAlert} from '../../utils/useShowAlert';
+import {useUpdateSlotStatus} from '../../customhook/useUpdateSlotStatus';
 
-export default function Appointmentcard({
+export default function AppointmentCard({
   appointment,
-  setModalVisible,
-  setselectedbookingid,
 }: {
   appointment: Appointmentdto;
-  setModalVisible: any;
-  setselectedbookingid: any;
 }) {
   const navigation = useNavigation<any>();
   const {data: doctorDetails} = useGetDoctor(appointment.doctor_id ?? '');
+
+  const {successAlert} = useAlert();
+  const {mutate: updateSlotStatus} = useUpdateSlotStatus(() => {
+    successAlert('Updated Booking.');
+  });
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [rescheduleModal, setReScheduleModal] = useState(false);
 
   return (
     <View
@@ -80,16 +85,13 @@ export default function Appointmentcard({
               <MenuOption
                 style={{padding: 5}}
                 onSelect={() => {
-                  setModalVisible(true);
-                  setselectedbookingid(appointment.id);
+                  setDeleteModal(true);
                 }}>
                 <Text style={{color: 'black', padding: 5}}>Cancel</Text>
               </MenuOption>
               <MenuOption
                 onSelect={() => {
-                  navigation.navigate(AppPages.BookApointment, {
-                    existing_appointment: appointment,
-                  });
+                  setReScheduleModal(true);
                 }}>
                 <Text style={{color: 'black', padding: 5}}>Reschduled</Text>
               </MenuOption>
@@ -157,6 +159,31 @@ export default function Appointmentcard({
           </TouchableOpacity>
         )}
       </View>
+
+      <ConfirmationModal
+        onsubmit={() => {
+          updateSlotStatus({
+            id: appointment.id,
+            status: 'CANCELLED',
+          });
+        }}
+        modalVisible={deleteModal}
+        setModalVisible={setDeleteModal}
+        subtitle="Are you sure you want to cancel the booking"
+        title="Cancel Booking ?"
+      />
+      <ConfirmationModal
+        onsubmit={() => {
+          navigation.navigate(AppPages.BookApointment, {
+            existing_appointment: appointment,
+          });
+        }}
+        modalVisible={rescheduleModal}
+        setModalVisible={setReScheduleModal}
+        subtitle="Are you sure you want to Reschedule the booking"
+        title="Reschedule Booking ?"
+        mode="primary"
+      />
     </View>
   );
 }

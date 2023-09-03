@@ -32,7 +32,7 @@ import {useModalMethods} from '../../utils/useModalMethods';
 import LocationModal from './LocationSelect';
 
 export default function Home() {
-  const {username, userid, cityId} = useSelector(
+  const {username, userid, cityName} = useSelector(
     (root: RootState) => root.Appstate,
   );
   const navigation = useNavigation<NavigationProp<any>>();
@@ -40,11 +40,7 @@ export default function Home() {
   const {data: topcliniclist} = useGetcliniclist({});
   const {data: Specialitylist} = usegetSpeciality();
   const locatinModalMethods = useModalMethods();
-  const {data: locationList} = useGetLocation();
-  const cityName = useMemo(
-    () => locationList?.find(l => l.id == cityId)?.name,
-    [cityId, locationList],
-  );
+
   return (
     <View style={{flex: 1, marginHorizontal: 10, gap: 10}}>
       <View
@@ -93,24 +89,39 @@ export default function Home() {
           <Text style={[commonStyles.font16, commonStyles.weight600]}>
             Top Doctors
           </Text>
-          <ScrollView horizontal={true} contentContainerStyle={{gap: 10}}>
-            {topdoctorlist?.map(doctor => {
-              return <Doctor details={doctor} key={doctor.id} />;
-            })}
-          </ScrollView>
+          <FlatList
+            contentContainerStyle={{gap: 10, height: '100%'}}
+            horizontal={true}
+            data={topdoctorlist}
+            renderItem={({item}) => <Doctor details={item} key={item.id} />}
+            keyExtractor={c => c.id}
+            ListEmptyComponent={
+              <View>
+                <Text style={commonStyles.caption}>
+                  No Doctors Listed in the area yet.
+                </Text>
+              </View>
+            }
+          />
         </View>
         <View style={{flexDirection: 'column', gap: 5}}>
           <Text style={[commonStyles.font16, commonStyles.weight600]}>
             Top Clinics
           </Text>
-
-          <ScrollView
+          <FlatList
+            contentContainerStyle={{gap: 10, height: '100%'}}
             horizontal={true}
-            contentContainerStyle={{gap: 10, height: '100%'}}>
-            {topcliniclist?.map(clinic => {
-              return <Clinic details={clinic} key={clinic.id} />;
-            })}
-          </ScrollView>
+            data={topcliniclist}
+            renderItem={({item}) => <Clinic details={item} key={item.id} />}
+            keyExtractor={c => c.id}
+            ListEmptyComponent={
+              <View>
+                <Text style={commonStyles.caption}>
+                  No Clinics Listed in the area yet.
+                </Text>
+              </View>
+            }
+          />
         </View>
         <View style={{flexDirection: 'column', gap: 5}}>
           <Text style={[commonStyles.font16, commonStyles.weight400]}>
