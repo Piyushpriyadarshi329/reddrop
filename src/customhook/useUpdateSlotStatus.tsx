@@ -10,9 +10,9 @@ export function useUpdateSlotStatus(onSuccess: any) {
     (payload: updateSlotsStatusRequest) =>
       axios.post(UPDATESLOTSSTATUS_URL, payload),
     {
-      onSuccess: (data, variables) => {
+      onSuccess: (...p) => {
         qc.invalidateQueries(['APPOINTMENTS']);
-        // onSuccess();
+        onSuccess?.(...p);
       },
     },
   );

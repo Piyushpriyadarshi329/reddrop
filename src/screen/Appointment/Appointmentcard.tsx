@@ -29,11 +29,12 @@ export default function AppointmentCard({
   const {data: doctorDetails} = useGetDoctor(appointment.doctor_id ?? '');
 
   const {successAlert} = useAlert();
-  const {mutate: updateSlotStatus} = useUpdateSlotStatus(() => {
-    successAlert('Updated Booking.');
-  });
   const [deleteModal, setDeleteModal] = useState(false);
   const [rescheduleModal, setReScheduleModal] = useState(false);
+  const {mutate: updateSlotStatus} = useUpdateSlotStatus(() => {
+    successAlert('Updated Booking.');
+    setDeleteModal(false);
+  });
 
   return (
     <View
