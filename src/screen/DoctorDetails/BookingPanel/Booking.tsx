@@ -18,6 +18,7 @@ import SlotCard from '../SlotCard';
 import {DateObj, useDateList} from '../helper';
 import {useGetBookingAvailability} from '../useGetBookingAvailability';
 import ClinicButton from './ClinicButton';
+import {successAlert} from '../../../utils/useShowAlert';
 export interface BookingProps {
   doctorId: string;
   existingAppointment: Appointmentdto;
@@ -44,9 +45,8 @@ const Booking = ({
   });
   const {mutate: bookSlot} = useBookSlot({
     onSuccess: () => {
-      Alert.alert('Booked Successfully.', '', [
-        {text: 'Ok', onPress: () => onBookingSuccess()},
-      ]);
+      successAlert('Booked Successfully');
+      onBookingSuccess();
     },
   });
 
