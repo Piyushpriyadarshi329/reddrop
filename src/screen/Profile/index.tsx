@@ -11,6 +11,7 @@ import {getAge} from '../../utils/dateMethods';
 import AboutMenuOptions from './MenuOptions';
 import {useGetCustomer, useUpdateCustomer} from './useCustomerQuery';
 import {ProfileModal} from './Edit/Modal';
+import {updateuserdata} from '../../redux/reducer/Authreducer';
 
 export default function Profile() {
   const AppState = useSelector((state: RootState) => state.Appstate);
@@ -23,6 +24,7 @@ export default function Profile() {
       profile_image_key: data?.fileKey,
     });
   }
+  const dispatch = useDispatch();
   return (
     <MenuProvider>
       <Navbar
@@ -30,7 +32,15 @@ export default function Profile() {
         endAdornment={
           <AboutMenuOptions
             setEditMode={() => setEditModalVisible(true)}
-            onLogout={() => {}}
+            onLogout={() => {
+              dispatch(
+                updateuserdata({
+                  userid: '',
+                  islogin: false,
+                  username: '',
+                }),
+              );
+            }}
           />
         }
       />
