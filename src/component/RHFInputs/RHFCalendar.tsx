@@ -5,6 +5,7 @@ import {Controller, useFormContext} from 'react-hook-form';
 import {View, TouchableOpacity} from 'react-native';
 import {ValidationErrors} from '../../asset/constants';
 import CalendarModal from '../CalendarModal';
+import {commonStyles} from '../../asset/styles';
 
 export const RHFCalendar = (props: {
   name: string;
@@ -14,6 +15,7 @@ export const RHFCalendar = (props: {
   rules?: any;
   minDate?: string;
   dateFormat?: string;
+  label?: string;
 }) => {
   const {control} = useFormContext();
   const [modalVisible, setModalVisible] = useState(false);
@@ -23,6 +25,15 @@ export const RHFCalendar = (props: {
       render={({field, formState: {errors}}) => (
         <View style={{paddingHorizontal: 10, paddingVertical: 10}}>
           <TouchableOpacity onPress={() => setModalVisible(true)}>
+            {props.label && (
+              <Text
+                style={[
+                  commonStyles.caption,
+                  {fontWeight: '700', color: '#8795a0'},
+                ]}>
+                {props.label}
+              </Text>
+            )}
             {field.value ? (
               <Text>{moment(field.value).format(props.dateFormat)}</Text>
             ) : (

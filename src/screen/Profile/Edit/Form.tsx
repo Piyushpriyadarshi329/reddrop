@@ -5,6 +5,7 @@ import {RHFDropdown} from '../../../component/RHFInputs/RHFDropdown';
 import {RHFCalendar} from '../../../component/RHFInputs/RHFCalendar';
 import {Button} from '@rneui/themed';
 import Color from '../../../asset/Color';
+import {Gender} from '../../DoctorDetails/BookingPanel/UserCard';
 
 const CustomerProfileUpdateForm = ({onSubmit}: {onSubmit: () => void}) => {
   return (
@@ -15,9 +16,9 @@ const CustomerProfileUpdateForm = ({onSubmit}: {onSubmit: () => void}) => {
       <RHFDropdown
         name="gender"
         options={[
-          {label: 'Male', value: 'Male'},
-          {label: 'Female', value: 'Female'},
-          {label: 'Others', value: 'Others'},
+          {label: 'Male', value: Gender.MALE},
+          {label: 'Female', value: Gender.FEMALE},
+          {label: 'Others', value: Gender.OTHERS},
         ]}
       />
       <RHFCalendar name="dob" dateFormat="ll" />
