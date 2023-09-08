@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {Text} from '@rneui/themed';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {FormProvider, useForm} from 'react-hook-form';
 import {Button, Image, Pressable, View} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -9,6 +9,12 @@ import Color from '../asset/Color';
 import {useRegister} from '../customhook/useRegister';
 import {AuthStyles} from './authStyles';
 import {RHFTextInput} from '../component/RHFInputs/RHFTextInput';
+import messaging from '@react-native-firebase/messaging';
+import {useDispatch, useSelector} from 'react-redux';
+import {useLogin} from '../customhook/useLogin';
+import {updateuserdata} from '../redux/reducer/Authreducer';
+import {Toast} from 'react-native-toast-message/lib/src/Toast';
+
 interface RegisterForm {
   name: string;
   email: string;
@@ -18,7 +24,26 @@ interface RegisterForm {
 }
 export default function Register() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
   const formMethods = useForm<RegisterForm>();
+  const [fcm_token, setfcm_token] = useState('');
+
+  useEffect(() => {
+    checkToken();
+  });
+
+  const checkToken = async () => {
+    try {
+      const fcmToken = await messaging().getToken();
+      if (fcmToken) {
+        console.log(fcmToken);
+        setfcm_token(fcmToken);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   async function submithandler(formValues: RegisterForm) {
     try {
@@ -35,7 +60,19 @@ export default function Register() {
       if (res.Success) {
         alert(res.Message);
 
-        navigation.navigate('Login');
+        console.log('signup res', res);
+
+        dispatch(
+          updateuserdata({
+            islogin: true,
+            userid: res.data.id,
+            username: res.data.name,
+          }),
+        );
+
+        //again Login api call and navigate to home page
+
+        // navigation.navigate('Login');
       } else {
         alert(res.Message);
       }

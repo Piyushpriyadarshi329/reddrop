@@ -1,4 +1,4 @@
-var BASE_URL = 'http://16.171.126.47:5000/api/v1'; //UAT
+export const BASE_URL = 'http://16.171.126.47:5000/api/v1'; //UAT
 // var BASE_URL = 'http://192.168.29.230:5001/api/v1'; //UAT
 // var BASE_URL = 'http://192.168.29.230:5001/api/v1'; //UAT
 

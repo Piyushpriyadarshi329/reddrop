@@ -19,6 +19,7 @@ import {DateObj, useDateList} from '../helper';
 import {useGetBookingAvailability} from '../useGetBookingAvailability';
 import ClinicButton from './ClinicButton';
 import {successAlert} from '../../../utils/useShowAlert';
+import {getToday} from '../../../utils/dateMethods';
 export interface BookingProps {
   doctorId: string;
   existingAppointment: Appointmentdto;
@@ -30,6 +31,39 @@ const Booking = ({
   onBookingSuccess,
 }: BookingProps) => {
   const dateList = useDateList();
+
+  const [updateDateList, setupdateDateList] = useState([]);
+
+  useEffect(() => {
+    updateDateListFun();
+  }, []);
+
+  async function updateDateListFun() {
+    try {
+      let localDateList: any = [];
+
+      dateList.map(async i => {
+        const {data: bookingAvailability, isLoading: isSlotsLoading} =
+          await useGetBookingAvailability({
+            doctor_id: doctorId,
+            clinic_id: selectedClinic?.id ?? '',
+            date: new Date(i?.senddate + 'T00:00:00Z').getTime(),
+          });
+
+        console.log('bookingAvailability', bookingAvailability);
+
+        if (bookingAvailability.length > 0) {
+          localDateList.push(i);
+        }
+      });
+
+      console.log('localDateList', localDateList);
+      setupdateDateList(localDateList);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const [selectedClinic, setSelectedClinic] = useState<
     ClinicWithAddressAndImage | undefined
   >(undefined);
@@ -54,30 +88,64 @@ const Booking = ({
     useGetBookingAvailability({
       doctor_id: doctorId,
       clinic_id: selectedClinic?.id ?? '',
-      date: new Date(selectedDate?.senddate + 'T00:00:00Z').getTime(),
+      date: getToday().getTime(),
     });
 
   const timeSlots = useMemo(
     () =>
-      bookingAvailability?.map(i => ({
-        ...i,
-        title:
-          showTimeFromString(i.fromtime) +
-          ' To ' +
-          showTimeFromString(i.totime),
-        data: i.slots.map(j => {
-          return {...j, id: i.workingtime_id};
-        }),
-      })),
+      bookingAvailability?.map(i => {
+        if (
+          getToday().getTime() ==
+          new Date(
+            new Date().toISOString().split('T')[0] + 'T00:00:00Z',
+          ).getTime()
+        ) {
+          console.log('totime', i.totime);
+
+          let cur_time =
+            ('0' + new Date().getHours()).slice(-2) +
+            ('0' + new Date().getMinutes()).slice(-2);
+
+          console.log('cur_time', Number(cur_time), Number(i.totime));
+
+          if (Number(i.totime) >= Number(cur_time)) {
+            return {
+              ...i,
+              title:
+                showTimeFromString(i.fromtime) +
+                ' To ' +
+                showTimeFromString(i.totime),
+              data: i.slots.map(j => {
+                return {...j, id: i.workingtime_id};
+              }),
+            };
+          } else {
+            return {
+              ...i,
+              title: 'No Slots available',
+              data: [],
+            };
+          }
+        } else {
+          return {
+            ...i,
+            title:
+              showTimeFromString(i.fromtime) +
+              ' To ' +
+              showTimeFromString(i.totime),
+            data: i.slots.map(j => {
+              return {...j, id: i.workingtime_id};
+            }),
+          };
+        }
+      }),
     [bookingAvailability],
   );
   const AppState = useSelector((state: RootState) => state.Appstate);
 
   async function bookAppointmentHandler() {
     try {
-      const Appointment_date = new Date(
-        `${selectedDate?.senddate}T00:00:00Z`,
-      ).getTime();
+      const Appointment_date = getToday().getTime();
 
       let bookSlotPayload: BookSlotRequest = {
         customer_id: AppState.userid,
@@ -90,7 +158,11 @@ const Booking = ({
       };
       if (existingAppointment) {
         bookSlotPayload.existing_booking_id = existingAppointment.id;
+        bookSlotPayload.group_id = existingAppointment.group_id;
       }
+
+      console.log('bookSlotPayload', bookSlotPayload);
+
       bookSlot(bookSlotPayload);
     } catch (error) {
       console.log(error);

@@ -1,20 +1,25 @@
-import {useNavigation} from '@react-navigation/native';
+import {
+  NavigationProp,
+  useIsFocused,
+  useNavigation,
+} from '@react-navigation/native';
 import {Text} from '@rneui/themed';
-import React, {useState} from 'react';
-import {Image, TouchableOpacity, View} from 'react-native';
+import React, {useState, useRef} from 'react';
+import {Image, TouchableOpacity, View, BackHandler} from 'react-native';
 import openMap from 'react-native-open-maps';
 import {
   Menu,
   MenuOption,
   MenuOptions,
   MenuTrigger,
+  MenuContext,
 } from 'react-native-popup-menu';
 import Icon from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {AppPages} from '../../appPages';
 import {commonStyles} from '../../asset/styles';
 import {ConfirmationModal} from '../../component/ConfirmationModal';
-import {Appointmentdto} from '../../types';
+import {Appointmentdto, BookingStatus} from '../../types';
 import {getTimeStringFromDBTime} from '../../utils/dateMethods';
 import {useGetDoctor} from '../DoctorDetails/useDoctorQuery';
 import {useAlert} from '../../utils/useShowAlert';
@@ -22,15 +27,21 @@ import {useUpdateSlotStatus} from '../../customhook/useUpdateSlotStatus';
 
 export default function AppointmentCard({
   appointment,
+  showMenuOptions,
 }: {
   appointment: Appointmentdto;
+  showMenuOptions?: boolean;
 }) {
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<NavigationProp<any>>();
+  const isFocused = useIsFocused();
+  console.log('isFocused: ', isFocused);
   const {data: doctorDetails} = useGetDoctor(appointment.doctor_id ?? '');
 
   const {successAlert} = useAlert();
   const [deleteModal, setDeleteModal] = useState(false);
   const [rescheduleModal, setReScheduleModal] = useState(false);
+  const [popupOpen, setPopupOpen] = useState(false);
+  const popupRef = useRef(null);
   const {mutate: updateSlotStatus} = useUpdateSlotStatus(() => {
     successAlert('Updated Booking.');
     setDeleteModal(false);
@@ -77,27 +88,36 @@ export default function AppointmentCard({
           </Text>
         </View>
         <View style={{paddingHorizontal: 10}}>
-          <Menu>
-            <MenuTrigger>
-              <Icon name="dots-three-horizontal" size={16} color={'black'} />
-            </MenuTrigger>
+          {isFocused && showMenuOptions ? (
+            <Menu>
+              <MenuTrigger
+                onPress={() => {
+                  setPopupOpen(true);
+                }}
+                style={{padding: 10}}>
+                <Icon name="dots-three-horizontal" size={16} color={'black'} />
+              </MenuTrigger>
 
-            <MenuOptions>
-              <MenuOption
-                style={{padding: 5}}
-                onSelect={() => {
-                  setDeleteModal(true);
-                }}>
-                <Text style={{color: 'black', padding: 5}}>Cancel</Text>
-              </MenuOption>
-              <MenuOption
-                onSelect={() => {
-                  setReScheduleModal(true);
-                }}>
-                <Text style={{color: 'black', padding: 5}}>Reschduled</Text>
-              </MenuOption>
-            </MenuOptions>
-          </Menu>
+              <MenuOptions>
+                <MenuOption
+                  style={{padding: 5}}
+                  onSelect={() => {
+                    setPopupOpen(false);
+                    setDeleteModal(true);
+                  }}>
+                  <Text style={{color: 'black', padding: 5}}>Cancel</Text>
+                </MenuOption>
+                <MenuOption
+                  onSelect={() => {
+                    setPopupOpen(false);
+
+                    setReScheduleModal(true);
+                  }}>
+                  <Text style={{color: 'black', padding: 5}}>Reschduled</Text>
+                </MenuOption>
+              </MenuOptions>
+            </Menu>
+          ) : null}
         </View>
       </View>
 
@@ -177,6 +197,7 @@ export default function AppointmentCard({
         onsubmit={() => {
           navigation.navigate(AppPages.BookApointment, {
             existing_appointment: appointment,
+            id: doctorDetails?.id,
           });
         }}
         modalVisible={rescheduleModal}
