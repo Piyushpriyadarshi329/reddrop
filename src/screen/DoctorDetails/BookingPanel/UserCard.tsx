@@ -15,14 +15,14 @@ export enum Gender {
   FEMALE = 'Female',
   OTHERS = 'Others',
 }
-export const UserCard = ({user}: {user: UserDetails}) => {
+export const UserCard = ({user}: {user?: UserDetails}) => {
   return (
     <ShadowWrapper>
       <View style={{padding: 10, borderRadius: 10}}>
         <Text>
-          {user.name}({getAge(user.dob)})
+          {user?.name}({user?.dob && getAge(user?.dob)})
         </Text>
-        <Text>{user.gender}</Text>
+        <Text>{user?.gender}</Text>
       </View>
     </ShadowWrapper>
   );

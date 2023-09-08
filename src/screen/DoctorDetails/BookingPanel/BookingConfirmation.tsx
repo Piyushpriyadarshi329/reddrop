@@ -15,7 +15,7 @@ export const BookingConfirmation = ({
 }: {
   modalMethods: IModalMethods;
 }) => {
-  const [user, setUser] = useState<BookingUserInterface>({
+  const [user, setUser] = useState<BookingUserInterface | undefined>({
     dob: new Date('1995-12-17T03:24:00'),
     gender: Gender.MALE,
     name: 'Punyashlok',
