@@ -20,6 +20,8 @@ import {useGetBookingAvailability} from '../useGetBookingAvailability';
 import ClinicButton from './ClinicButton';
 import {successAlert} from '../../../utils/useShowAlert';
 import {getToday} from '../../../utils/dateMethods';
+import {BookingConfirmation} from './BookingConfirmation';
+import {useModalMethods} from '../../../utils/useModalMethods';
 export interface BookingProps {
   doctorId: string;
   existingAppointment: Appointmentdto;
@@ -70,6 +72,7 @@ const Booking = ({
   const [selectedDate, setSelectedDate] = useState<DateObj | undefined>(
     undefined,
   );
+  const bookingModal = useModalMethods();
   const [selectedTime, setSelectedTime] = useState<
     (Slot & {id: string}) | undefined
   >(undefined);
@@ -272,10 +275,16 @@ const Booking = ({
             width: '100%',
           }}>
           <View>
-            <Btn title="Book Appointment" onPress={bookAppointmentHandler} />
+            <Btn
+              title="Book Appointment"
+              onPress={() => {
+                bookingModal.open();
+              }}
+            />
           </View>
         </View>
       )}
+      <BookingConfirmation modalMethods={bookingModal} />
     </View>
   );
 };

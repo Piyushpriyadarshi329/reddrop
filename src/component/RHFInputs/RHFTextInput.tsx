@@ -1,8 +1,7 @@
 import {useFormContext, Controller} from 'react-hook-form';
 import {StyleSheet, KeyboardTypeOptions} from 'react-native';
 import {ValidationErrors} from '../../asset/constants';
-import {Input} from '@rneui/themed';
-import {Text} from 'react-native';
+import {Input} from '@rneui/base';
 
 export const RHFTextInput = (props: {
   name: string;
@@ -13,6 +12,7 @@ export const RHFTextInput = (props: {
   rules?: any;
   secureTextEntry?: boolean;
   keyboardType?: KeyboardTypeOptions;
+  label?: string;
 }) => {
   const {control} = useFormContext();
   return (
@@ -20,9 +20,12 @@ export const RHFTextInput = (props: {
       control={control}
       render={({field, formState: {errors}}) => (
         <Input
+          label={props.label}
           errorMessage={errors[props.name]?.message?.toString()}
           {...field}
-          onChangeText={t => field.onChange(t)}
+          onChangeText={t => {
+            field.onChange(t);
+          }}
           style={props.style}
           multiline={props.multiline}
           placeholder={props.placeholder}
