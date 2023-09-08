@@ -9,6 +9,7 @@ import {Button} from '@rneui/themed';
 import Color from '../../../asset/Color';
 
 export interface BookingUserInterface {
+  id?: string;
   name: string;
   dob: Date;
   gender: Gender;
