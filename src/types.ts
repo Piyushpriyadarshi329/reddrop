@@ -208,6 +208,9 @@ export interface BookingDto {
   agent_id?: string;
   appointment_date: number;
   existing_booking_id?: string;
+  name?: string;
+  gender?: string;
+  dob?: Number;
 }
 export type BookSlotRequest = Omit<
   BookingDto,

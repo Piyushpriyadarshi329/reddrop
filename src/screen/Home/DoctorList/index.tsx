@@ -15,6 +15,8 @@ export default function DoctorsList({route}: any) {
   const {data: doctors} = useGetDoctorList({clinic_id: data.id});
   const {data: clinics} = useGetcliniclist({});
   const thisClinic = clinics?.find(c => c.id === data.id);
+
+  console.log('thisClinic', thisClinic);
   const groupedDoctors = _.groupBy(
     doctors?.map(d => {
       if (d.speciality == null) {
@@ -49,25 +51,66 @@ export default function DoctorsList({route}: any) {
             borderBottomLeftRadius: 20,
             justifyContent: 'space-between',
           }}>
-          <View>
+          <View style={{flex: 1}}>
             <Text style={[commonStyles.font24, {color: Pallet3.textOnPrimary}]}>
               {thisClinic?.name}
             </Text>
             <Text
               style={[commonStyles.caption, {color: Pallet3.textOnPrimary}]}>
+              {' '}
+              {thisClinic?.address.address_line1}
+            </Text>
+            <Text
+              style={[commonStyles.caption, {color: Pallet3.textOnPrimary}]}>
+              {' '}
+              {thisClinic?.address.address_line2}
+            </Text>
+            <Text
+              style={[commonStyles.caption, {color: Pallet3.textOnPrimary}]}>
+              {' '}
+              {thisClinic?.address.city}
+            </Text>
+            <Text
+              style={[commonStyles.caption, {color: Pallet3.textOnPrimary}]}>
               {doctors?.length ?? 0} Doctors Listed
             </Text>
+
+            <View style={{flex: 1, flexDirection: 'row'}}>
+              <View style={{flex: 1}}>
+                {/* <Text
+                  style={[
+                    commonStyles.caption,
+                    {color: Pallet3.textOnPrimary},
+                  ]}>
+                  About
+                </Text> */}
+                <Text
+                  style={[
+                    commonStyles.caption,
+                    {color: Pallet3.textOnPrimary},
+                  ]}>
+                  {thisClinic?.about}
+                </Text>
+              </View>
+              <View style={{marginRight: 20, marginTop: -40}}>
+                <Image
+                  source={
+                    thisClinic?.profile_image
+                      ? {
+                          uri: thisClinic?.profile_image,
+                        }
+                      : require('./../../../asset/image/Clinic.jpeg')
+                  }
+                  style={{
+                    width: 130,
+                    height: 130,
+                    borderRadius: 130,
+                  }}
+                  resizeMode="cover"
+                />
+              </View>
+            </View>
           </View>
-          {thisClinic?.profile_image && (
-            <Image
-              source={{
-                uri: thisClinic.profile_image,
-              }}
-              width={100}
-              height={100}
-              resizeMode="contain"
-            />
-          )}
         </View>
         <View style={{flex: 2}}>
           <SectionList

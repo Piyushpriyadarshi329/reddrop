@@ -22,6 +22,7 @@ import {successAlert} from '../../../utils/useShowAlert';
 import {getToday} from '../../../utils/dateMethods';
 import {BookingConfirmation} from './BookingConfirmation';
 import {useModalMethods} from '../../../utils/useModalMethods';
+import moment from 'moment';
 export interface BookingProps {
   doctorId: string;
   existingAppointment: Appointmentdto;
@@ -33,38 +34,6 @@ const Booking = ({
   onBookingSuccess,
 }: BookingProps) => {
   const dateList = useDateList();
-
-  const [updateDateList, setupdateDateList] = useState([]);
-
-  useEffect(() => {
-    updateDateListFun();
-  }, []);
-
-  async function updateDateListFun() {
-    try {
-      let localDateList: any = [];
-
-      dateList.map(async i => {
-        const {data: bookingAvailability, isLoading: isSlotsLoading} =
-          await useGetBookingAvailability({
-            doctor_id: doctorId,
-            clinic_id: selectedClinic?.id ?? '',
-            date: new Date(i?.senddate + 'T00:00:00Z').getTime(),
-          });
-
-        console.log('bookingAvailability', bookingAvailability);
-
-        if (bookingAvailability.length > 0) {
-          localDateList.push(i);
-        }
-      });
-
-      console.log('localDateList', localDateList);
-      setupdateDateList(localDateList);
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   const [selectedClinic, setSelectedClinic] = useState<
     ClinicWithAddressAndImage | undefined
@@ -91,45 +60,18 @@ const Booking = ({
     useGetBookingAvailability({
       doctor_id: doctorId,
       clinic_id: selectedClinic?.id ?? '',
-      date: getToday().getTime(),
+      date: selectedDate?.senddate.getTime() ?? 0,
     });
 
   const timeSlots = useMemo(
     () =>
-      bookingAvailability?.map(i => {
-        if (
-          getToday().getTime() ==
-          new Date(
-            new Date().toISOString().split('T')[0] + 'T00:00:00Z',
-          ).getTime()
-        ) {
-          console.log('totime', i.totime);
-
-          let cur_time =
-            ('0' + new Date().getHours()).slice(-2) +
-            ('0' + new Date().getMinutes()).slice(-2);
-
-          console.log('cur_time', Number(cur_time), Number(i.totime));
-
-          if (Number(i.totime) >= Number(cur_time)) {
-            return {
-              ...i,
-              title:
-                showTimeFromString(i.fromtime) +
-                ' To ' +
-                showTimeFromString(i.totime),
-              data: i.slots.map(j => {
-                return {...j, id: i.workingtime_id};
-              }),
-            };
-          } else {
-            return {
-              ...i,
-              title: 'No Slots available',
-              data: [],
-            };
-          }
-        } else {
+      bookingAvailability
+        ?.filter(
+          i =>
+            getToday().getTime() != selectedDate?.senddate.getTime() ||
+            i.totime >= moment().format('HHmm'),
+        )
+        ?.map(i => {
           return {
             ...i,
             title:
@@ -140,37 +82,10 @@ const Booking = ({
               return {...j, id: i.workingtime_id};
             }),
           };
-        }
-      }),
-    [bookingAvailability],
+        }),
+    [bookingAvailability, selectedDate],
   );
-  const AppState = useSelector((state: RootState) => state.Appstate);
 
-  async function bookAppointmentHandler() {
-    try {
-      const Appointment_date = getToday().getTime();
-
-      let bookSlotPayload: BookSlotRequest = {
-        customer_id: AppState.userid,
-        doctor_clinic_id: selectedClinic?.clinic_doctor_id ?? '',
-        slot_index: selectedTime?.index ?? 0,
-        workingtime_id: selectedTime?.id ?? '',
-        group_id: uuid.v4().toString(),
-        payment_order_id: uuid.v4().toString(),
-        appointment_date: Appointment_date,
-      };
-      if (existingAppointment) {
-        bookSlotPayload.existing_booking_id = existingAppointment.id;
-        bookSlotPayload.group_id = existingAppointment.group_id;
-      }
-
-      console.log('bookSlotPayload', bookSlotPayload);
-
-      bookSlot(bookSlotPayload);
-    } catch (error) {
-      console.log(error);
-    }
-  }
   useEffect(() => {
     dateList && dateList.length && setSelectedDate(dateList[0]);
   }, [dateList]);
@@ -260,6 +175,7 @@ const Booking = ({
                   flex: 1,
                   justifyContent: 'center',
                   alignItems: 'center',
+                  marginTop: 40,
                 }}>
                 <Text style={{color: 'black', fontSize: 16, fontWeight: '600'}}>
                   No Slots available
@@ -284,7 +200,13 @@ const Booking = ({
           </View>
         </View>
       )}
-      <BookingConfirmation modalMethods={bookingModal} />
+      <BookingConfirmation
+        modalMethods={bookingModal}
+        selectedTime={selectedTime}
+        existingAppointment={existingAppointment}
+        onBookingSuccess={onBookingSuccess}
+        selectedClinic={selectedClinic}
+      />
     </View>
   );
 };
