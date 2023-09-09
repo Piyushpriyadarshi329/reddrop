@@ -34,7 +34,9 @@ export default function Speciality({details}: {details: SpecialityDto}) {
         />
       </View>
       <View style={{paddingTop: 5, flex: 1}}>
-        <Text style={commonStyles.font16}>{details.name}</Text>
+        <Text style={commonStyles.font12} numberOfLines={1}>
+          {details.name}
+        </Text>
         <View style={{width: '100%'}}></View>
       </View>
     </TouchableOpacity>
