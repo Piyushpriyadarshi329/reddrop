@@ -1,6 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {Alert, FlatList, Image, ScrollView, Text, View} from 'react-native';
-import uuid from 'react-native-uuid';
 import {useSelector} from 'react-redux';
 import {showTimeFromString} from '../../../Appfunction';
 import Btn from '../../../component/Btn';
@@ -23,22 +22,20 @@ import {getToday} from '../../../utils/dateMethods';
 import {BookingConfirmation} from './BookingConfirmation';
 import {useModalMethods} from '../../../utils/useModalMethods';
 import moment from 'moment';
+import {useGetAvailableDates} from '../../../customhook/useGetAvailableDates';
 export interface BookingProps {
   doctorId: string;
   existingAppointment: Appointmentdto;
   onBookingSuccess: any;
+  clinicDetails: ClinicWithAddressAndImage;
 }
 const Booking = ({
   doctorId,
   existingAppointment,
   onBookingSuccess,
+  clinicDetails,
 }: BookingProps) => {
-  const dateList = useDateList();
-
-  const [selectedClinic, setSelectedClinic] = useState<
-    ClinicWithAddressAndImage | undefined
-  >(undefined);
-  const [selectedDate, setSelectedDate] = useState<DateObj | undefined>(
+  const [selectedDate, setSelectedDate] = useState<number | undefined>(
     undefined,
   );
   const bookingModal = useModalMethods();
@@ -46,21 +43,20 @@ const Booking = ({
     (Slot & {id: string}) | undefined
   >(undefined);
 
-  let {data: clinicsList} = useGetClinicsList({doctor_id: doctorId}, data => {
-    setSelectedClinic(data?.[0]);
+  const {data: dateList} = useGetAvailableDates({
+    date: getToday().getTime(),
+    doctor_id: doctorId,
+    clinic_id: clinicDetails?.id || '',
+    // clinic_id: '244e7e5f-761b-4063-83cf-0314bb623f2c',
   });
-  const {mutate: bookSlot} = useBookSlot({
-    onSuccess: () => {
-      successAlert('Booked Successfully');
-      onBookingSuccess();
-    },
-  });
+
+  console.log('dateList1', dateList);
 
   const {data: bookingAvailability, isLoading: isSlotsLoading} =
     useGetBookingAvailability({
       doctor_id: doctorId,
-      clinic_id: selectedClinic?.id ?? '',
-      date: selectedDate?.senddate.getTime() ?? 0,
+      clinic_id: clinicDetails?.id ?? '',
+      date: selectedDate ?? 0,
     });
 
   const timeSlots = useMemo(
@@ -68,7 +64,7 @@ const Booking = ({
       bookingAvailability
         ?.filter(
           i =>
-            getToday().getTime() != selectedDate?.senddate.getTime() ||
+            getToday().getTime() != selectedDate ||
             i.totime >= moment().format('HHmm'),
         )
         ?.map(i => {
@@ -87,13 +83,13 @@ const Booking = ({
   );
 
   useEffect(() => {
-    dateList && dateList.length && setSelectedDate(dateList[0]);
+    dateList && dateList.length && setSelectedDate(dateList[0]?.date);
   }, [dateList]);
 
   return (
     <View style={{flex: 1, position: 'relative'}}>
       <ScrollView style={{height: '100%'}}>
-        <View style={{flexDirection: 'row', height: 60}}>
+        {/* <View style={{flexDirection: 'row', height: 60}}>
           {clinicsList?.map(clinic => (
             <ClinicButton
               clinic={clinic}
@@ -101,14 +97,14 @@ const Booking = ({
               setSelectedClinic={setSelectedClinic}
             />
           ))}
-        </View>
+        </View> */}
         <View style={{marginTop: 10}}>
           <FlatList
             horizontal
             data={dateList}
             renderItem={({item: i}) => (
               <DateCard
-                key={`${i.date}_${i.day}_${i.month}`}
+                key={`${i.date}`}
                 {...{
                   setselectedtime: setSelectedTime,
                   setselecteddate: setSelectedDate,
@@ -205,7 +201,7 @@ const Booking = ({
         selectedTime={selectedTime}
         existingAppointment={existingAppointment}
         onBookingSuccess={onBookingSuccess}
-        selectedClinic={selectedClinic}
+        selectedClinic={clinicDetails}
       />
     </View>
   );

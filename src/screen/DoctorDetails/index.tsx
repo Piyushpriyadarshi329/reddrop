@@ -60,6 +60,7 @@ export default function BookApointment(props: {route: any}) {
                 bookingProps={{
                   doctorId: props.route.params?.id,
                   existingAppointment: props.route.params.existing_appointment,
+                  clinicDetails: props.route.params?.clinicDetails,
                   onBookingSuccess,
                 }}
               />
