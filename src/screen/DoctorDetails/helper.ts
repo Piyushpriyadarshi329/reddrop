@@ -20,7 +20,7 @@ export interface DateObj {
   date: number;
   month: number;
   day: number;
-  senddate: string;
+  senddate: Date;
 }
 
 export const useDateList = () => {
@@ -31,17 +31,16 @@ export const useDateList = () => {
     for (let i = 0; i < 15; i++) {
       let d = new Date();
       d.setDate(d.getDate() + i);
+      d.setHours(0);
+      d.setMinutes(0);
+      d.setSeconds(0);
+      d.setMilliseconds(0);
 
       let obj = {
         date: d.getDate(),
         month: d.getMonth(),
         day: d.getDay(),
-        senddate:
-          d.getFullYear() +
-          '-' +
-          ('0' + (d.getMonth() + 1)).slice(-2) +
-          '-' +
-          ('0' + d.getDate()).slice(-2),
+        senddate: d,
       };
 
       localdaylist.push(obj);

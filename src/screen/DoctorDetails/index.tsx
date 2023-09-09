@@ -13,7 +13,9 @@ import {AppPages} from '../../appPages';
 export default function BookApointment(props: {route: any}) {
   const navigation = useNavigation();
   const DoctorBookingStack = createNativeStackNavigator();
-  props.route.params;
+
+  console.log('props.route.params?.id', props.route.params?.id);
+
   const {data: doctorDetails} = useGetDoctor(props.route.params?.id);
   const onBookingSuccess = () => {
     navigation.goBack();

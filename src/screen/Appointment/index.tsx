@@ -72,7 +72,10 @@ export default function Appointment() {
       </View>
 
       <View style={{flex: 12, marginTop: 10}}>
-        <AppointmentList status={appointmentTabToStatus[selected]} />
+        <AppointmentList
+          tab={selected}
+          showMenuOptions={selected === AppointmentTab.Scheduled}
+        />
       </View>
     </View>
   );

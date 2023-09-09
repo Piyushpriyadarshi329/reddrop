@@ -2,7 +2,7 @@ import React from 'react';
 import {Pressable, Text, View} from 'react-native';
 // import Icon from 'react-native-vector-icons/dist/Entypo';
 import Color from '../../asset/Color';
-import {monthNames, weekdayNames} from './helper';
+import {DateObj, monthNames, weekdayNames} from './helper';
 import {homeStyles} from '../Home/Home';
 import ShadowWrapper, {shadowStyles} from '../../component/ShadowWrapper';
 
@@ -15,7 +15,7 @@ export const DateCard = ({
 }: {
   setselectedtime: any;
   setselecteddate: any;
-  selecteddate: any;
+  selecteddate: DateObj | undefined;
   i: any;
 }) => {
   const fontColor = selecteddate == i ? 'white' : 'black';

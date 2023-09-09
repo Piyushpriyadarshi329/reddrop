@@ -7,25 +7,49 @@ import {BookingStatus} from '../../types';
 import AppointmentCard from './Appointmentcard';
 import {useGetAppointments} from './useAppointmentQuery';
 import {getToday} from '../../utils/dateMethods';
+import {AppointmentTab, appointmentTabToStatus} from './helper';
 
-export const AppointmentList = ({status}: {status: BookingStatus[]}) => {
+export const AppointmentList = ({
+  tab,
+  showMenuOptions,
+}: {
+  tab: AppointmentTab;
+  showMenuOptions?: boolean;
+}) => {
+  const bookingStatus = appointmentTabToStatus[tab];
   const userid = useSelector((state: RootState) => state.Appstate.userid);
   const datePayload = useMemo(() => {
-    if (status[0] === BookingStatus.BOOKED) {
-      return {from_date: getToday()};
-    } else if (status.includes(BookingStatus.COMPLETED)) {
-      return {to_date: getToday()};
+    if (bookingStatus[0] === BookingStatus.BOOKED) {
+      return {from_date: getToday().getTime()};
+    } else if (bookingStatus.includes(BookingStatus.COMPLETED)) {
+      return {to_date: getToday().getTime()};
     }
     return {};
-  }, [status]);
+  }, [bookingStatus]);
   const {data: appointments} = useGetAppointments({
     customerId: userid,
-    status,
+    status: bookingStatus,
     ...datePayload,
   });
-  const sortedAppointments = appointments?.sort(
-    (a, b) => b.appointment_date - a.appointment_date,
-  );
+
+  const sortedAppointments = useMemo(() => {
+    if (tab === AppointmentTab.History) {
+      return appointments
+        ?.filter(
+          a =>
+            !(
+              a.status == BookingStatus.BOOKED &&
+              a.appointment_date == getToday().getTime()
+            ),
+        )
+        ?.sort((a, b) => b.appointment_date - a.appointment_date);
+    } else {
+      return appointments?.sort(
+        (a, b) => b.appointment_date - a.appointment_date,
+      );
+    }
+  }, [appointments, tab]);
+
   return (
     <ScrollView>
       <>
@@ -38,7 +62,10 @@ export const AppointmentList = ({status}: {status: BookingStatus[]}) => {
         ) : (
           <>
             {sortedAppointments?.map(i => (
-              <AppointmentCard appointment={i} />
+              <AppointmentCard
+                appointment={i}
+                showMenuOptions={showMenuOptions}
+              />
             ))}
           </>
         )}
