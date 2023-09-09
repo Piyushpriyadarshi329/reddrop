@@ -15,7 +15,7 @@ export const DateCard = ({
 }: {
   setselectedtime: any;
   setselecteddate: any;
-  selecteddate: DateObj | undefined;
+  selecteddate: number | undefined;
   i: any;
 }) => {
   console.log('i', i.date);
