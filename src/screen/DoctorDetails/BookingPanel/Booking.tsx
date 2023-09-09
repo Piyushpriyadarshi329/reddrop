@@ -106,15 +106,6 @@ const Booking = ({
   return (
     <View style={{flex: 1, position: 'relative'}}>
       <ScrollView style={{height: '100%'}}>
-        <View style={{flexDirection: 'row', height: 60}}>
-          {clinicsList?.map(clinic => (
-            <ClinicButton
-              clinic={clinic}
-              selectedClinic={selectedClinic}
-              setSelectedClinic={setSelectedClinic}
-            />
-          ))}
-        </View>
         <View style={{marginTop: 10}}>
           <FlatList
             horizontal
