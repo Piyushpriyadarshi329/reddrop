@@ -22,11 +22,17 @@ const theme = createTheme({
   components: {
     Button: {
       raised: true,
+      color: Color.primary,
+      buttonStyle: {borderRadius: 10},
+      containerStyle: {borderRadius: 10},
     },
     Text: {
       style: {
         fontFamily: 'Poppins-Medium',
       },
+    },
+    Icon: {
+      type: 'material-community',
     },
   },
 });

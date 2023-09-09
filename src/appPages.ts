@@ -1,4 +1,5 @@
 export const AppPages = {
+  AuthHome: 'AuthHome',
   HomeStack: 'HomeStack',
   Home: 'Home',
   Search: 'Search',

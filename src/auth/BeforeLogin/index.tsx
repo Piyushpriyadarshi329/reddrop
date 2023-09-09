@@ -1,10 +1,11 @@
-import {View, Text} from 'react-native';
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Login from './Login';
-import OTP from './OTP';
+import OTP from '../OTP';
 import Register from './Register';
+import {AppPages} from '../../appPages';
+import {AuthHome} from './Home';
 
 export default function Beforelogin() {
   const Stack = createNativeStackNavigator();
@@ -12,6 +13,11 @@ export default function Beforelogin() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name={AppPages.AuthHome}
+          component={AuthHome}
+          options={{headerShown: false}}
+        />
         <Stack.Screen
           name="Login"
           component={Login}
