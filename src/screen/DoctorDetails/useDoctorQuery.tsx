@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {GETDOCTORLIST_URL, GET_DOCTOR} from '../../API_CONFIG';
+import {GETDOCTORLIST_URL, GET_DOCTOR, SearchDoctorUrl} from '../../API_CONFIG';
 import {useQuery} from '@tanstack/react-query';
 import {
   DoctorDto,
@@ -11,6 +11,20 @@ import {useAlert} from '../../utils/useShowAlert';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/Store';
 
+export function useSearchDoctorList(payload: {name: string}) {
+  const cityName = useSelector((root: RootState) => root.Appstate.cityName);
+  return useQuery(
+    ['DOCTORS', cityName, payload],
+    () =>
+      axios.post<GetDoctorsListResponse>(SearchDoctorUrl, {
+        ...payload,
+        city: cityName,
+      }),
+    {
+      select: data => data.data.data,
+    },
+  );
+}
 export function useGetDoctorList(payload: GetDotcorsListRequest) {
   const cityName = useSelector((root: RootState) => root.Appstate.cityName);
   return useQuery(

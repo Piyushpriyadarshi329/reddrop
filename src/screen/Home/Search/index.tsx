@@ -4,7 +4,10 @@ import {SearchBar, Text} from '@rneui/themed';
 import Navbar from '../../../component/Navbar';
 import {homeStyles} from '../Home';
 import useDebounce from '../../../utils/useDebounce';
-import {useGetDoctorList} from '../../DoctorDetails/useDoctorQuery';
+import {
+  useGetDoctorList,
+  useSearchDoctorList,
+} from '../../DoctorDetails/useDoctorQuery';
 import DoctorListCard from '../DoctorList/DoctorListCard';
 import {Pallet3} from '../../../asset/Color';
 
@@ -15,8 +18,8 @@ const Search = () => {
   useEffect(() => {
     searchBar?.current?.focus();
   }, []);
-  const {data: doctors} = useGetDoctorList({
-    doctor_name_search_string: searchedText,
+  const {data: doctors} = useSearchDoctorList({
+    name: searchedText,
   });
 
   return (
@@ -45,14 +48,11 @@ const Search = () => {
           onChangeText={setValue}
         />
       </View>
-      <View>
-        <View>
-          <FlatList
-            data={doctors}
-            renderItem={({item}) => <DoctorListCard details={item} />}
-          />
-        </View>
-      </View>
+      <FlatList
+        data={doctors}
+        keyExtractor={item => item.id}
+        renderItem={({item}) => <DoctorListCard details={item} />}
+      />
     </View>
   );
 };
