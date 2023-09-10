@@ -8,6 +8,7 @@ export const BASE_URL = 'http://16.171.126.47:5000/api/v1'; //UAT
 export const LOGIN_URL = BASE_URL + '/login';
 export const REGISTER_URL = BASE_URL + '/signup';
 export const GETDOCTORLIST_URL = BASE_URL + '/getdoctorlist';
+export const SearchDoctorUrl = BASE_URL + '/searchDoctor';
 export const GET_DOCTOR = BASE_URL + '/getdoctor';
 export const GETAVAILABLITY_URL = BASE_URL + '/getavailability';
 export const BOOKSLOT_URL = BASE_URL + '/bookSlot';

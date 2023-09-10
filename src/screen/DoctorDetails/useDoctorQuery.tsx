@@ -14,7 +14,7 @@ import {RootState} from '../../redux/Store';
 export function useSearchDoctorList(payload: {name: string}) {
   const cityName = useSelector((root: RootState) => root.Appstate.cityName);
   return useQuery(
-    ['DOCTORS', cityName, payload],
+    ['SEARCHED_DOCTORS', cityName, payload],
     () =>
       axios.post<GetDoctorsListResponse>(SearchDoctorUrl, {
         ...payload,
