@@ -401,3 +401,12 @@ export interface VisibleDocument {
 }
 
 export type AddDocumentResponse = DataResponse<VisibleDocument>;
+
+export interface LatestBookingStatus {
+  slot_index: number;
+  status: BookingStatus;
+}
+
+export interface AppointmentWithLatestStatus extends Appointmentdto {
+  latestBookingStatus?: LatestBookingStatus;
+}

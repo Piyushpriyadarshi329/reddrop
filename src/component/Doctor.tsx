@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Text} from '@rneui/themed';
 import React, {useState} from 'react';
 import {Image, Modal, Pressable, TouchableOpacity, View} from 'react-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {commonStyles} from '../asset/styles';
 import {updatecustomerdata} from '../redux/reducer/Customerreducer';
 import {ClinicWithAddressAndImage, DoctorDto} from '../types';
@@ -11,10 +11,13 @@ import {AppPages} from '../appPages';
 import {useGetcliniclist as useGetClinicsList} from '../customhook/useGetcliniclist';
 import Color from '../asset/Color';
 import {Button} from 'react-native';
+import {RootState} from '../redux/Store';
 
 export default function Doctor({details}: {details: DoctorDto}) {
   const navigation = useNavigation<any>();
   const dispatch = useDispatch();
+  const city = useSelector((state: RootState) => state.Appstate.cityName);
+
   const [modalVisible, setModalVisible] = useState(false);
 
   const [selectedClinic, setSelectedClinic] = useState<

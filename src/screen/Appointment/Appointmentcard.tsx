@@ -19,7 +19,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {AppPages} from '../../appPages';
 import {commonStyles} from '../../asset/styles';
 import {ConfirmationModal} from '../../component/ConfirmationModal';
-import {Appointmentdto, BookingStatus} from '../../types';
+import {
+  Appointmentdto,
+  AppointmentWithLatestStatus,
+  BookingStatus,
+} from '../../types';
 import {getTimeStringFromDBTime} from '../../utils/dateMethods';
 import {useGetDoctor} from '../DoctorDetails/useDoctorQuery';
 import {useAlert} from '../../utils/useShowAlert';
@@ -29,7 +33,7 @@ export default function AppointmentCard({
   appointment,
   showMenuOptions,
 }: {
-  appointment: Appointmentdto;
+  appointment: AppointmentWithLatestStatus;
   showMenuOptions?: boolean;
 }) {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -144,7 +148,20 @@ export default function AppointmentCard({
         </View>
       </View>
 
-      <View style={{flexDirection: 'row', flex: 0.7, marginTop: 10}}>
+      {appointment?.latestBookingStatus ? (
+        <View
+          style={[
+            commonStyles.flexRowAlignCenter,
+            {alignSelf: 'flex-start', marginLeft: 20},
+          ]}>
+          <Text style={commonStyles.font16}>Current ongoing Slot:</Text>
+          <Text style={commonStyles.font24}>
+            {appointment?.latestBookingStatus?.slot_index}
+          </Text>
+        </View>
+      ) : null}
+
+      <View style={{flexDirection: 'row', flex: 0.7, marginTop: 5}}>
         <View style={{flexDirection: 'column', flex: 1, marginHorizontal: 15}}>
           <Text style={[commonStyles.font16, commonStyles.weight600]}>
             {appointment.address.address_line1}

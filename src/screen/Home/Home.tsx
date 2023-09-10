@@ -36,7 +36,9 @@ export default function Home() {
     (root: RootState) => root.Appstate,
   );
   const navigation = useNavigation<NavigationProp<any>>();
-  const {data: topdoctorlist} = useGetDoctorList({orderBy: 'BOOKINGS'});
+  const {data: topdoctorlist, dataUpdatedAt} = useGetDoctorList({
+    orderBy: 'BOOKINGS',
+  });
   const {data: topcliniclist} = useGetcliniclist({});
   const {data: Specialitylist} = usegetSpeciality();
   const locatinModalMethods = useModalMethods();
@@ -93,7 +95,11 @@ export default function Home() {
             contentContainerStyle={{gap: 10, height: '100%'}}
             horizontal={true}
             data={topdoctorlist}
-            renderItem={({item}) => <Doctor details={item} key={item.id} />}
+            key={dataUpdatedAt}
+            renderItem={({item, index}) => {
+              console.log(item.id, index);
+              return <Doctor details={item} key={item.id} />;
+            }}
             keyExtractor={c => c.id}
             ListEmptyComponent={
               <View>

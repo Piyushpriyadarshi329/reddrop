@@ -18,7 +18,6 @@ export const DateCard = ({
   selecteddate: number | undefined;
   i: any;
 }) => {
-  console.log('i', i.date);
   const fontColor = selecteddate == i.date ? 'white' : 'black';
   return (
     <ShadowWrapper containerStyle={shadowStyles.flexMargin}>
