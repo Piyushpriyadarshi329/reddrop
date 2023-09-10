@@ -1,6 +1,4 @@
-export const BASE_URL = 'http://16.171.126.47:5000/api/v1'; //UAT
-// var BASE_URL = 'http://192.168.29.230:5001/api/v1'; //UAT
-// var BASE_URL = 'http://192.168.29.230:5001/api/v1'; //UAT
+export const BASE_URL = 'http://43.204.45.2:5002/api/v1'; //dev
 
 // var BASE_URL = 'http://43.204.45.2:5000/api/v1'; //QA
 // var BASE_URL = 'http://43.204.45.2:5001/api/v1'; //prod

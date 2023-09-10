@@ -33,7 +33,9 @@ const CalendarModal = ({
           marginHorizontal: 50,
           borderRadius: 15,
           borderWidth: 1,
-          borderColor: Color.primary,
+          borderColor: 'white',
+          backgroundColor: 'white',
+          padding: 10,
         }}>
         <Calendar
           onDayPress={day => {
@@ -43,12 +45,12 @@ const CalendarModal = ({
           style={{borderRadius: 15}}
           theme={{
             backgroundColor: Pallet2.tertiary,
-            calendarBackground: Pallet2.tertiary,
-            textSectionTitleColor: Pallet2.primary,
-            selectedDayBackgroundColor: Pallet2.primary,
+            calendarBackground: Color.white,
+            textSectionTitleColor: Color.primary,
+            selectedDayBackgroundColor: Color.primary,
             selectedDayTextColor: '#ffffff',
             todayTextColor: Pallet2.primary,
-            dayTextColor: Pallet2.primary,
+            dayTextColor: Color.primary,
           }}
           markedDates={{
             [moment().format('YYYY-MM-DD')]: {

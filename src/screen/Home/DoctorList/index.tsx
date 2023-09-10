@@ -119,7 +119,9 @@ export default function DoctorsList({route}: any) {
             <Text>{section.title}</Text>
           </View>
         )}
-        renderItem={({item}) => <DoctorListCard details={item} />}
+        renderItem={({item}) => (
+          <DoctorListCard details={item} clinicDetails={thisClinic} />
+        )}
       />
     </View>
   );

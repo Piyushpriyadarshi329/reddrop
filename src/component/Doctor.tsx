@@ -12,6 +12,7 @@ import {useGetcliniclist as useGetClinicsList} from '../customhook/useGetclinicl
 import Color from '../asset/Color';
 import {Button} from 'react-native';
 import {RootState} from '../redux/Store';
+import ClinicsListModel from './ClinicsListModel';
 
 export default function Doctor({details}: {details: DoctorDto}) {
   const navigation = useNavigation<any>();
@@ -30,6 +31,11 @@ export default function Doctor({details}: {details: DoctorDto}) {
 
   function clickhandler() {
     try {
+      dispatch(
+        updatecustomerdata({
+          doctor: details,
+        }),
+      );
       if (clinicsList.length > 1) {
         setModalVisible(true);
       } else {
@@ -42,12 +48,6 @@ export default function Doctor({details}: {details: DoctorDto}) {
 
   async function clinicHandler(clinic: ClinicWithAddressAndImage) {
     try {
-      dispatch(
-        updatecustomerdata({
-          doctor: details,
-        }),
-      );
-
       navigation.navigate(AppPages.BookApointment, {
         id: details.id,
         clinicDetails: clinic,
@@ -61,55 +61,12 @@ export default function Doctor({details}: {details: DoctorDto}) {
   return (
     <ShadowWrapper>
       <View>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}>
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: Color.lightgray,
-            }}>
-            <View>
-              <Text>Please Select Clinic</Text>
-            </View>
+        <ClinicsListModel
+          doctorDetails={details}
+          setModalVisible={setModalVisible}
+          modalVisible={modalVisible}
+        />
 
-            {clinicsList?.map(i => {
-              return (
-                <>
-                  <View
-                    style={{
-                      backgroundColor: Color.primary,
-                      borderRadius: 5,
-                      marginTop: 10,
-                      width: '75%',
-                    }}>
-                    <Pressable
-                      onPress={() => {
-                        console.log('i', i);
-                        clinicHandler(i);
-                      }}
-                      style={{}}>
-                      <Text style={{padding: 5}}>Name:{i.name}</Text>
-                      <Text style={{padding: 3}}>
-                        Address: {i.address.address_line1}
-                      </Text>
-                      <Text style={{padding: 3}}>
-                        {i.address.address_line2}
-                      </Text>
-                      <Text style={{padding: 3}}>City:{i.address.city}</Text>
-                    </Pressable>
-                  </View>
-                </>
-              );
-            })}
-          </View>
-        </Modal>
         <TouchableOpacity
           onPress={clickhandler}
           style={[
