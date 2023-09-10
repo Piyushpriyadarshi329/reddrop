@@ -12,6 +12,7 @@ const Navbar = (props: {
   asFullScreenModal?: boolean;
   endAdornment?: JSX.Element;
   bgc?: string;
+  hideBorderRadius?: boolean;
 }) => {
   const navigation = useNavigation();
   return (
@@ -24,8 +25,8 @@ const Navbar = (props: {
         justifyContent: 'center',
         gap: 20,
         backgroundColor: props.bgc || Pallet3.primary,
-        borderBottomRightRadius: 20,
-        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: !props.hideBorderRadius ? 20 : 0,
+        borderBottomLeftRadius: !props.hideBorderRadius ? 20 : 0,
       }}>
       {!props.asFullScreenModal && !props.blockBack && (
         <View

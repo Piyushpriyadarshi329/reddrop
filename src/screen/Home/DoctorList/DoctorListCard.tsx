@@ -41,17 +41,17 @@ const DoctorListCard = ({
       if (clinicDetails) {
         clinicHandler(clinicDetails);
       } else {
-        if (clinicsList.length > 1) {
+        if ((clinicsList?.length ?? 0) > 1) {
           setModalVisible(true);
         } else {
-          clinicHandler(clinicsList[0]);
+          clinicHandler(clinicsList?.[0]);
         }
       }
     } catch (error) {
       console.log(error);
     }
   }
-  async function clinicHandler(clinic: ClinicWithAddressAndImage) {
+  async function clinicHandler(clinic: ClinicWithAddressAndImage | undefined) {
     try {
       navigation.navigate(AppPages.BookApointment, {
         id: details.id,

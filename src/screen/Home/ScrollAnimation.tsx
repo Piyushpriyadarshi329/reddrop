@@ -8,7 +8,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-export const useScrollAnimation = (height: number) => {
+export const useScrollAnimation = (height: number, endHeight?: number) => {
   const lastContentOffset = useSharedValue(0);
   const isScrolling = useSharedValue(false);
   const translateY = useSharedValue(height);
@@ -34,7 +34,7 @@ export const useScrollAnimation = (height: number) => {
         lastContentOffset.value < event.contentOffset.y &&
         isScrolling.value
       ) {
-        translateY.value = 0;
+        translateY.value = endHeight ?? 0;
         // scroll down
       }
       lastContentOffset.value = event.contentOffset.y;
