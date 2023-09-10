@@ -19,7 +19,6 @@ export default function DoctorsList({route}: any) {
   const {data: clinics} = useGetcliniclist({});
   const thisClinic = clinics?.find(c => c.id === data.id);
 
-  console.log('thisClinic', thisClinic);
   const groupedDoctors = _.groupBy(
     doctors?.map(d => {
       if (d.speciality == null) {
