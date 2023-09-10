@@ -6,6 +6,7 @@ export const BASE_URL = 'http://43.204.45.2:5002/api/v1'; //dev
 export const LOGIN_URL = BASE_URL + '/login';
 export const REGISTER_URL = BASE_URL + '/signup';
 export const GETDOCTORLIST_URL = BASE_URL + '/getdoctorlist';
+export const SearchDoctorUrl = BASE_URL + '/searchDoctor';
 export const GET_DOCTOR = BASE_URL + '/getdoctor';
 export const GETAVAILABLITY_URL = BASE_URL + '/getavailability';
 export const BOOKSLOT_URL = BASE_URL + '/bookSlot';
