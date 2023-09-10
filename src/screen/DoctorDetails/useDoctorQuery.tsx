@@ -6,6 +6,7 @@ import {
   GetDoctorResponse,
   GetDoctorsListResponse,
   GetDotcorsListRequest,
+  SearchDoctorsListResponse,
 } from '../../types';
 import {useAlert} from '../../utils/useShowAlert';
 import {useSelector} from 'react-redux';
@@ -16,7 +17,7 @@ export function useSearchDoctorList(payload: {name: string}) {
   return useQuery(
     ['SEARCHED_DOCTORS', cityName, payload],
     () =>
-      axios.post<GetDoctorsListResponse>(SearchDoctorUrl, {
+      axios.post<SearchDoctorsListResponse>(SearchDoctorUrl, {
         ...payload,
         city: cityName,
       }),

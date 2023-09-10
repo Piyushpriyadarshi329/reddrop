@@ -2,22 +2,38 @@ import {useNavigation} from '@react-navigation/native';
 import {Text} from '@rneui/themed';
 import React, {useState} from 'react';
 import {Image, TouchableOpacity, View} from 'react-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {ClinicWithAddressAndImage, DoctorDto} from '../../../types';
 import {updatecustomerdata} from '../../../redux/reducer/Customerreducer';
 import {AppPages} from '../../../appPages';
 import {commonStyles} from '../../../asset/styles';
 import ClinicsListModel from '../../../component/ClinicsListModel';
 import {useGetcliniclist as useGetClinicsList} from '../../../customhook/useGetcliniclist';
+import {RootState} from '../../../redux/Store';
+
+type Location = {
+  city: string;
+  lat: number;
+  lan: number;
+};
+
+type Doctor = DoctorDto & {
+  profile_image?: string;
+  location?: Location[];
+  fees?: number;
+};
 
 const DoctorListCard = ({
   details,
   clinicDetails,
 }: {
-  details: DoctorDto;
+  details: Doctor;
   clinicDetails?: ClinicWithAddressAndImage;
 }) => {
   const navigation = useNavigation<any>();
+  const {username, userid, cityName} = useSelector(
+    (root: RootState) => root.Appstate,
+  );
 
   const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
@@ -32,6 +48,27 @@ const DoctorListCard = ({
 
   function clickHandler() {
     try {
+      if (details.location) {
+        let filterCity: Location[] = details.location.filter(
+          i => i.city == cityName,
+        );
+
+        if (filterCity.length == 0) {
+          alert(
+            `Doctor is available in ${[
+              details?.location
+                .map(l => l.city)
+                .slice(0, -1)
+                .join(', '),
+              details.location[details.location.length - 1].city,
+            ]
+              .filter(Boolean)
+              .join('&')} \n\n Please change your city to book`,
+          );
+          return;
+        }
+      }
+
       dispatch(
         updatecustomerdata({
           doctor: details,
