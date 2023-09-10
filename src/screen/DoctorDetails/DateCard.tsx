@@ -15,24 +15,31 @@ export const DateCard = ({
 }: {
   setselectedtime: any;
   setselecteddate: any;
-  selecteddate: DateObj | undefined;
+  selecteddate: number | undefined;
   i: any;
 }) => {
-  const fontColor = selecteddate == i ? 'white' : 'black';
+  console.log('i', i.date);
+  const fontColor = selecteddate == i.date ? 'white' : 'black';
   return (
     <ShadowWrapper containerStyle={shadowStyles.flexMargin}>
       <Pressable
         style={{minWidth: 75, borderRadius: 10}}
         onPress={() => {
-          setselectedtime('');
-          setselecteddate(i);
+          if (i.available) {
+            setselectedtime('');
+            setselecteddate(i.date);
+          }
         }}>
         <View
           style={{
             paddingVertical: 15,
             borderColor: 'grey',
             borderRadius: 10,
-            backgroundColor: selecteddate == i ? Color.primary : 'white',
+            backgroundColor: i.available
+              ? selecteddate == i.date
+                ? Color.primary
+                : 'white'
+              : Color.lightgray,
           }}>
           <Text
             style={{
@@ -40,7 +47,7 @@ export const DateCard = ({
               fontSize: 16,
               textAlign: 'center',
             }}>
-            {weekdayNames[i.day]}
+            {weekdayNames[new Date(i?.date).getDay()]}
           </Text>
           <Text
             style={{
@@ -48,10 +55,10 @@ export const DateCard = ({
               fontSize: 16,
               textAlign: 'center',
             }}>
-            {i.date}
+            {new Date(i?.date).getDate()}
           </Text>
           <Text style={{color: fontColor, fontSize: 16, textAlign: 'center'}}>
-            {monthNames[i.month]}
+            {monthNames[new Date(i?.date).getMonth()]}
           </Text>
         </View>
       </Pressable>
