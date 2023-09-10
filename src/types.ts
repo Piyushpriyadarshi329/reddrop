@@ -127,6 +127,7 @@ export interface CustomerDto {
   is_agent: boolean;
   gender: string;
   dob: string;
+  appointmentsCount: number;
 }
 export type UpdateCustomerRequest = {
   name?: string;
@@ -158,11 +159,16 @@ export type ClinicWithAddressAndImage = ClinicWithAddress & {
   clinic_doctor_id?: string;
   fees?: number;
 };
+export type GetClinicsRequest = {
+  doctor_id?: string;
+  clinic_id?: string;
+  city?: string;
+};
 export type GetClinicsResponse = DataResponse<ClinicWithAddressAndImage[]>;
 
 /** UserController */
 export interface LoginRequest {
-  email: string;
+  userName: string;
   password: string;
   userType: number;
   fcm_token: string;
@@ -194,6 +200,12 @@ export enum BookingStatus {
   STARTED = 'STARTED',
   NA = 'NA',
 }
+export enum Gender {
+  MALE = 'Male',
+  FEMALE = 'Female',
+  OTHERS = 'Others',
+}
+
 export interface BookingDto {
   id: string;
   customer_id: string;
@@ -208,9 +220,9 @@ export interface BookingDto {
   agent_id?: string;
   appointment_date: number;
   existing_booking_id?: string;
-  name?: string;
-  gender?: string;
-  dob?: Number;
+  dob: number;
+  name: string;
+  gender: Gender;
 }
 export type BookSlotRequest = Omit<
   BookingDto,
@@ -292,13 +304,32 @@ export interface OccupiedDto {
 export interface GetAppointmentsRequest {
   customerId?: string;
   doctorId?: string;
+  clinicId?: string;
   status?: BookingStatus[];
   appointment_date?: number;
   from_date?: number;
   to_date?: number;
 }
+export interface GetCustomerAppointmentsRequest {
+  status?: BookingStatus[];
+  appointment_date?: number;
+  from_date?: number;
+  to_date?: number;
+}
+export type GetCustomerAppointmentResponse = DataResponse<
+  AppointmentWithLatestStatus[]
+>;
+
+export interface LatestBookingStatus {
+  slot_index: number;
+  status: BookingStatus;
+}
+
+export interface AppointmentWithLatestStatus extends Appointmentdto {
+  latestBookingStatus?: LatestBookingStatus;
+}
+
 export interface Appointmentdto extends BookingDto {
-  customerName?: string;
   customer_image_key?: string;
   doctorsName?: string;
   doctorSpeciality?: string;
@@ -410,3 +441,6 @@ export interface LatestBookingStatus {
 export interface AppointmentWithLatestStatus extends Appointmentdto {
   latestBookingStatus?: LatestBookingStatus;
 }
+export type GetAvailableDatesResponse = DataResponse<
+  {date: number; available: boolean}[]
+>;

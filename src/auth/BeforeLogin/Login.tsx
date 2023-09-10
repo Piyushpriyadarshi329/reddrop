@@ -48,9 +48,9 @@ export default function Login() {
   async function submitHandler(formValues: LoginForm) {
     try {
       let payload = {
-        email: formValues.username,
+        userName: formValues.username,
         password: formValues.password,
-        usertype: 1,
+        userType: 1,
         fcm_token: fcm_token,
       };
 

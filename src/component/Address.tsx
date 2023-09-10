@@ -2,13 +2,13 @@ import {Text} from '@rneui/themed';
 import React from 'react';
 import {View} from 'react-native';
 import {commonStyles} from '../asset/styles';
-import {AddressDto} from '../types';
+import {AddressDto, ShowAddress} from '../types';
 
 const Address = ({
   details,
   compact,
 }: {
-  details: AddressDto | undefined;
+  details: ShowAddress | undefined;
   compact?: boolean;
 }) => {
   return (

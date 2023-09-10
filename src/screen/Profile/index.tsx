@@ -1,5 +1,12 @@
 import {useState} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {MenuProvider} from 'react-native-popup-menu';
 import {useDispatch, useSelector} from 'react-redux';
 import {commonStyles} from '../../asset/styles';
@@ -12,6 +19,7 @@ import AboutMenuOptions from './MenuOptions';
 import {useGetCustomer, useUpdateCustomer} from './useCustomerQuery';
 import {ProfileModal} from './Edit/Modal';
 import {updateuserdata} from '../../redux/reducer/Authreducer';
+import {ProfileEntry} from './ProfileEntry';
 
 export default function Profile() {
   const AppState = useSelector((state: RootState) => state.Appstate);
@@ -44,7 +52,13 @@ export default function Profile() {
           />
         }
       />
-      <View style={{flex: 1, backgroundColor: 'white', paddingHorizontal: 20}}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: 'white',
+          paddingHorizontal: 20,
+          paddingTop: 20,
+        }}>
         <View style={styles.imageContainer}>
           <TouchableOpacity onPress={() => setpicModalVisible(true)}>
             <Image
@@ -67,13 +81,17 @@ export default function Profile() {
               </Text>
             )}
             {customer?.gender && (
-              <Text style={commonStyles.caption}>
-                {getAge(Number(customer.gender))}
-              </Text>
+              <Text style={commonStyles.caption}>{customer.gender}</Text>
             )}
             <Text style={commonStyles.caption}>{customer?.mobile}</Text>
           </View>
         </View>
+        <ScrollView style={{paddingHorizontal: 30, paddingTop: 40}}>
+          <ProfileEntry
+            label="Appointments till date"
+            value={customer?.appointmentsCount ?? 0}
+          />
+        </ScrollView>
         <ProfileModal
           {...{
             editMode: editModalVisible,

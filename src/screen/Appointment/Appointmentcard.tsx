@@ -38,7 +38,6 @@ export default function AppointmentCard({
 }) {
   const navigation = useNavigation<NavigationProp<any>>();
   const isFocused = useIsFocused();
-  console.log('isFocused: ', isFocused);
   const {data: doctorDetails} = useGetDoctor(appointment.doctor_id ?? '');
 
   const {successAlert} = useAlert();
