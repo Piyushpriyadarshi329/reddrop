@@ -1,5 +1,5 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {SearchBar} from '@rneui/themed';
+import {SearchBar, Skeleton} from '@rneui/themed';
 import React from 'react';
 import {
   FlatList,
@@ -32,11 +32,18 @@ export default function Home() {
     (root: RootState) => root.Appstate,
   );
   const navigation = useNavigation<NavigationProp<any>>();
-  const {data: topdoctorlist, dataUpdatedAt} = useGetDoctorList({
+  const {
+    data: topdoctorlist,
+    dataUpdatedAt,
+    isLoading: isDoctorsLoading,
+  } = useGetDoctorList({
     orderBy: 'BOOKINGS',
   });
-  const {data: topcliniclist} = useGetcliniclist({});
-  const {data: Specialitylist} = usegetSpeciality();
+  const {data: topcliniclist, isLoading: isClinicsLoading} = useGetcliniclist(
+    {},
+  );
+  const {data: Specialitylist, isLoading: isSpecialitiesLoading} =
+    usegetSpeciality();
   const locatinModalMethods = useModalMethods();
   const {AnimatedScrollView, AnimatedView: AnimationView} =
     useScrollAnimation(50);
@@ -93,56 +100,92 @@ export default function Home() {
             <Text style={[commonStyles.font16, commonStyles.weight600]}>
               Top Doctors
             </Text>
-            <FlatList
-              contentContainerStyle={{gap: 10, height: '100%'}}
-              horizontal={true}
-              data={topdoctorlist}
-              key={dataUpdatedAt}
-              renderItem={({item}) => <Doctor details={item} key={item.id} />}
-              keyExtractor={c => c.id}
-              ListEmptyComponent={
-                <View>
-                  <Text style={commonStyles.caption}>
-                    No Doctors Listed in the area yet.
-                  </Text>
-                </View>
-              }
-            />
+            {isDoctorsLoading ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  gap: 10,
+                  justifyContent: 'center',
+                }}>
+                <Skeleton animation="pulse" width={100} height={100} />
+                <Skeleton animation="pulse" width={100} height={100} />
+                <Skeleton animation="pulse" width={100} height={100} />
+              </View>
+            ) : (
+              <FlatList
+                contentContainerStyle={{gap: 10, height: '100%'}}
+                horizontal={true}
+                data={topdoctorlist}
+                key={dataUpdatedAt}
+                renderItem={({item}) => <Doctor details={item} key={item.id} />}
+                keyExtractor={c => c.id}
+                ListEmptyComponent={
+                  <View>
+                    <Text style={commonStyles.caption}>
+                      No Doctors Listed in the area yet.
+                    </Text>
+                  </View>
+                }
+              />
+            )}
           </View>
           <View style={{flexDirection: 'column', gap: 5}}>
             <Text style={[commonStyles.font16, commonStyles.weight600]}>
               Top Clinics
             </Text>
-            <FlatList
-              contentContainerStyle={{gap: 10, height: '100%'}}
-              horizontal={true}
-              data={topcliniclist}
-              renderItem={({item}) => <Clinic details={item} key={item.id} />}
-              keyExtractor={c => c.id}
-              ListEmptyComponent={
-                <View>
-                  <Text style={commonStyles.caption}>
-                    No Clinics Listed in the area yet.
-                  </Text>
-                </View>
-              }
-            />
+            {isClinicsLoading ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  gap: 10,
+                  justifyContent: 'center',
+                }}>
+                <Skeleton animation="pulse" width={100} height={100} />
+                <Skeleton animation="pulse" width={100} height={100} />
+                <Skeleton animation="pulse" width={100} height={100} />
+              </View>
+            ) : (
+              <FlatList
+                contentContainerStyle={{gap: 10, height: '100%'}}
+                horizontal={true}
+                data={topcliniclist}
+                renderItem={({item}) => <Clinic details={item} key={item.id} />}
+                keyExtractor={c => c.id}
+                ListEmptyComponent={
+                  <View>
+                    <Text style={commonStyles.caption}>
+                      No Clinics Listed in the area yet.
+                    </Text>
+                  </View>
+                }
+              />
+            )}
           </View>
           <View style={{flexDirection: 'column', gap: 5}}>
             <Text style={[commonStyles.font16, commonStyles.weight400]}>
               Select from a category
             </Text>
             <View style={{gap: 10, paddingHorizontal: 30}}>
-              {sliceIntoChunks(Specialitylist?.data, 3)?.map(
-                (chunk: SpecialityDto[]) => (
-                  <View
-                    style={{flex: 1, flexDirection: 'row', gap: 30}}
-                    key={`speciality_row_${chunk[0].id}`}>
-                    {chunk.map(item => (
-                      <Speciality details={item} key={item.id} />
-                    ))}
-                  </View>
-                ),
+              {isSpecialitiesLoading ? (
+                <View style={{flexDirection: 'row', gap: 10}}>
+                  <Skeleton animation="pulse" width={100} height={100} />
+                  <Skeleton animation="pulse" width={100} height={100} />
+                  <Skeleton animation="pulse" width={100} height={100} />
+                </View>
+              ) : (
+                <>
+                  {sliceIntoChunks(Specialitylist?.data, 3)?.map(
+                    (chunk: SpecialityDto[]) => (
+                      <View
+                        style={{flex: 1, flexDirection: 'row', gap: 30}}
+                        key={`speciality_row_${chunk[0].id}`}>
+                        {chunk.map(item => (
+                          <Speciality details={item} key={item.id} />
+                        ))}
+                      </View>
+                    ),
+                  )}
+                </>
               )}
             </View>
           </View>

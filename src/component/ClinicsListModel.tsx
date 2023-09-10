@@ -7,6 +7,11 @@ import {updatecustomerdata} from '../redux/reducer/Customerreducer';
 import {useNavigation} from '@react-navigation/native';
 import {AppPages} from '../appPages';
 import {useGetcliniclist as useGetClinicsList} from '../customhook/useGetcliniclist';
+import {Icon} from '@rneui/themed';
+import {useWindowDimensions} from 'react-native';
+import ModalCloseOnEscape from '../utils/ModalCloseOnEscape';
+import {TouchableOpacity} from 'react-native';
+import openMap from 'react-native-open-maps';
 
 export default function ClinicsListModel({
   doctorDetails,
@@ -40,52 +45,85 @@ export default function ClinicsListModel({
       console.log(error);
     }
   }
+  const {height} = useWindowDimensions();
   return (
     <Modal
-      animationType="slide"
+      animationType="fade"
       transparent={true}
       visible={modalVisible}
       onRequestClose={() => {
         setModalVisible(!modalVisible);
       }}>
+      <ModalCloseOnEscape setVisible={setModalVisible} />
       <View
         style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: Color.lightgray,
+          marginTop: height / 4,
+          height: height / 2,
+          marginHorizontal: 50,
+          backgroundColor: 'white',
+          borderRadius: 20,
+          borderWidth: 1,
+          borderColor: Color.primary,
+          paddingHorizontal: 20,
+          paddingVertical: 10,
         }}>
-        <View>
-          <Text>Please Select Clinic</Text>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={{fontSize: 20}}>Choose Clinic</Text>
+          <Icon
+            name="close"
+            color={'red'}
+            containerStyle={{position: 'absolute', right: 10}}
+            onPress={() => setModalVisible(false)}
+          />
         </View>
-
-        {clinicsList?.map(i => {
-          return (
-            <>
+        <View style={{gap: 10, marginTop: 20}}>
+          {clinicsList?.map(clinic => {
+            console.log(clinic.address);
+            return (
               <View
                 style={{
                   backgroundColor: Color.primary,
                   borderRadius: 5,
-                  marginTop: 10,
-                  width: '75%',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
                 }}>
-                <Pressable
-                  onPress={() => {
-                    console.log('i', i);
-                    clinicHandler(i);
+                <TouchableOpacity
+                  style={{
+                    paddingVertical: 5,
+                    paddingHorizontal: 10,
+                    flex: 1,
                   }}
-                  style={{}}>
-                  <Text style={{padding: 5}}>Name:{i.name}</Text>
-                  <Text style={{padding: 3}}>
-                    Address: {i.address.address_line1}
+                  onPress={() => {
+                    clinicHandler(clinic);
+                  }}>
+                  <Text style={{color: 'white', fontSize: 18}}>
+                    {clinic.name}
                   </Text>
-                  <Text style={{padding: 3}}>{i.address.address_line2}</Text>
-                  <Text style={{padding: 3}}>City:{i.address.city}</Text>
-                </Pressable>
+                  <Text style={{color: 'white'}}>
+                    {clinic.address.address_line1}
+                  </Text>
+                  <Text style={{color: 'white'}}>
+                    {clinic.address.address_line2}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    paddingHorizontal: 10,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  onPress={() => {
+                    openMap({
+                      latitude: Number(clinic.address.lat) || 0,
+                      longitude: Number(clinic.address.lan) || 0,
+                    });
+                  }}>
+                  <Icon name="navigate" type="ionicon" color={'white'} />
+                </TouchableOpacity>
               </View>
-            </>
-          );
-        })}
+            );
+          })}
+        </View>
       </View>
     </Modal>
   );

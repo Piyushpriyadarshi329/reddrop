@@ -44,7 +44,7 @@ export const BookingConfirmation = ({
 
   const [showUserForm, setShowUserForm] = useState(false);
 
-  const {mutate: bookSlot} = useBookSlot({
+  const {mutate: bookSlot, isLoading} = useBookSlot({
     onSuccess: () => {
       successAlert('Booked Successfully');
       onBookingSuccess();
@@ -131,10 +131,11 @@ export const BookingConfirmation = ({
           </TouchableOpacity>
         )}
         <Button
-          onPress={bookAppointmentHandler}
+          onPress={!isLoading ? bookAppointmentHandler : () => {}}
           title={'Book'}
           color={Color.primary}
           disabled={!user}
+          loading={isLoading}
         />
       </View>
     </Modal>

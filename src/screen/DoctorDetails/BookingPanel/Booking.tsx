@@ -23,6 +23,7 @@ import {BookingConfirmation} from './BookingConfirmation';
 import {useModalMethods} from '../../../utils/useModalMethods';
 import moment from 'moment';
 import {useGetAvailableDates} from '../../../customhook/useGetAvailableDates';
+import {Button, Icon} from '@rneui/themed';
 export interface BookingProps {
   doctorId: string;
   existingAppointment: Appointmentdto;
@@ -187,7 +188,7 @@ const Booking = ({
             width: '100%',
           }}>
           <View>
-            <Btn
+            <Button
               title="Book Appointment"
               onPress={() => {
                 bookingModal.open();
@@ -196,13 +197,15 @@ const Booking = ({
           </View>
         </View>
       )}
-      <BookingConfirmation
-        modalMethods={bookingModal}
-        selectedTime={selectedTime}
-        existingAppointment={existingAppointment}
-        onBookingSuccess={onBookingSuccess}
-        selectedClinic={clinicDetails}
-      />
+      {bookingModal.isOpen && (
+        <BookingConfirmation
+          modalMethods={bookingModal}
+          selectedTime={selectedTime}
+          existingAppointment={existingAppointment}
+          onBookingSuccess={onBookingSuccess}
+          selectedClinic={clinicDetails}
+        />
+      )}
     </View>
   );
 };
