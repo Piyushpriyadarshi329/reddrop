@@ -18,6 +18,7 @@ export default function Speciality({details}: {details: SpecialityDto}) {
           alignItems: 'center',
           borderRadius: 10,
           backgroundColor: 'white',
+          padding: 5,
         }}
         onPress={() => {
           navigation.navigate(AppPages.DoctorlistSpecialitywise, {
