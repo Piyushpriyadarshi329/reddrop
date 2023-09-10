@@ -168,7 +168,7 @@ export type GetClinicsResponse = DataResponse<ClinicWithAddressAndImage[]>;
 
 /** UserController */
 export interface LoginRequest {
-  email: string;
+  userName: string;
   password: string;
   userType: number;
   fcm_token: string;
