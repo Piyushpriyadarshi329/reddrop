@@ -49,7 +49,7 @@ export default function Home() {
     useScrollAnimation(50);
 
   return (
-    <View style={{flex: 1, marginHorizontal: 10, gap: 10}}>
+    <View style={{flex: 1, marginHorizontal: 10, gap: 5}}>
       <View
         style={[
           commonStyles.flexRowAlignCenter,
@@ -70,15 +70,14 @@ export default function Home() {
         </TouchableOpacity>
         <Text style={commonStyles.font18}>Home</Text>
       </View>
-      <View style={{gap: 15}}>
-        <AnimationView>
-          <>
-            <Text style={commonStyles.font20}>Hello {username}👋</Text>
-            <Text style={commonStyles.caption}>How are you today ?</Text>
-          </>
-        </AnimationView>
-      </View>
+      <AnimationView>
+        <>
+          <Text style={commonStyles.font20}>Hello {username}👋</Text>
+          <Text style={commonStyles.caption}>How are you today ?</Text>
+        </>
+      </AnimationView>
       <Pressable
+        style={{paddingTop: 10}}
         onPress={() => {
           navigation.navigate(AppPages.Search);
         }}>
@@ -94,9 +93,8 @@ export default function Home() {
         />
       </Pressable>
       <AnimatedScrollView>
-        {/* // contentContainerStyle={{gap: 10}} */}
-        <>
-          <View style={{flexDirection: 'column', gap: 5}}>
+        <View style={{gap: 10}}>
+          <View style={{flexDirection: 'column', gap: 10}}>
             <Text style={[commonStyles.font16, commonStyles.weight600]}>
               Top Doctors
             </Text>
@@ -129,7 +127,7 @@ export default function Home() {
               />
             )}
           </View>
-          <View style={{flexDirection: 'column', gap: 5}}>
+          <View style={{flexDirection: 'column', gap: 10}}>
             <Text style={[commonStyles.font16, commonStyles.weight600]}>
               Top Clinics
             </Text>
@@ -161,7 +159,7 @@ export default function Home() {
               />
             )}
           </View>
-          <View style={{flexDirection: 'column', gap: 5}}>
+          <View style={{flexDirection: 'column', gap: 10}}>
             <Text style={[commonStyles.font16, commonStyles.weight400]}>
               Select from a category
             </Text>
@@ -189,7 +187,7 @@ export default function Home() {
               )}
             </View>
           </View>
-        </>
+        </View>
       </AnimatedScrollView>
       <LocationModal modalMethods={locatinModalMethods} />
     </View>

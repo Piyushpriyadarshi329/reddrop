@@ -1,6 +1,12 @@
 import {Image, Text} from '@rneui/themed';
 import React from 'react';
-import {SectionList, StyleSheet, View, TouchableOpacity} from 'react-native';
+import {
+  SectionList,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import Color, {Pallet3} from '../../../asset/Color';
 import {commonStyles} from '../../../asset/styles';
 import Navbar from '../../../component/Navbar';
@@ -37,57 +43,81 @@ export default function DoctorsList({route}: any) {
     ],
     [],
   );
-  const {AnimatedScrollView, AnimatedView} = useScrollAnimation(250);
+  const {AnimatedScrollView, AnimatedView} = useScrollAnimation(400);
   return (
     <View>
       <Navbar title={'Doctors'} hideBorderRadius />
-      <AnimatedView style={styles.topContainer}>
-        <View style={{flex: 1}}>
-          <Text style={[commonStyles.font24, {color: Pallet3.textOnPrimary}]}>
-            {thisClinic?.name}
-          </Text>
-          <View style={{flexDirection: 'row'}}>
-            <View>
-              <TouchableOpacity
-                onPress={() => {
-                  thisClinic?.address.lat &&
-                    thisClinic?.address.lan &&
-                    openMap({
-                      latitude: thisClinic?.address.lat,
-                      longitude: thisClinic?.address.lan,
-                    });
-                }}>
-                <View>
-                  <Text
-                    style={{
-                      color: Pallet3.textOnPrimary,
-                      fontSize: 16,
-                    }}>
-                    {thisClinic?.address.address_line1}
-                  </Text>
-                  {thisClinic?.address.address_line2 && (
+      <ScrollView>
+        <View style={styles.topContainer}>
+          <View>
+            <Text style={[commonStyles.font24, {color: Pallet3.textOnPrimary}]}>
+              {thisClinic?.name}
+            </Text>
+            <View style={{}}>
+              <View style={{flexDirection: 'row'}}>
+                <TouchableOpacity
+                  style={{width: '70%'}}
+                  onPress={() => {
+                    thisClinic?.address.lat &&
+                      thisClinic?.address.lan &&
+                      openMap({
+                        latitude: thisClinic?.address.lat,
+                        longitude: thisClinic?.address.lan,
+                      });
+                  }}>
+                  <View>
                     <Text
                       style={{
                         color: Pallet3.textOnPrimary,
-                        fontSize: 12,
+                        fontSize: 14,
                       }}>
-                      {thisClinic?.address.address_line2}
+                      {thisClinic?.address.address_line1}
                     </Text>
-                  )}
-                  <Text
+                    {thisClinic?.address.address_line2 && (
+                      <Text
+                        style={{
+                          color: Pallet3.textOnPrimary,
+                          fontSize: 11,
+                        }}>
+                        {thisClinic?.address.address_line2}
+                      </Text>
+                    )}
+                    <Text
+                      style={{
+                        color: Pallet3.textOnPrimary,
+                        fontSize: 11,
+                      }}>
+                      {thisClinic?.address.city}, {thisClinic?.address.state} -
+                      {thisClinic?.address.pincode}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    width: '30%',
+                  }}>
+                  <Image
+                    source={
+                      thisClinic?.profile_image
+                        ? {
+                            uri: thisClinic?.profile_image,
+                          }
+                        : require('./../../../asset/image/Clinic.jpeg')
+                    }
                     style={{
-                      color: Pallet3.textOnPrimary,
-                      fontSize: 12,
-                    }}>
-                    {thisClinic?.address.city}, {thisClinic?.address.state} -
-                    {thisClinic?.address.pincode}
-                  </Text>
+                      width: 110,
+                      height: 110,
+                      borderRadius: 110,
+                    }}
+                    resizeMode="cover"
+                  />
                 </View>
-              </TouchableOpacity>
+              </View>
               <View style={{paddingTop: 10}}>
                 <Text
                   style={[
-                    commonStyles.caption,
+                    {fontSize: 18, color: 'grey'},
                     {color: Pallet3.textOnPrimary},
                   ]}>
                   {doctors?.length ?? 0} Doctors Listed
@@ -102,25 +132,8 @@ export default function DoctorsList({route}: any) {
                 </Text>
               </View>
             </View>
-            <Image
-              source={
-                thisClinic?.profile_image
-                  ? {
-                      uri: thisClinic?.profile_image,
-                    }
-                  : require('./../../../asset/image/Clinic.jpeg')
-              }
-              style={{
-                width: 130,
-                height: 130,
-                borderRadius: 130,
-              }}
-              resizeMode="cover"
-            />
           </View>
         </View>
-      </AnimatedView>
-      <AnimatedScrollView>
         <>
           {sectionedData.map(section => (
             <View style={{backgroundColor: Color.greybgc}}>
@@ -132,8 +145,9 @@ export default function DoctorsList({route}: any) {
               ))}
             </View>
           ))}
+          <View style={{height: 100}}></View>
         </>
-      </AnimatedScrollView>
+      </ScrollView>
     </View>
   );
 }
