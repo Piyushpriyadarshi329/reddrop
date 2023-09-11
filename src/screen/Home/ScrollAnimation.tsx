@@ -16,7 +16,7 @@ export const useScrollAnimation = (height: number, endHeight?: number) => {
   const actionBar = useAnimatedStyle(() => {
     return {
       height: withTiming(translateY.value, {
-        duration: 750,
+        duration: 100,
         easing: Easing.inOut(Easing.ease),
       }),
     };

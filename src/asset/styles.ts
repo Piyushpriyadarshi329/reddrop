@@ -12,7 +12,7 @@ export const commonStyles = StyleSheet.create({
   weight700: {fontWeight: '700'},
   weight600: {fontWeight: '600'},
   weight400: {fontWeight: '400'},
-  caption: {fontSize: 16, color: 'grey'},
+  caption: {fontSize: 14, color: 'grey'},
   justifyCenter: {
     justifyContent: 'center',
   },
