@@ -50,7 +50,7 @@ export default function Home() {
   const height = 50 * 2;
   const {AnimatedScrollView, AnimatedView} = ScrollWP(height, 0.6);
   return (
-    <View style={{flex: 1, marginHorizontal: 10, gap: 5}}>
+    <View style={{flex: 1, gap: 5}}>
       <View
         style={[
           commonStyles.flexRowAlignCenter,
@@ -96,7 +96,7 @@ export default function Home() {
         </View>
       </AnimatedView>
       <AnimatedScrollView>
-        <View style={{gap: 10, paddingTop: 20}}>
+        <View style={{marginHorizontal: 10, gap: 10, paddingTop: 20}}>
           <View style={{flexDirection: 'column', gap: 10}}>
             <Text style={[commonStyles.font16, commonStyles.weight600]}>
               Top Doctors
