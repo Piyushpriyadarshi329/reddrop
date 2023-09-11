@@ -43,6 +43,16 @@ export interface GetDotcorsListRequest {
   doctor_name_search_string?: string;
 }
 
+export type SearchDoctor = DoctorDto & {
+  profile_image: string;
+  location: {
+    city: string;
+    lat: number;
+    lan: number;
+  }[];
+  fees?: number;
+};
+export type SearchDoctorsListResponse = DataResponse<SearchDoctor[]>;
 export type GetDoctorsListResponse = DataResponse<
   (DoctorDto & {
     profile_image: string;
@@ -433,14 +443,6 @@ export interface VisibleDocument {
 
 export type AddDocumentResponse = DataResponse<VisibleDocument>;
 
-export interface LatestBookingStatus {
-  slot_index: number;
-  status: BookingStatus;
-}
-
-export interface AppointmentWithLatestStatus extends Appointmentdto {
-  latestBookingStatus?: LatestBookingStatus;
-}
 export type GetAvailableDatesResponse = DataResponse<
   {date: number; available: boolean}[]
 >;
