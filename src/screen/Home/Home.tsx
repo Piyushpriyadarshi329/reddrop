@@ -26,6 +26,7 @@ import {useModalMethods} from '../../utils/useModalMethods';
 import {useGetDoctorList} from '../DoctorDetails/useDoctorQuery';
 import LocationModal from './LocationSelect';
 import {useScrollAnimation} from './ScrollAnimation';
+import {ScrollWP} from './ScrollWP';
 
 export default function Home() {
   const {username, userid, cityName} = useSelector(
@@ -45,9 +46,9 @@ export default function Home() {
   const {data: Specialitylist, isLoading: isSpecialitiesLoading} =
     usegetSpeciality();
   const locatinModalMethods = useModalMethods();
-  const {AnimatedScrollView, AnimatedView: AnimationView} =
-    useScrollAnimation(50);
-
+  // const {AnimatedScrollView, AnimatedView: AnimatedView} = useScrollAnimation(50);
+  const height = 50 * 2;
+  const {AnimatedScrollView, AnimatedView} = ScrollWP(height, 0.6);
   return (
     <View style={{flex: 1, marginHorizontal: 10, gap: 5}}>
       <View
@@ -55,6 +56,7 @@ export default function Home() {
           commonStyles.flexRowAlignCenter,
           commonStyles.justifyCenter,
           commonStyles.p10,
+          {zIndex: 20, backgroundColor: 'white'},
         ]}>
         <TouchableOpacity
           onPress={locatinModalMethods.open}
@@ -70,30 +72,31 @@ export default function Home() {
         </TouchableOpacity>
         <Text style={commonStyles.font18}>Home</Text>
       </View>
-      <AnimationView>
-        <>
-          <Text style={commonStyles.font20}>Hello {username}👋</Text>
-          <Text style={commonStyles.caption}>How are you today ?</Text>
-        </>
-      </AnimationView>
-      <Pressable
-        style={{paddingTop: 10}}
-        onPress={() => {
-          navigation.navigate(AppPages.Search);
-        }}>
-        <SearchBar
-          round
-          lightTheme
-          containerStyle={homeStyles.searhBarContainer}
-          placeholder="Search Doctors and Clinics"
-          onFocus={() => {
-            navigation.navigate(AppPages.Search);
-          }}
-          disabled
-        />
-      </Pressable>
+      <AnimatedView>
+        <View style={{height: height, backgroundColor: 'white'}}>
+          <View>
+            <Text style={commonStyles.font20}>Hello {username}👋</Text>
+            <Text style={commonStyles.caption}>How are you today ?</Text>
+          </View>
+          <Pressable
+            onPress={() => {
+              navigation.navigate(AppPages.Search);
+            }}>
+            <SearchBar
+              round
+              lightTheme
+              containerStyle={homeStyles.searhBarContainer}
+              placeholder="Search Doctors and Clinics"
+              onFocus={() => {
+                navigation.navigate(AppPages.Search);
+              }}
+              disabled
+            />
+          </Pressable>
+        </View>
+      </AnimatedView>
       <AnimatedScrollView>
-        <View style={{gap: 10}}>
+        <View style={{gap: 10, paddingTop: 20}}>
           <View style={{flexDirection: 'column', gap: 10}}>
             <Text style={[commonStyles.font16, commonStyles.weight600]}>
               Top Doctors
