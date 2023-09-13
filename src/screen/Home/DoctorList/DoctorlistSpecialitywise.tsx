@@ -15,7 +15,6 @@ export default function DoctorlistSpecialitywise({route}: any) {
   const currentSpeciality = Specialitylist?.data?.find(
     s => s.name === data.name,
   );
-  console.log(currentSpeciality);
   return (
     <View style={{flex: 1}}>
       <SafeAreaView />

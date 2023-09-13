@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -46,9 +47,12 @@ export default function Home() {
   const {data: Specialitylist, isLoading: isSpecialitiesLoading} =
     usegetSpeciality();
   const locatinModalMethods = useModalMethods();
+  const {fontScale} = useWindowDimensions();
   // const {AnimatedScrollView, AnimatedView: AnimatedView} = useScrollAnimation(50);
-  const height = 50 * 2;
-  const {AnimatedScrollView, AnimatedView} = ScrollWP(height, 0.6);
+  console.log(fontScale);
+  const height = 50 * fontScale;
+  const bottomContainerTopPaddding = height + 30;
+  const {AnimatedScrollView, AnimatedView} = ScrollWP(height, 1);
   return (
     <View style={{flex: 1, gap: 5}}>
       <View
@@ -56,7 +60,7 @@ export default function Home() {
           commonStyles.flexRowAlignCenter,
           commonStyles.justifyCenter,
           commonStyles.p10,
-          {zIndex: 20, backgroundColor: 'white'},
+          {height: 50, zIndex: 20, backgroundColor: 'white'},
         ]}>
         <TouchableOpacity
           onPress={locatinModalMethods.open}
@@ -73,12 +77,13 @@ export default function Home() {
         <Text style={commonStyles.font18}>Home</Text>
       </View>
       <AnimatedView>
-        <View style={{height: height, backgroundColor: 'white'}}>
-          <View>
+        <View style={{backgroundColor: 'white', padding: 5}}>
+          <View style={{paddingHorizontal: 10}}>
             <Text style={commonStyles.font20}>Hello {username}👋</Text>
             <Text style={commonStyles.caption}>How are you today ?</Text>
           </View>
           <Pressable
+            style={{padding: 10, backgroundColor: 'white', marginTop: -2}}
             onPress={() => {
               navigation.navigate(AppPages.Search);
             }}>
@@ -96,7 +101,12 @@ export default function Home() {
         </View>
       </AnimatedView>
       <AnimatedScrollView>
-        <View style={{marginHorizontal: 10, gap: 10, paddingTop: 20}}>
+        <View
+          style={{
+            marginHorizontal: 10,
+            gap: 10,
+            paddingTop: bottomContainerTopPaddding,
+          }}>
           <View style={{flexDirection: 'column', gap: 10}}>
             <Text style={[commonStyles.font16, commonStyles.weight600]}>
               Top Doctors

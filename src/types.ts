@@ -331,7 +331,8 @@ export type GetCustomerAppointmentResponse = DataResponse<
 >;
 
 export interface LatestBookingStatus {
-  slot_index: number;
+  completed_slot: number;
+  started_slot: number;
   status: BookingStatus;
 }
 

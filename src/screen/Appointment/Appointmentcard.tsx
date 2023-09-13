@@ -153,10 +153,25 @@ export default function AppointmentCard({
             commonStyles.flexRowAlignCenter,
             {alignSelf: 'flex-start', marginLeft: 20},
           ]}>
-          <Text style={commonStyles.font16}>Current ongoing Slot:</Text>
-          <Text style={commonStyles.font24}>
-            {appointment?.latestBookingStatus?.slot_index}
-          </Text>
+          {appointment?.latestBookingStatus?.started_slot ? (
+            <>
+              <Text style={commonStyles.font16}>Current ongoing Slot:</Text>
+              <Text style={commonStyles.font24}>
+                {appointment?.latestBookingStatus?.started_slot}
+              </Text>
+            </>
+          ) : (
+            <>
+              {appointment?.latestBookingStatus?.completed_slot ? (
+                <>
+                  <Text style={commonStyles.font16}>Completed Slot:</Text>
+                  <Text style={commonStyles.font24}>
+                    {appointment?.latestBookingStatus?.completed_slot}
+                  </Text>
+                </>
+              ) : null}
+            </>
+          )}
         </View>
       ) : null}
 
