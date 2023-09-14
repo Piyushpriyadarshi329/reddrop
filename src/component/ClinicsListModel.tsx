@@ -78,7 +78,6 @@ export default function ClinicsListModel({
         </View>
         <View style={{gap: 10, marginTop: 20}}>
           {clinicsList?.map(clinic => {
-            console.log(clinic.address);
             return (
               <View
                 style={{
