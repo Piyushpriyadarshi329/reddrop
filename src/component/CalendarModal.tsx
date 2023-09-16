@@ -4,6 +4,7 @@ import {Calendar} from 'react-native-calendars';
 import Color, {Pallet2} from '../asset/Color';
 import ModalCloseOnEscape from '../utils/ModalCloseOnEscape';
 import moment from 'moment';
+import CalendarPicker from 'react-native-calendar-picker';
 
 const CalendarModal = ({
   date,
@@ -37,12 +38,14 @@ const CalendarModal = ({
           backgroundColor: 'white',
           padding: 10,
         }}>
-        <Calendar
-          onDayPress={day => {
-            setDate(new Date(day.dateString));
+        <CalendarPicker
+          onDateChange={day => {
+            setDate(new Date(day));
             setModalVisible(!modalVisible);
           }}
           style={{borderRadius: 15}}
+          width={300}
+          height={500}
           theme={{
             backgroundColor: Pallet2.tertiary,
             calendarBackground: Color.white,

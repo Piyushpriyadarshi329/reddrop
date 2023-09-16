@@ -201,6 +201,7 @@ const Booking = ({
         <BookingConfirmation
           modalMethods={bookingModal}
           selectedTime={selectedTime}
+          selectedDate={selectedDate}
           existingAppointment={existingAppointment}
           onBookingSuccess={onBookingSuccess}
           selectedClinic={clinicDetails}

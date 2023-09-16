@@ -43,7 +43,10 @@ export default function BookApointment(props: {route: any}) {
             name="Details"
             component={(route: any) => (
               <View style={{marginBottom: 10}}>
-                <DoctorDetails doctorDetails={doctorDetails} />
+                <DoctorDetails
+                  doctorDetails={doctorDetails}
+                  clinicDetails={props.route.params?.clinicDetails}
+                />
                 <Btn
                   title="Schedule -> "
                   onPress={() => route.navigation.navigate('Book')}

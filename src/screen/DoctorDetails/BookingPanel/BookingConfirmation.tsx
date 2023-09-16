@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {IModalMethods} from '../../../utils/useModalMethods';
 import {View, Modal, TouchableOpacity} from 'react-native';
 import {Button, CheckBox, Icon, Text} from '@rneui/themed';
@@ -21,26 +21,43 @@ import {getToday} from '../../../utils/dateMethods';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../../redux/Store';
 import uuid from 'react-native-uuid';
+import {useGetCustomer} from '../../Profile/useCustomerQuery';
 
 export const BookingConfirmation = ({
   modalMethods,
   selectedTime,
+  selectedDate,
   existingAppointment,
   selectedClinic,
   onBookingSuccess,
 }: {
   modalMethods: IModalMethods;
   selectedTime: (Slot & {id: string}) | undefined;
+  selectedDate: number | undefined;
   existingAppointment: Appointmentdto;
   onBookingSuccess: any;
   selectedClinic: ClinicWithAddressAndImage | undefined;
 }) => {
-  const [user, setUser] = useState<BookingUserInterface | undefined>({
-    dob: new Date('1995-12-17T03:24:00'),
-    gender: Gender.MALE,
-    name: 'Punyashlok',
-  });
   const AppState = useSelector((state: RootState) => state.Appstate);
+
+  let {data: customerData} = useGetCustomer(AppState.userid);
+
+  console.log('customerData', customerData);
+
+  const [user, setUser] = useState<BookingUserInterface | undefined>({
+    dob: customerData?.dob ? new Date(customerData?.dob) : undefined,
+    gender: (customerData?.gender ?? '') as Gender,
+    name: customerData?.name ?? '',
+  });
+
+  useEffect(() => {
+    setUser({
+      // dob: new Date('1995-12-17T03:24:00'),
+      dob: customerData?.dob ? new Date(customerData?.dob) : undefined,
+      gender: (customerData?.gender ?? '') as Gender,
+      name: customerData?.name ?? '',
+    });
+  }, [customerData]);
 
   const [showUserForm, setShowUserForm] = useState(false);
 
@@ -53,8 +70,6 @@ export const BookingConfirmation = ({
 
   async function bookAppointmentHandler() {
     try {
-      const Appointment_date = getToday().getTime();
-
       let bookSlotPayload: BookSlotRequest = {
         customer_id: AppState.userid,
         doctor_clinic_id: selectedClinic?.clinic_doctor_id ?? '',
@@ -62,8 +77,8 @@ export const BookingConfirmation = ({
         workingtime_id: selectedTime?.id ?? '',
         group_id: uuid.v4().toString(),
         payment_order_id: uuid.v4().toString(),
-        appointment_date: Appointment_date,
-        dob: user?.dob.getTime(),
+        appointment_date: selectedDate ?? 0,
+        dob: user?.dob,
         gender: user?.gender,
         name: user?.name,
       };

@@ -31,20 +31,37 @@ export default function DoctorlistSpecialitywise({route}: any) {
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
-        <Text
-          style={{
-            fontSize: 18,
-            fontWeight: '600',
-            color: Pallet3.textOnPrimary,
-            paddingVertical: 2,
-          }}>
-          {data.name}
-        </Text>
-        <Image
-          source={{uri: currentSpeciality?.speciality_image}}
-          width={100}
-          height={100}
-        />
+        <View style={{flex: 1.5}}>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: '600',
+              color: Pallet3.textOnPrimary,
+              paddingVertical: 2,
+            }}>
+            {data.name}
+          </Text>
+          <Text
+            style={{
+              fontSize: 12,
+              fontWeight: '600',
+              color: Pallet3.textOnPrimary,
+              paddingVertical: 2,
+              textAlign: 'justify',
+            }}>
+            Lorem Ipsum is simply dummy text of the printing and typesetting
+            industry. Lorem Ipsum has been the industry's standard dummy text
+            ever since the 1500s, when an unknown printer took a galley of type
+            and scrambled it to make a type specimen book.
+          </Text>
+        </View>
+        <View style={{flex: 1, marginLeft: 30}}>
+          <Image
+            source={{uri: currentSpeciality?.speciality_image}}
+            width={100}
+            height={100}
+          />
+        </View>
       </View>
       <View style={{flex: 3, flexDirection: 'column', padding: 10}}>
         {topdoctorlist?.length == 0 ? (

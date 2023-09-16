@@ -61,8 +61,8 @@ export default function DoctorsList({route}: any) {
                     thisClinic?.address.lat &&
                       thisClinic?.address.lan &&
                       openMap({
-                        latitude: thisClinic?.address.lat,
-                        longitude: thisClinic?.address.lan,
+                        latitude: Number(thisClinic?.address.lat),
+                        longitude: Number(thisClinic?.address.lan),
                       });
                   }}>
                   <View>
