@@ -7,7 +7,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:532135385988:android:9239bfc217efb1aa05dbd1",
+        "mobilesdk_app_id": "1:532135385988:android:9dcaf01535733ae805dbd1",
         "android_client_info": {
           "package_name": "com.carebook_client"
         }
@@ -26,9 +26,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:532135385988:android:9dcaf01535733ae805dbd1",
+        "mobilesdk_app_id": "1:532135385988:android:9239bfc217efb1aa05dbd1",
         "android_client_info": {
-          "package_name": "com.reddrop"
+          "package_name": "com.carebook_client"
         }
       },
       "oauth_client": [],
