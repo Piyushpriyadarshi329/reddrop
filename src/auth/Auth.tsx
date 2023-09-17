@@ -10,8 +10,6 @@ import Afterlogin from './Afterlogin';
 import Beforelogin from './BeforeLogin';
 import Splashscreen from './Splashscreen';
 
-const Tab = createBottomTabNavigator();
-
 export default function Auth() {
   const isLoggedIn = useSelector((state: RootState) => state.Appstate.islogin);
   const dispatch = useDispatch();
@@ -43,7 +41,7 @@ export default function Auth() {
       {showsplash ? (
         <Splashscreen />
       ) : (
-        <>{isLoggedIn ? <Afterlogin /> : <Beforelogin />}</>
+        <>{false ? <Afterlogin /> : <Beforelogin />}</>
       )}
     </>
   );

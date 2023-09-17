@@ -11,44 +11,22 @@ import {useRegister} from '../../customhook/useRegister';
 import {updateuserdata} from '../../redux/reducer/Authreducer';
 import {authFieldStyleProps, b4LoginStyles} from './Home';
 import {validateEmail, validatePhone} from '../../utils/validations';
+import {CustomerDetails} from './CustomerDetails';
+import {OTPVerif} from './OTPVerif';
 
-interface RegisterForm {
+export interface RegisterForm {
   name: string;
   email: string;
-  mobile: Number;
+  mobile: string;
   password: string;
   usertype: string;
 }
-enum IdentityType {
-  MOBILE = 'MOBILE',
-  MAIL = 'MAIL',
-}
+
 export default function Register() {
   const navigation = useNavigation<any>();
+  const [otpVerified, setOtpVerified] = useState(false);
   const dispatch = useDispatch();
-
-  const formMethods = useForm<RegisterForm>();
-  const [fcm_token, setfcm_token] = useState('');
-  const [identityType, setIdentityType] = useState<IdentityType>(
-    IdentityType.MOBILE,
-  );
-  const [showPW, setShowPW] = useState(false);
-
-  useEffect(() => {
-    checkToken();
-  });
-
-  const checkToken = async () => {
-    try {
-      const fcmToken = await messaging().getToken();
-      if (fcmToken) {
-        console.log(fcmToken);
-        setfcm_token(fcmToken);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const formMethods = useForm<RegisterForm>({});
 
   async function submitHandler(formValues: RegisterForm) {
     try {
@@ -81,6 +59,7 @@ export default function Register() {
       console.log(error);
     }
   }
+
   return (
     <View style={b4LoginStyles.container}>
       <View style={b4LoginStyles.topContainer}>
@@ -101,87 +80,8 @@ export default function Register() {
                 Sign up to Continue
               </Text>
             </View>
-            <RHFTextInput
-              name={'name'}
-              placeholder="Full Name"
-              label="Name"
-              required
-              {...authFieldStyleProps}
-            />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                paddingHorizontal: 10,
-              }}>
-              <Text
-                style={
-                  identityType === IdentityType.MOBILE
-                    ? authFieldStyleProps.labelStyle
-                    : b4LoginStyles.deselectedText
-                }
-                onPress={() => setIdentityType(IdentityType.MOBILE)}>
-                Mobile No.
-              </Text>
-              <Text style={b4LoginStyles.deselectedText}>/</Text>
-              <Text
-                style={
-                  identityType === IdentityType.MAIL
-                    ? authFieldStyleProps.labelStyle
-                    : b4LoginStyles.deselectedText
-                }
-                onPress={() => setIdentityType(IdentityType.MAIL)}>
-                Email Address
-              </Text>
-            </View>
-            {identityType === IdentityType.MAIL ? (
-              <RHFTextInput
-                name="email"
-                placeholder="Email"
-                keyboardType="email-address"
-                required
-                rules={{validate: validateEmail}}
-                {...authFieldStyleProps}
-              />
-            ) : (
-              <RHFTextInput
-                name="mobile"
-                keyboardType="phone-pad"
-                placeholder="Mobile No"
-                required
-                rules={{validate: validatePhone}}
-                {...authFieldStyleProps}
-              />
-            )}
-
-            <RHFTextInput
-              name="password"
-              placeholder="Password"
-              label="Password"
-              secureTextEntry={!showPW}
-              required
-              {...authFieldStyleProps}
-              rightIcon={
-                <Icon
-                  name={showPW ? 'eye' : 'eye-off'}
-                  color={'#95e8ff'}
-                  style={{fontSize: 20, padding: 5}}
-                  onPressIn={() => {
-                    setShowPW(true);
-                  }}
-                  onPressOut={() => {
-                    setShowPW(false);
-                  }}
-                />
-              }
-            />
-
-            <Button
-              title="Submit"
-              color={'white'}
-              titleStyle={{color: Color.primary}}
-              onPress={formMethods.handleSubmit(submitHandler)}
-            />
+            {!otpVerified && <OTPVerif onVerify={() => setOtpVerified(true)} />}
+            {otpVerified && <CustomerDetails onSubmit={submitHandler} />}
             <View
               style={{
                 justifyContent: 'flex-end',
