@@ -89,6 +89,9 @@ export default function AppointmentCard({
           <Text style={[commonStyles.font16, commonStyles.weight600]}>
             {appointment.clinic_name}
           </Text>
+          <Text style={[commonStyles.font16, commonStyles.weight600]}>
+            {appointment?.mobile}
+          </Text>
         </View>
         <View style={{paddingHorizontal: 10}}>
           {isFocused && showMenuOptions ? (
@@ -134,16 +137,34 @@ export default function AppointmentCard({
           borderRadius: 10,
           paddingHorizontal: 10,
         }}>
-        <Text style={commonStyles.font18}>
+        <Text style={commonStyles.font14}>
           {new Date(Number(appointment.appointment_date)).toDateString()}
         </Text>
-        <Text style={commonStyles.font18}>
-          {getTimeStringFromDBTime(appointment.from_working_time)}
+        <Text style={commonStyles.font14}>
+          {getTimeStringFromDBTime(appointment.from_working_time)} -
+          {getTimeStringFromDBTime(appointment.to_working_time)}
         </Text>
+
         <View
           style={[commonStyles.flexRowAlignCenter, {alignSelf: 'flex-end'}]}>
-          <Text style={commonStyles.font16}>Slot:</Text>
-          <Text style={commonStyles.font24}>{appointment.slot_index}</Text>
+          <Text style={commonStyles.font14}>Slot:</Text>
+          <Text style={commonStyles.font18}>{appointment.slot_index}</Text>
+        </View>
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginHorizontal: 15,
+          backgroundColor: '#f5f9fa',
+          borderRadius: 10,
+          paddingHorizontal: 10,
+        }}>
+        <View
+          style={[commonStyles.flexRowAlignCenter, {alignSelf: 'flex-end'}]}>
+          <Text style={commonStyles.font14}>Patient:</Text>
+          <Text style={commonStyles.font16}>{appointment.name}</Text>
         </View>
       </View>
 

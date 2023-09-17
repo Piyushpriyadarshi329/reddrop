@@ -11,7 +11,7 @@ import Color from '../../../asset/Color';
 export interface BookingUserInterface {
   id?: string;
   name: string;
-  dob: Date;
+  dob?: Date;
   gender: Gender;
 }
 export const UserForm = ({
@@ -26,13 +26,7 @@ export const UserForm = ({
     <View style={{paddingHorizontal: 40}}>
       <FormProvider {...formMethods}>
         <RHFTextInput name="name" required placeholder="Name" label="Name" />
-        <RHFCalendar
-          name="dob"
-          required
-          label="Date of Birth"
-          placeholder="Enter DOB"
-          dateFormat="ll"
-        />
+        <RHFTextInput name="dob" required label="Age" placeholder="Age" />
         <RHFDropdown
           name="gender"
           placeholder="Gender"

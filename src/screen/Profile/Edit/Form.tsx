@@ -10,10 +10,11 @@ import {Gender} from '../../DoctorDetails/BookingPanel/UserCard';
 const CustomerProfileUpdateForm = ({onSubmit}: {onSubmit: () => void}) => {
   return (
     <ScrollView contentContainerStyle={{flex: 1}}>
-      <RHFTextInput name="name" required />
-      <RHFTextInput name="email" required />
-      <RHFTextInput name="mobile" required />
+      <RHFTextInput label="Name" name="name" required />
+      <RHFTextInput label="Email" name="email" required />
+      <RHFTextInput label="Mobile" name="mobile" required />
       <RHFDropdown
+        label="Gender"
         name="gender"
         options={[
           {label: 'Male', value: Gender.MALE},
@@ -21,7 +22,7 @@ const CustomerProfileUpdateForm = ({onSubmit}: {onSubmit: () => void}) => {
           {label: 'Others', value: Gender.OTHERS},
         ]}
       />
-      <RHFCalendar name="dob" dateFormat="ll" />
+      <RHFCalendar label="Date of Birth" name="dob" dateFormat="ll" />
       <Button
         title={'Submit'}
         color={Color.primary}

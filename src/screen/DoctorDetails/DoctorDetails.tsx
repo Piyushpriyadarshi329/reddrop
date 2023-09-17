@@ -1,23 +1,32 @@
 import {default as React} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {commonStyles} from '../../asset/styles';
-import {DoctorDto} from '../../types';
+import {ClinicWithAddressAndImage, DoctorDto} from '../../types';
 import ShadowWrapper, {shadowStyles} from '../../component/ShadowWrapper';
 
 const DoctorDetails = ({
   doctorDetails,
+  clinicDetails,
 }: {
   doctorDetails:
     | (DoctorDto & {
         profile_image: string;
       })
     | undefined;
+  clinicDetails: ClinicWithAddressAndImage;
 }) => {
+  console.log('doctorDetails', doctorDetails);
   return (
     <>
       <Text style={commonStyles.caption}>{doctorDetails?.speciality}</Text>
       <Text style={[commonStyles.font20, commonStyles.weight700]}>
         Dr.{doctorDetails?.name}
+      </Text>
+      <Text style={[commonStyles.font16, commonStyles.weight700]}>
+        {clinicDetails.name}
+      </Text>
+      <Text style={[commonStyles.font16, commonStyles.weight700]}>
+        consulting fees: {clinicDetails?.fees}
       </Text>
       {doctorDetails?.degree && (
         <Text style={commonStyles.caption}>{doctorDetails?.degree}</Text>

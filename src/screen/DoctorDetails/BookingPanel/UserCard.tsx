@@ -15,7 +15,7 @@ export const UserCard = ({user}: {user?: BookingUserInterface}) => {
     <ShadowWrapper>
       <View style={{padding: 10, borderRadius: 10}}>
         <Text>
-          {user?.name}({user?.dob && getAge(user?.dob.getTime())})
+          {user?.name}({user?.dob && user?.dob})
         </Text>
         <Text>{user?.gender}</Text>
       </View>

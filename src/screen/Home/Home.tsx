@@ -29,6 +29,7 @@ import {useGetDoctorList} from '../DoctorDetails/useDoctorQuery';
 import LocationModal from './LocationSelect';
 import {useScrollAnimation} from './ScrollAnimation';
 import {ScrollWP} from './ScrollWP';
+import messaging from '@react-native-firebase/messaging';
 
 const bgc = '#dcedec';
 
@@ -44,6 +45,19 @@ export default function Home() {
   } = useGetDoctorList({
     orderBy: 'BOOKINGS',
   });
+  const checkToken = async () => {
+    try {
+      const fcmToken = await messaging().getToken();
+      if (fcmToken) {
+        console.log(fcmToken);
+        // setfcm_token(fcmToken);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  checkToken();
+
   const {data: topcliniclist, isLoading: isClinicsLoading} = useGetcliniclist(
     {},
   );

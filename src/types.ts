@@ -348,6 +348,8 @@ export interface Appointmentdto extends BookingDto {
   clinic_name?: string;
   from_working_time?: string;
   address: ShowAddress;
+  to_working_time?: string;
+  mobile?: string;
 }
 
 export interface ShowAddress {

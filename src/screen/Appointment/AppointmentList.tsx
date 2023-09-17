@@ -22,7 +22,7 @@ export const AppointmentList = ({
     if (bookingStatus[0] === BookingStatus.BOOKED) {
       return {from_date: getToday().getTime()};
     } else if (bookingStatus.includes(BookingStatus.COMPLETED)) {
-      return {to_date: getToday().getTime()};
+      return {to_date: getToday().getTime() + 24 * 60 * 60 * 1000};
     }
     return {};
   }, [bookingStatus]);
