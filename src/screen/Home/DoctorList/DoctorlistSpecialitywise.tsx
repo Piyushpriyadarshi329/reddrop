@@ -18,73 +18,71 @@ export default function DoctorlistSpecialitywise({route}: any) {
   return (
     <View style={{flex: 1}}>
       <SafeAreaView />
-      <Navbar title="Doctors" />
-      <View
-        style={{
-          paddingHorizontal: 20,
-          paddingTop: 40,
-          marginTop: -20,
-          backgroundColor: Pallet3.primary,
-          flex: 1,
-          borderBottomLeftRadius: 20,
-          borderBottomRightRadius: 20,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        }}>
-        <View style={{flex: 1.5}}>
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: '600',
-              color: Pallet3.textOnPrimary,
-              paddingVertical: 2,
-            }}>
-            {data.name}
-          </Text>
-          <Text
-            style={{
-              fontSize: 12,
-              fontWeight: '600',
-              color: Pallet3.textOnPrimary,
-              paddingVertical: 2,
-              textAlign: 'justify',
-            }}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book.
-          </Text>
-        </View>
-        <View style={{flex: 1, marginLeft: 30}}>
-          <Image
-            source={{uri: currentSpeciality?.speciality_image}}
-            width={100}
-            height={100}
-          />
-        </View>
-      </View>
-      <View style={{flex: 3, flexDirection: 'column', padding: 10}}>
-        {topdoctorlist?.length == 0 ? (
-          <>
-            <View
+      <Navbar title="Doctors" hideBorderRadius />
+      <ScrollView>
+        <View
+          style={{
+            paddingHorizontal: 20,
+            paddingTop: 40,
+            marginTop: -20,
+            backgroundColor: Pallet3.primary,
+            borderBottomLeftRadius: 20,
+            borderBottomRightRadius: 20,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <View style={{flex: 1.5}}>
+            <Text
               style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
+                fontSize: 20,
+                fontWeight: '600',
+                color: Pallet3.textOnPrimary,
+                paddingVertical: 2,
               }}>
-              <Text style={{color: 'black', fontSize: 18, fontWeight: '700'}}>
-                No Doctors Availability
-              </Text>
+              {data.name}
+            </Text>
+            <Text
+              style={{
+                fontSize: 15,
+                fontWeight: '600',
+                color: Pallet3.textOnPrimary,
+                paddingVertical: 2,
+                textAlign: 'justify',
+              }}>
+              {data.description}
+            </Text>
+          </View>
+          <View style={{flex: 1, marginLeft: 30}}>
+            <Image
+              source={{uri: currentSpeciality?.speciality_image}}
+              width={100}
+              height={100}
+            />
+          </View>
+        </View>
+        <View style={{flexDirection: 'column', padding: 10}}>
+          {topdoctorlist?.length == 0 ? (
+            <>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={{color: 'black', fontSize: 18, fontWeight: '700'}}>
+                  No Doctors Availability
+                </Text>
+              </View>
+            </>
+          ) : (
+            <View style={{gap: 10}}>
+              {topdoctorlist?.map(i => {
+                return <DoctorListCard details={i} />;
+              })}
             </View>
-          </>
-        ) : (
-          <ScrollView>
-            {topdoctorlist?.map(i => {
-              return <DoctorListCard details={i} />;
-            })}
-          </ScrollView>
-        )}
-      </View>
+          )}
+        </View>
+      </ScrollView>
     </View>
   );
 }

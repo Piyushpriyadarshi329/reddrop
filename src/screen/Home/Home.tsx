@@ -212,6 +212,7 @@ export default function Home() {
                     fontWeight: '400',
                     fontSize: 16,
                     textAlign: 'center',
+                    color: 'grey',
                   },
                 ]}>
                 Select from a category

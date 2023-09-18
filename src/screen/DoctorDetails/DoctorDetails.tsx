@@ -26,7 +26,7 @@ const DoctorDetails = ({
         {clinicDetails.name}
       </Text>
       <Text style={[commonStyles.font16, commonStyles.weight700]}>
-        consulting fees: {clinicDetails?.fees}
+        Consulting fees: {clinicDetails?.fees}
       </Text>
       {doctorDetails?.degree && (
         <Text style={commonStyles.caption}>{doctorDetails?.degree}</Text>

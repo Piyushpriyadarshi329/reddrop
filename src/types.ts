@@ -26,6 +26,7 @@ export interface SpecialityDto {
   id: string;
   name: string;
   doc_key: string;
+  description: string;
 }
 export interface LocationDto {
   id: string;

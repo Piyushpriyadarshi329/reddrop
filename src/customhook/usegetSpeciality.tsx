@@ -34,10 +34,11 @@ import {
 
 export function usegetSpeciality() {
   return useQuery(
-    [''],
+    ['SPECIALTIES'],
     () => axios.get<GetSpecialityListResponse>(GETSPECIALITY_URL),
     {
       select: data => data.data,
+      staleTime: Infinity,
     },
   );
 }

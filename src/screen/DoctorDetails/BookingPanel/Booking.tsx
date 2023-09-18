@@ -1,29 +1,15 @@
+import {Button} from '@rneui/themed';
+import moment from 'moment';
 import React, {useEffect, useMemo, useState} from 'react';
-import {Alert, FlatList, Image, ScrollView, Text, View} from 'react-native';
-import {useSelector} from 'react-redux';
-import {showTimeFromString} from '../../../Appfunction';
-import Btn from '../../../component/Btn';
-import {useBookslot as useBookSlot} from '../../../customhook/useBookslot';
-import {useGetcliniclist as useGetClinicsList} from '../../../customhook/useGetcliniclist';
-import type {RootState} from '../../../redux/Store';
-import {
-  Appointmentdto,
-  BookSlotRequest,
-  ClinicWithAddressAndImage,
-  Slot,
-} from '../../../types';
+import {FlatList, Image, ScrollView, Text, View} from 'react-native';
+import {useGetAvailableDates} from '../../../customhook/useGetAvailableDates';
+import {Appointmentdto, ClinicWithAddressAndImage, Slot} from '../../../types';
+import {getTimeStringFromDBTime, getToday} from '../../../utils/dateMethods';
+import {useModalMethods} from '../../../utils/useModalMethods';
 import {DateCard} from '../DateCard';
 import SlotCard from '../SlotCard';
-import {DateObj, useDateList} from '../helper';
 import {useGetBookingAvailability} from '../useGetBookingAvailability';
-import ClinicButton from './ClinicButton';
-import {successAlert} from '../../../utils/useShowAlert';
-import {getToday} from '../../../utils/dateMethods';
 import {BookingConfirmation} from './BookingConfirmation';
-import {useModalMethods} from '../../../utils/useModalMethods';
-import moment from 'moment';
-import {useGetAvailableDates} from '../../../customhook/useGetAvailableDates';
-import {Button, Icon} from '@rneui/themed';
 export interface BookingProps {
   doctorId: string;
   existingAppointment: Appointmentdto;
@@ -51,8 +37,6 @@ const Booking = ({
     // clinic_id: '244e7e5f-761b-4063-83cf-0314bb623f2c',
   });
 
-  console.log('dateList1', dateList);
-
   const {data: bookingAvailability, isLoading: isSlotsLoading} =
     useGetBookingAvailability({
       doctor_id: doctorId,
@@ -72,9 +56,9 @@ const Booking = ({
           return {
             ...i,
             title:
-              showTimeFromString(i.fromtime) +
+              getTimeStringFromDBTime(i.fromtime) +
               ' To ' +
-              showTimeFromString(i.totime),
+              getTimeStringFromDBTime(i.totime),
             data: i.slots.map(j => {
               return {...j, id: i.workingtime_id};
             }),

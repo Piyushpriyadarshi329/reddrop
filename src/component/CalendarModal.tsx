@@ -1,4 +1,4 @@
-import {default as React} from 'react';
+import React from 'react';
 import {Modal, View} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import Color, {Pallet2} from '../asset/Color';
@@ -40,6 +40,7 @@ const CalendarModal = ({
         }}>
         <CalendarPicker
           onDateChange={day => {
+            console.log(day);
             setDate(new Date(day));
             setModalVisible(!modalVisible);
           }}

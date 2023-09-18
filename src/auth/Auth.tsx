@@ -41,7 +41,7 @@ export default function Auth() {
       {showsplash ? (
         <Splashscreen />
       ) : (
-        <>{false ? <Afterlogin /> : <Beforelogin />}</>
+        <>{isLoggedIn ? <Afterlogin /> : <Beforelogin />}</>
       )}
     </>
   );
