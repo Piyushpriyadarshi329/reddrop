@@ -1,29 +1,11 @@
 import axios from 'axios';
 import {REGISTER_URL} from '../API_CONFIG';
+import {useMutation} from '@tanstack/react-query';
+import {axiosAlert} from '../utils/useShowAlert';
 
-export async function useRegister(payload: any) {
-  console.log('REGISTER_URL=============>', REGISTER_URL, payload);
-
-  // const config: any =  {
-  //     headers: {
-  //       Authorization: `Bearer ${rentalbikedetails.accessToken}`,
-  //     },
-  //   };
-
-  let myPromise = new Promise(async function (myResolve, myReject) {
-    try {
-      console.log('REGISTER_URL=============>', REGISTER_URL, payload);
-
-      var res = await axios.post(REGISTER_URL, payload);
-
-      console.log('res', res.data);
-
-      myResolve(res.data);
-    } catch (error: any) {
-      console.log('error', error);
-      myReject({statuscode: 401});
-    }
+export function useRegisterQuery(props: {onSuccess: any}) {
+  return useMutation((payload: any) => axios.post(REGISTER_URL, payload), {
+    onError: axiosAlert,
+    onSuccess: (data: any) => props.onSuccess(data?.data?.data),
   });
-
-  return myPromise;
 }
