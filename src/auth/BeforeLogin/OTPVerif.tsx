@@ -54,6 +54,7 @@ export const OTPVerif = ({onVerify}: {onVerify: () => void}) => {
         name={'mobile'}
         placeholder="Mobile Number"
         label="Mobile"
+        keyboardType="phone-pad"
         required
         disabled={otpSent}
         rules={{

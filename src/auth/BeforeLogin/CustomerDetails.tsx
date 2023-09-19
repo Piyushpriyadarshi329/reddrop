@@ -9,8 +9,10 @@ import {RegisterForm} from './Register';
 
 export const CustomerDetails = ({
   onSubmit,
+  isLoading,
 }: {
   onSubmit: (values: RegisterForm) => void;
+  isLoading: boolean;
 }) => {
   const [showPW, setShowPW] = useState(false);
   const formMethods = useFormContext<RegisterForm>();
@@ -56,9 +58,13 @@ export const CustomerDetails = ({
       <Button
         title="Submit"
         color={'white'}
+        loading={isLoading}
+        loadingProps={{color: 'blue'}}
         titleStyle={{color: Color.primary}}
         onPress={() => {
-          onSubmit(formMethods.getValues());
+          if (!isLoading) {
+            onSubmit(formMethods.getValues());
+          }
         }}
       />
     </>

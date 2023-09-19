@@ -197,6 +197,7 @@ export interface SignupRequest {
   mobile: string;
   password: string;
   usertype: UserType;
+  fcm_token?: string;
 }
 
 export type SignupResponse = DataResponse<any>;

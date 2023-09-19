@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {Text} from '@rneui/themed';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FormProvider, useForm} from 'react-hook-form';
 import {Image, Pressable, ScrollView, View} from 'react-native';
 import {useDispatch} from 'react-redux';
@@ -10,6 +10,8 @@ import {updateuserdata} from '../../redux/reducer/Authreducer';
 import {CustomerDetails} from './CustomerDetails';
 import {b4LoginStyles} from './Home';
 import {OTPVerif} from './OTPVerif';
+import messaging from '@react-native-firebase/messaging';
+import {SignupRequest, UserType} from '../../types';
 
 export interface RegisterForm {
   name: string;
@@ -24,7 +26,7 @@ export default function Register() {
   const [otpVerified, setOtpVerified] = useState(false);
   const dispatch = useDispatch();
   const formMethods = useForm<RegisterForm>({});
-  const {mutate} = useRegisterQuery({
+  const {mutate, isLoading} = useRegisterQuery({
     onSuccess: (data: any) => {
       dispatch(
         updateuserdata({
@@ -35,13 +37,32 @@ export default function Register() {
       );
     },
   });
+
+  const [fcm_token, setfcm_token] = useState('');
+  useEffect(() => {
+    checkToken();
+  }, []);
+
+  const checkToken = async () => {
+    try {
+      const fcmToken = await messaging().getToken();
+      if (fcmToken) {
+        console.log(fcmToken);
+        setfcm_token(fcmToken);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   async function submitHandler(formValues: RegisterForm) {
-    let payload: RegisterForm = {
+    let payload: SignupRequest = {
       name: formValues.name,
       email: formValues.email,
       mobile: formValues.mobile,
       password: formValues.password,
-      usertype: 'CUSTOMER',
+      usertype: UserType.CUSTOMER,
+      fcm_token: fcm_token,
     };
     mutate(payload);
   }
@@ -67,7 +88,9 @@ export default function Register() {
               </Text>
             </View>
             {!otpVerified && <OTPVerif onVerify={() => setOtpVerified(true)} />}
-            {otpVerified && <CustomerDetails onSubmit={submitHandler} />}
+            {otpVerified && (
+              <CustomerDetails onSubmit={submitHandler} isLoading={isLoading} />
+            )}
             <View
               style={{
                 justifyContent: 'flex-end',
