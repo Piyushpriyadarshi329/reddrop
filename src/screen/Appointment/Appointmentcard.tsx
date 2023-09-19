@@ -119,7 +119,7 @@ export default function AppointmentCard({
 
                     setReScheduleModal(true);
                   }}>
-                  <Text style={{color: 'black', padding: 5}}>Reschduled</Text>
+                  <Text style={{color: 'black', padding: 5}}>Re-Schedule</Text>
                 </MenuOption>
               </MenuOptions>
             </Menu>
