@@ -21,3 +21,4 @@ export const GETLOCATION_URL = BASE_URL + '/getLocation';
 export const CUSTOMER_URL = BASE_URL + '/customer';
 export const DOCUMENT = BASE_URL + '/document';
 export const getAvailableDates_Url = BASE_URL + '/getAvailableDates';
+export const CREATEORDERSANDBOX_Url = 'https://sandbox.cashfree.com/pg/orders';
