@@ -1,5 +1,5 @@
 import {Button, Icon, Text} from '@rneui/themed';
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {useFormContext} from 'react-hook-form';
 import Color from '../../asset/Color';
 import {RHFTextInput} from '../../component/RHFInputs/RHFTextInput';
@@ -21,6 +21,13 @@ export const OTPVerif = ({onVerify}: {onVerify: () => void}) => {
   }, [mobile]);
   const [otpSent, setOTPSent] = useState(false);
   const [otp, setOTP] = useState('');
+
+  const otpInput = useRef();
+  useEffect(() => {
+    setTimeout(() => {
+      otpInput.current?.focusField(0);
+    }, 500);
+  }, []);
   const {mutate: mutateSendOTP} = useSendOTP({
     onSuccess: () => setOTPSent(true),
   });
@@ -72,8 +79,9 @@ export const OTPVerif = ({onVerify}: {onVerify: () => void}) => {
         <OTPInputView
           style={{width: '80%', height: 50, alignSelf: 'center'}}
           pinCount={OTPLength}
-          autoFocusOnLoad
+          autoFocusOnLoad={false}
           code={otp}
+          ref={otpInput}
           onCodeChanged={code => setOTP(code)}
           codeInputFieldStyle={styles.underlineStyleBase}
           codeInputHighlightStyle={styles.underlineStyleHighLighted}
