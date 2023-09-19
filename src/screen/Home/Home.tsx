@@ -66,10 +66,11 @@ export default function Home() {
   const locatinModalMethods = useModalMethods();
   const {fontScale} = useWindowDimensions();
   // const {AnimatedScrollView, AnimatedView: AnimatedView} = useScrollAnimation(50);
-  console.log(fontScale);
+
   const height = 50 * fontScale;
   const bottomContainerTopPaddding = height + 30;
   const {AnimatedScrollView, AnimatedView} = ScrollWP(height, 1);
+
   return (
     <View style={{flex: 1, gap: 5}}>
       <ImageBackground

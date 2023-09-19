@@ -26,7 +26,6 @@ export interface SpecialityDto {
   id: string;
   name: string;
   doc_key: string;
-  description: string;
 }
 export interface LocationDto {
   id: string;
@@ -332,9 +331,8 @@ export type GetCustomerAppointmentResponse = DataResponse<
 >;
 
 export interface LatestBookingStatus {
-  completed_slot: number;
   started_slot: number;
-  status: BookingStatus;
+  completed_slot: number;
 }
 
 export interface AppointmentWithLatestStatus extends Appointmentdto {
@@ -349,8 +347,6 @@ export interface Appointmentdto extends BookingDto {
   clinic_name?: string;
   from_working_time?: string;
   address: ShowAddress;
-  to_working_time?: string;
-  mobile?: string;
 }
 
 export interface ShowAddress {
@@ -450,3 +446,23 @@ export type AddDocumentResponse = DataResponse<VisibleDocument>;
 export type GetAvailableDatesResponse = DataResponse<
   {date: number; available: boolean}[]
 >;
+
+export enum CB_NOTIFICATION {
+  LIVE_STATUS = 'LIVE_STATUS',
+  NEW_BOOKING = 'NEW_BOOKING',
+}
+
+export interface LiveStatusNotificationData {
+  name: CB_NOTIFICATION.LIVE_STATUS;
+  started_slot: string;
+  completed_slot: string;
+}
+export interface NewBookingNotificationData {
+  name: CB_NOTIFICATION.NEW_BOOKING;
+  doctorId: string;
+  date: string;
+}
+
+export type NotificationData =
+  | LiveStatusNotificationData
+  | NewBookingNotificationData;

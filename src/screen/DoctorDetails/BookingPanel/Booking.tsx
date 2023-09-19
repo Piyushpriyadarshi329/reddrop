@@ -50,6 +50,8 @@ const Booking = ({
         ?.filter(
           i =>
             getToday().getTime() != selectedDate ||
+            i.totime <= i.fromtime ||
+            // to time <= from time meaning the working_time extends till next day.
             i.totime >= moment().format('HHmm'),
         )
         ?.map(i => {

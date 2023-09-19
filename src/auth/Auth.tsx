@@ -4,16 +4,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useDispatch, useSelector} from 'react-redux';
 import type {RootState} from './../redux/Store';
-
+import messaging from '@react-native-firebase/messaging';
 import {updateuserdata} from '../redux/reducer/Authreducer';
 import Afterlogin from './Afterlogin';
 import Beforelogin from './BeforeLogin';
 import Splashscreen from './Splashscreen';
+import {useNotificationHandler} from './notificationHandler';
 
 export default function Auth() {
   const isLoggedIn = useSelector((state: RootState) => state.Appstate.islogin);
   const dispatch = useDispatch();
-
+  const notificationHandler = useNotificationHandler();
   async function getsayncdata() {
     try {
       let asyncdata = await AsyncStorage.getItem('userdata');
@@ -27,6 +28,13 @@ export default function Auth() {
       console.log(error);
     }
   }
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      remoteMessage.data as any;
+    });
+
+    return unsubscribe;
+  }, []);
 
   const [showsplash, setshowsplash] = useState(true);
 
