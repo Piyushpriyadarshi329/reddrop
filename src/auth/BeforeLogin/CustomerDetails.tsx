@@ -28,7 +28,6 @@ export const CustomerDetails = ({
         placeholder="Email"
         label="Email"
         keyboardType="email-address"
-        rules={{validate: validateEmail}}
         {...authFieldStyleProps}
       />
 
@@ -58,7 +57,9 @@ export const CustomerDetails = ({
         title="Submit"
         color={'white'}
         titleStyle={{color: Color.primary}}
-        onPress={formMethods.handleSubmit(onSubmit)}
+        onPress={() => {
+          onSubmit(formMethods.getValues());
+        }}
       />
     </>
   );

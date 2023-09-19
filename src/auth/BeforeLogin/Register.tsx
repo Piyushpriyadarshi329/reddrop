@@ -1,17 +1,14 @@
-import messaging from '@react-native-firebase/messaging';
 import {useNavigation} from '@react-navigation/native';
-import {Button, Icon, Text} from '@rneui/themed';
-import React, {useEffect, useState} from 'react';
+import {Text} from '@rneui/themed';
+import React, {useState} from 'react';
 import {FormProvider, useForm} from 'react-hook-form';
 import {Image, Pressable, ScrollView, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import Color from '../../asset/Color';
-import {RHFTextInput} from '../../component/RHFInputs/RHFTextInput';
-import {useRegister} from '../../customhook/useRegister';
+import {useRegisterQuery} from '../../customhook/useRegister';
 import {updateuserdata} from '../../redux/reducer/Authreducer';
-import {authFieldStyleProps, b4LoginStyles} from './Home';
-import {validateEmail, validatePhone} from '../../utils/validations';
 import {CustomerDetails} from './CustomerDetails';
+import {b4LoginStyles} from './Home';
 import {OTPVerif} from './OTPVerif';
 
 export interface RegisterForm {
@@ -27,37 +24,26 @@ export default function Register() {
   const [otpVerified, setOtpVerified] = useState(false);
   const dispatch = useDispatch();
   const formMethods = useForm<RegisterForm>({});
-
+  const {mutate} = useRegisterQuery({
+    onSuccess: (data: any) => {
+      dispatch(
+        updateuserdata({
+          islogin: true,
+          userid: data?.id,
+          username: data?.name,
+        }),
+      );
+    },
+  });
   async function submitHandler(formValues: RegisterForm) {
-    try {
-      let payload: RegisterForm = {
-        name: formValues.name,
-        email: formValues.email,
-        mobile: formValues.mobile,
-        password: formValues.password,
-        usertype: 'CUSTOMER',
-      };
-
-      let res: any = await useRegister(payload);
-
-      if (res.Success) {
-        alert(res.Message);
-
-        console.log('signup res', res);
-
-        dispatch(
-          updateuserdata({
-            islogin: true,
-            userid: res.data.id,
-            username: res.data.name,
-          }),
-        );
-      } else {
-        alert(res.Message);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    let payload: RegisterForm = {
+      name: formValues.name,
+      email: formValues.email,
+      mobile: formValues.mobile,
+      password: formValues.password,
+      usertype: 'CUSTOMER',
+    };
+    mutate(payload);
   }
 
   return (
