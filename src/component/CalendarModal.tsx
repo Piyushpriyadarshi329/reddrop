@@ -14,8 +14,8 @@ const CalendarModal = ({
   setModalVisible,
   minDate,
 }: {
-  date: Date | null;
-  setDate: (p: Date) => void;
+  date: number | null;
+  setDate: (p: number) => void;
   modalVisible: boolean;
   setModalVisible: any;
   minDate?: string;
@@ -41,10 +41,10 @@ const CalendarModal = ({
         }}>
         <CalendarPicker
           onDateChange={day => {
-            setDate(new Date(day as any));
+            setDate(new Date(day as any).getTime());
             setModalVisible(!modalVisible);
           }}
-          selectedStartDate={date || undefined}
+          selectedStartDate={new Date(date)}
           textStyle={{
             color: 'black',
           }}
