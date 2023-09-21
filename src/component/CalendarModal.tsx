@@ -44,31 +44,14 @@ const CalendarModal = ({
             setDate(new Date(day as any));
             setModalVisible(!modalVisible);
           }}
+          selectedStartDate={date || undefined}
           textStyle={{
             color: 'black',
           }}
           width={(ScreenWidth * 4) / 5}
-          // height={500}
-          // style={{borderRadius: 15}}
-          // theme={{
-          //   backgroundColor: Pallet2.tertiary,
-          //   calendarBackground: Color.white,
-          //   textSectionTitleColor: Color.primary,
-          //   selectedDayBackgroundColor: Color.primary,
-          //   selectedDayTextColor: '#ffffff',
-          //   todayTextColor: Pallet2.primary,
-          //   dayTextColor: Color.primary,
-          // }}
-          // markedDates={{
-          //   [moment().format('YYYY-MM-DD')]: {
-          //     marked: true,
-          //     selectedColor: Pallet2.primary,
-          //   },
-          //   [moment(date).format('YYYY-MM-DD')]: {
-          //     selected: true,
-          //     disableTouchEvent: true,
-          //   },
-          // }}
+          todayBackgroundColor={Color.secondary}
+          selectedDayColor={Color.primary}
+          selectedDayTextColor="#FFFFFF"
           minDate={new Date(Number(minDate))}
         />
       </View>
