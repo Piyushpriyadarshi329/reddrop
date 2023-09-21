@@ -44,7 +44,8 @@ const CalendarModal = ({
             setDate(new Date(day as any).getTime());
             setModalVisible(!modalVisible);
           }}
-          selectedStartDate={new Date(date)}
+          selectedStartDate={new Date(Number(date))}
+          initialDate={new Date(Number(date))}
           textStyle={{
             color: 'black',
           }}
