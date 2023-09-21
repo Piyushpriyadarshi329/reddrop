@@ -30,7 +30,7 @@ export default function Auth() {
   }
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      remoteMessage.data as any;
+      notificationHandler(remoteMessage.data as any);
     });
 
     return unsubscribe;
