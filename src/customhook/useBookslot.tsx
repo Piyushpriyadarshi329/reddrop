@@ -11,7 +11,7 @@ export function useBookslot(props?: {onSuccess: any}) {
       axios.post<BookSlotResponse>(BOOKSLOT_URL, payload),
     {
       onSuccess: (...p) => {
-        console.log(p[0]);
+        // console.log(p[0]);
         qc.invalidateQueries(['APPOINTMENTS']);
         props?.onSuccess?.(...p);
       },

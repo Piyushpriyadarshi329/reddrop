@@ -37,6 +37,8 @@ const Booking = ({
     // clinic_id: '244e7e5f-761b-4063-83cf-0314bb623f2c',
   });
 
+  console.log('dateList', dateList);
+
   const {data: bookingAvailability, isLoading: isSlotsLoading} =
     useGetBookingAvailability({
       doctor_id: doctorId,
@@ -76,96 +78,110 @@ const Booking = ({
   return (
     <View style={{flex: 1, position: 'relative'}}>
       <ScrollView style={{height: '100%'}}>
-        {/* <View style={{flexDirection: 'row', height: 60}}>
-          {clinicsList?.map(clinic => (
-            <ClinicButton
-              clinic={clinic}
-              selectedClinic={selectedClinic}
-              setSelectedClinic={setSelectedClinic}
-            />
-          ))}
-        </View> */}
-        <View style={{marginTop: 10}}>
-          <FlatList
-            horizontal
-            data={dateList}
-            renderItem={({item: i}) => (
-              <DateCard
-                key={`${i.date}`}
-                {...{
-                  setselectedtime: setSelectedTime,
-                  setselecteddate: setSelectedDate,
-                  selecteddate: selectedDate,
-                  i,
-                }}
-              />
-            )}
-          />
-        </View>
-        <View style={{flexDirection: 'column'}}>
-          {isSlotsLoading && (
+        {!dateList || dateList.length == 0 ? (
+          <>
             <View
               style={{
+                flex: 1,
+                justifyContent: 'center',
                 alignItems: 'center',
-                paddingTop: 20,
+                marginTop: 40,
               }}>
-              <Image
-                source={require('../../../asset/image/Carebook_loader.gif')}
-                style={{width: 100, height: 100}}
+              <Text style={{color: 'black', fontSize: 16, fontWeight: '600'}}>
+                No date available
+              </Text>
+            </View>
+          </>
+        ) : (
+          <>
+            <View style={{marginTop: 10}}>
+              <FlatList
+                horizontal
+                data={dateList}
+                renderItem={({item: i}) => (
+                  <DateCard
+                    key={`${i.date}`}
+                    {...{
+                      setselectedtime: setSelectedTime,
+                      setselecteddate: setSelectedDate,
+                      selecteddate: selectedDate,
+                      i,
+                    }}
+                  />
+                )}
               />
             </View>
-          )}
-          {!isSlotsLoading &&
-            (!!timeSlots?.length ? (
-              <>
-                {timeSlots.map(timeSlot => (
-                  <View key={timeSlot.workingtime_id}>
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        textAlign: 'center',
-                        marginTop: 10,
-                        color: 'black',
-                        fontWeight: '600',
-                      }}>
-                      {timeSlot.title}
-                    </Text>
-                    <View
-                      style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
-                      {timeSlot.data.map(slot => (
+            <View style={{flexDirection: 'column'}}>
+              {isSlotsLoading && (
+                <View
+                  style={{
+                    alignItems: 'center',
+                    paddingTop: 20,
+                  }}>
+                  <Image
+                    source={require('../../../asset/image/Carebook_loader.gif')}
+                    style={{width: 100, height: 100}}
+                  />
+                </View>
+              )}
+              {!isSlotsLoading &&
+                (!!timeSlots?.length ? (
+                  <>
+                    {timeSlots.map(timeSlot => (
+                      <View key={timeSlot.workingtime_id}>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            textAlign: 'center',
+                            marginTop: 10,
+                            color: 'black',
+                            fontWeight: '600',
+                          }}>
+                          {timeSlot.title}
+                        </Text>
                         <View
-                          style={{width: '20%'}}
-                          id={`${slot?.id}_${slot.index}`}>
-                          <SlotCard
-                            slot={slot}
-                            isSelected={
-                              selectedTime?.id == slot.id &&
-                              selectedTime?.index == slot.index
-                            }
-                            onPress={slot => {
-                              setSelectedTime(slot);
-                            }}
-                          />
+                          style={{
+                            flex: 1,
+                            flexDirection: 'row',
+                            flexWrap: 'wrap',
+                          }}>
+                          {timeSlot.data.map(slot => (
+                            <View
+                              style={{width: '20%'}}
+                              id={`${slot?.id}_${slot.index}`}>
+                              <SlotCard
+                                slot={slot}
+                                isSelected={
+                                  selectedTime?.id == slot.id &&
+                                  selectedTime?.index == slot.index
+                                }
+                                onPress={slot => {
+                                  setSelectedTime(slot);
+                                }}
+                              />
+                            </View>
+                          ))}
                         </View>
-                      ))}
-                    </View>
+                      </View>
+                    ))}
+                  </>
+                ) : (
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: 40,
+                    }}>
+                    <Text
+                      style={{color: 'black', fontSize: 16, fontWeight: '600'}}>
+                      No Slots available
+                    </Text>
                   </View>
                 ))}
-              </>
-            ) : (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginTop: 40,
-                }}>
-                <Text style={{color: 'black', fontSize: 16, fontWeight: '600'}}>
-                  No Slots available
-                </Text>
-              </View>
-            ))}
-        </View>
+            </View>
+          </>
+        )}
       </ScrollView>
       {selectedTime && (
         <View

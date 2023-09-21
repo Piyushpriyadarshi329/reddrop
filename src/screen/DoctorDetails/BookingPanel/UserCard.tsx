@@ -16,7 +16,7 @@ export const UserCard = ({user}: {user?: BookingUserInterface}) => {
       <View style={{padding: 10, borderRadius: 10}}>
         <Text>
           {user?.name}
-          {!!user?.dob && `(${user?.dob} y)`}
+          {!!user?.dob && `(${user?.dob} Y)`}
         </Text>
         <Text>{user?.gender}</Text>
       </View>

@@ -18,7 +18,7 @@ export default function BookApointment(props: {route: any}) {
 
   const {data: doctorDetails} = useGetDoctor(props.route.params?.id);
   const onBookingSuccess = () => {
-    navigation.goBack();
+    // navigation.goBack();
   };
   return (
     <>
@@ -27,6 +27,7 @@ export default function BookApointment(props: {route: any}) {
         <View style={style.imageContainer}>
           <Image
             style={style.image}
+            resizeMode="cover"
             source={
               doctorDetails?.profile_image
                 ? {

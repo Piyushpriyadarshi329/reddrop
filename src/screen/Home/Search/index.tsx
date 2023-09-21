@@ -22,6 +22,8 @@ const Search = () => {
     name: searchedText,
   });
 
+  console.log('doctor', doctors);
+
   return (
     <View>
       <Navbar title="Doctors" />
@@ -48,11 +50,26 @@ const Search = () => {
           onChangeText={setValue}
         />
       </View>
-      <FlatList
-        data={doctors}
-        keyExtractor={item => item.id}
-        renderItem={({item}) => <DoctorListCard details={item} />}
-      />
+
+      {!doctors || doctors.length == 0 ? (
+        <View style={{justifyContent: 'center', marginTop: 200}}>
+          <Text
+            style={{
+              color: 'black',
+              textAlign: 'center',
+              fontSize: 18,
+              fontWeight: '700',
+            }}>
+            No result found
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={doctors}
+          keyExtractor={item => item.id}
+          renderItem={({item}) => <DoctorListCard details={item} />}
+        />
+      )}
     </View>
   );
 };

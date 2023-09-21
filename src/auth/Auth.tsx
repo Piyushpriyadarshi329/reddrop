@@ -10,6 +10,7 @@ import Afterlogin from './Afterlogin';
 import Beforelogin from './BeforeLogin';
 import Splashscreen from './Splashscreen';
 import {useNotificationHandler} from './notificationHandler';
+import {CB_NOTIFICATION} from '../types';
 
 export default function Auth() {
   const isLoggedIn = useSelector((state: RootState) => state.Appstate.islogin);
@@ -30,6 +31,8 @@ export default function Auth() {
   }
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log('remoteMessage', remoteMessage.data);
+
       notificationHandler(remoteMessage.data as any);
     });
 

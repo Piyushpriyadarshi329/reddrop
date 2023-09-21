@@ -422,6 +422,11 @@ export interface Slot {
   index: number;
   status: SlotStatus;
 }
+export type CreatePaymentResponse = DataResponse<{
+  orderId: string;
+  amount: string;
+  CFResponse: any;
+}>;
 
 export interface GetBookingsSummaryRequest {
   doctor_id: string;
@@ -451,8 +456,12 @@ export type GetAvailableDatesResponse = DataResponse<
 export enum CB_NOTIFICATION {
   LIVE_STATUS = 'LIVE_STATUS',
   NEW_BOOKING = 'NEW_BOOKING',
+  PAYMENT_CLOSURE = 'PAYMENT_CLOSURE',
 }
-
+export interface PaymentClosureNotification {
+  name: CB_NOTIFICATION.PAYMENT_CLOSURE;
+  status: PaymentStatus;
+}
 export interface LiveStatusNotificationData {
   name: CB_NOTIFICATION.LIVE_STATUS;
   started_slot: string;
@@ -466,4 +475,5 @@ export interface NewBookingNotificationData {
 
 export type NotificationData =
   | LiveStatusNotificationData
-  | NewBookingNotificationData;
+  | NewBookingNotificationData
+  | PaymentClosureNotification;

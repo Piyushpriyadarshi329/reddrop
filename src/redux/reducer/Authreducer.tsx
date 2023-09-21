@@ -7,6 +7,7 @@ export interface CounterState {
   islogin: boolean;
   username: string;
   cityName: string;
+  paymentStatus: string;
 }
 
 const initialState: CounterState = {
@@ -14,6 +15,7 @@ const initialState: CounterState = {
   islogin: false,
   username: '',
   cityName: '',
+  paymentStatus: '',
 };
 
 export const Appstate = createSlice({

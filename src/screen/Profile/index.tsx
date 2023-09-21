@@ -26,6 +26,8 @@ export default function Profile() {
   const [picmodalVisible, setpicModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const {data: customer} = useGetCustomer(AppState.userid);
+
+  console.log('customer', customer);
   const {mutate: updateCustomer} = useUpdateCustomer(AppState.userid);
   function onUploadPic(data: VisibleDocument | undefined) {
     updateCustomer({
@@ -76,9 +78,14 @@ export default function Profile() {
               {customer?.name}
             </Text>
             {customer?.dob && (
-              <Text style={commonStyles.caption}>
-                {getAge(Number(customer.dob))}
-              </Text>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={commonStyles.caption}>
+                  {`${getAge(Number(customer.dob))}Y`}
+
+                  {/* {getAge(Number(new Date(customer.dob).getTime()))} */}
+                </Text>
+                {/* <Text style={commonStyles.caption}>{'y'}</Text> */}
+              </View>
             )}
             {customer?.gender && (
               <Text style={commonStyles.caption}>{customer.gender}</Text>
