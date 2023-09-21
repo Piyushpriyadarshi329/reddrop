@@ -6,6 +6,7 @@ import {RHFTextInput} from '../../component/RHFInputs/RHFTextInput';
 import {validateEmail} from '../../utils/validations';
 import {authFieldStyleProps} from './Home';
 import {RegisterForm} from './Register';
+import {ScrollView} from 'react-native';
 
 export const CustomerDetails = ({
   onSubmit,

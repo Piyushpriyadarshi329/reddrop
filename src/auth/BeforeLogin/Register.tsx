@@ -25,7 +25,9 @@ export default function Register() {
   const navigation = useNavigation<any>();
   const [otpVerified, setOtpVerified] = useState(false);
   const dispatch = useDispatch();
-  const formMethods = useForm<RegisterForm>({});
+  const formMethods = useForm<RegisterForm>({
+    mode: 'onTouched',
+  });
   const {mutate, isLoading} = useRegisterQuery({
     onSuccess: (data: any) => {
       dispatch(
@@ -78,7 +80,9 @@ export default function Register() {
 
       <View style={b4LoginStyles.bottomContainerForm}>
         <FormProvider {...formMethods}>
-          <ScrollView contentContainerStyle={b4LoginStyles.signUpFormContainer}>
+          <ScrollView
+            contentContainerStyle={b4LoginStyles.signUpFormContainer}
+            keyboardShouldPersistTaps="always">
             <View style={{paddingBottom: 20}}>
               <Text style={{fontSize: 22, color: 'white'}}>
                 Create An Account

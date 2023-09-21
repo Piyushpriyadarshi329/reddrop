@@ -88,7 +88,9 @@ export default function Login() {
       </View>
       <View style={b4LoginStyles.bottomContainerForm}>
         <FormProvider {...formMethods}>
-          <ScrollView contentContainerStyle={b4LoginStyles.formContainer}>
+          <ScrollView
+            contentContainerStyle={b4LoginStyles.formContainer}
+            keyboardShouldPersistTaps={'always'}>
             <View style={{paddingBottom: 20}}>
               <Text style={{fontSize: 22, color: 'white'}}>Sign in</Text>
               <Text style={{fontSize: 14, color: '#dae0ff'}}>

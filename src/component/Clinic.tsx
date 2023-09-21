@@ -18,9 +18,9 @@ export default function Clinic({
       <TouchableOpacity
         style={[
           {
-            padding: 10,
             backgroundColor: 'white',
             width: 130,
+            height: 180,
             justifyContent: 'space-between',
             alignItems: 'center',
             borderRadius: 10,
@@ -29,18 +29,20 @@ export default function Clinic({
         onPress={() => {
           navigation.navigate(AppPages.Doctorlist, {data: details});
         }}>
-        <Image
-          style={commonStyles.profileImage}
-          source={
-            details.profile_image
-              ? {
-                  uri: details.profile_image,
-                }
-              : require('./../asset/image/Clinic.jpeg')
-          }
-        />
-        <View style={{paddingTop: 5}}>
-          <Text style={commonStyles.font18} numberOfLines={1}>
+        <View style={{padding: 10}}>
+          <Image
+            style={commonStyles.profileImage}
+            source={
+              details.profile_image
+                ? {
+                    uri: details.profile_image,
+                  }
+                : require('./../asset/image/Clinic.jpeg')
+            }
+          />
+        </View>
+        <View style={{paddingHorizontal: 5, paddingVertical: 5, width: '100%'}}>
+          <Text style={commonStyles.font14} numberOfLines={2}>
             {details.name}
           </Text>
         </View>

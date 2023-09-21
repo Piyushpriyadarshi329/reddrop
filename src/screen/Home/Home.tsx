@@ -238,6 +238,7 @@ export default function Home() {
                         </View>
                       ),
                     )}
+                    <View style={{height: 50}}></View>
                   </>
                 )}
               </View>

@@ -92,9 +92,12 @@ export default function Doctor({details}: {details: DoctorDto}) {
             />
           </View>
           <View style={{paddingTop: 5, flex: 1}}>
-            <Text style={commonStyles.font18} numberOfLines={1}>
-              Dr. {details.name}
-            </Text>
+            <View style={commonStyles.flexRowAlignCenter}>
+              <Text style={commonStyles.font14}>Dr.</Text>
+              <Text style={commonStyles.font16} numberOfLines={1}>
+                {details.name}
+              </Text>
+            </View>
             <Text style={commonStyles.font12}>{details.speciality}</Text>
             {!!details.no_of_bookings ? (
               <Text style={commonStyles.font12}>
