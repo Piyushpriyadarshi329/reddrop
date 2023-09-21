@@ -10,6 +10,7 @@ import Afterlogin from './Afterlogin';
 import Beforelogin from './BeforeLogin';
 import Splashscreen from './Splashscreen';
 import {useNotificationHandler} from './notificationHandler';
+import {CB_NOTIFICATION} from '../types';
 
 export default function Auth() {
   const isLoggedIn = useSelector((state: RootState) => state.Appstate.islogin);
@@ -30,7 +31,13 @@ export default function Auth() {
   }
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      remoteMessage.data as any;
+      console.log('remoteMessage', remoteMessage.data);
+
+      if (remoteMessage.data?.name == CB_NOTIFICATION.PAYMENT_CLOSURE) {
+        dispatch(updateuserdata({paymentStatus: remoteMessage.data.status}));
+      } else {
+        notificationHandler(remoteMessage.data as any);
+      }
     });
 
     return unsubscribe;

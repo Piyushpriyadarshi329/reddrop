@@ -56,7 +56,7 @@ export const ProfileModal = ({
       email: formValues.email,
       mobile: formValues.mobile,
       gender: formValues.gender,
-      dob: formValues.dob,
+      dob: new Date(formValues.dob).getTime(),
     });
   };
   return (
