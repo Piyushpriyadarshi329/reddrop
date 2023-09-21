@@ -3,7 +3,6 @@ import {
   Image,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -20,6 +19,8 @@ import {useGetCustomer, useUpdateCustomer} from './useCustomerQuery';
 import {ProfileModal} from './Edit/Modal';
 import {updateuserdata} from '../../redux/reducer/Authreducer';
 import {ProfileEntry} from './ProfileEntry';
+
+import {Text} from '@rneui/themed';
 
 export default function Profile() {
   const AppState = useSelector((state: RootState) => state.Appstate);
@@ -78,14 +79,9 @@ export default function Profile() {
               {customer?.name}
             </Text>
             {customer?.dob && (
-              <View style={{flexDirection: 'row'}}>
-                <Text style={commonStyles.caption}>
-                  {`${getAge(Number(customer.dob))}Y`}
-
-                  {/* {getAge(Number(new Date(customer.dob).getTime()))} */}
-                </Text>
-                {/* <Text style={commonStyles.caption}>{'y'}</Text> */}
-              </View>
+              <Text style={{...commonStyles.caption, color: 'black'}}>
+                {getAge(Number(customer.dob))} Y
+              </Text>
             )}
             {customer?.gender && (
               <Text style={commonStyles.caption}>{customer.gender}</Text>
