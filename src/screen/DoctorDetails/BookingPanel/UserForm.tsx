@@ -2,7 +2,6 @@ import React from 'react';
 import {FormProvider, useForm} from 'react-hook-form';
 import {View} from 'react-native';
 import {RHFTextInput} from '../../../component/RHFInputs/RHFTextInput';
-import {RHFCalendar} from '../../../component/RHFInputs/RHFCalendar';
 import {RHFDropdown} from '../../../component/RHFInputs/RHFDropdown';
 import {Gender} from './UserCard';
 import {Button} from '@rneui/themed';

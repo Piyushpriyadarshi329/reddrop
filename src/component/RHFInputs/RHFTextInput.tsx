@@ -16,16 +16,19 @@ export const RHFTextInput = ({
   return (
     <Controller
       control={control}
-      render={({field, formState: {errors}}) => (
-        <Input
-          errorMessage={errors[name]?.message?.toString()}
-          onChangeText={t => {
-            field.onChange(t);
-          }}
-          {...field}
-          {...props}
-        />
-      )}
+      render={({field, formState: {errors}}) => {
+        console.log(errors, errors[name]?.message?.toString());
+        return (
+          <Input
+            errorMessage={errors[name]?.message?.toString()}
+            onChangeText={t => {
+              field.onChange(t);
+            }}
+            {...field}
+            {...props}
+          />
+        );
+      }}
       name={name}
       rules={{
         required: required ? ValidationErrors.Required : undefined,

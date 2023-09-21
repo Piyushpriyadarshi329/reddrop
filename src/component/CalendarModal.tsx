@@ -5,6 +5,7 @@ import Color, {Pallet2} from '../asset/Color';
 import ModalCloseOnEscape from '../utils/ModalCloseOnEscape';
 import moment from 'moment';
 import CalendarPicker from 'react-native-calendar-picker';
+import {ScreenHeight, ScreenWidth} from '@rneui/base';
 
 const CalendarModal = ({
   date,
@@ -30,8 +31,8 @@ const CalendarModal = ({
       <ModalCloseOnEscape setVisible={setModalVisible} />
       <View
         style={{
-          marginTop: 200,
-          marginHorizontal: 50,
+          marginTop: ScreenHeight / 3,
+          marginHorizontal: (ScreenWidth * 1) / 10,
           borderRadius: 15,
           borderWidth: 1,
           borderColor: 'white',
@@ -40,33 +41,35 @@ const CalendarModal = ({
         }}>
         <CalendarPicker
           onDateChange={day => {
-            console.log(day);
-            setDate(new Date(day));
+            setDate(new Date(day as any));
             setModalVisible(!modalVisible);
           }}
-          style={{borderRadius: 15}}
-          width={300}
-          height={500}
-          theme={{
-            backgroundColor: Pallet2.tertiary,
-            calendarBackground: Color.white,
-            textSectionTitleColor: Color.primary,
-            selectedDayBackgroundColor: Color.primary,
-            selectedDayTextColor: '#ffffff',
-            todayTextColor: Pallet2.primary,
-            dayTextColor: Color.primary,
+          textStyle={{
+            color: 'black',
           }}
-          markedDates={{
-            [moment().format('YYYY-MM-DD')]: {
-              marked: true,
-              selectedColor: Pallet2.primary,
-            },
-            [moment(date).format('YYYY-MM-DD')]: {
-              selected: true,
-              disableTouchEvent: true,
-            },
-          }}
-          minDate={minDate}
+          width={(ScreenWidth * 4) / 5}
+          // height={500}
+          // style={{borderRadius: 15}}
+          // theme={{
+          //   backgroundColor: Pallet2.tertiary,
+          //   calendarBackground: Color.white,
+          //   textSectionTitleColor: Color.primary,
+          //   selectedDayBackgroundColor: Color.primary,
+          //   selectedDayTextColor: '#ffffff',
+          //   todayTextColor: Pallet2.primary,
+          //   dayTextColor: Color.primary,
+          // }}
+          // markedDates={{
+          //   [moment().format('YYYY-MM-DD')]: {
+          //     marked: true,
+          //     selectedColor: Pallet2.primary,
+          //   },
+          //   [moment(date).format('YYYY-MM-DD')]: {
+          //     selected: true,
+          //     disableTouchEvent: true,
+          //   },
+          // }}
+          minDate={new Date(Number(minDate))}
         />
       </View>
     </Modal>

@@ -33,11 +33,7 @@ export default function Auth() {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       console.log('remoteMessage', remoteMessage.data);
 
-      if (remoteMessage.data?.name == CB_NOTIFICATION.PAYMENT_CLOSURE) {
-        dispatch(updateuserdata({paymentStatus: remoteMessage.data.status}));
-      } else {
-        notificationHandler(remoteMessage.data as any);
-      }
+      notificationHandler(remoteMessage.data as any);
     });
 
     return unsubscribe;

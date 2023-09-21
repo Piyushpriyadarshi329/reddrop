@@ -8,7 +8,7 @@ import {authFieldStyleProps} from './Home';
 import {RegisterForm} from './Register';
 import {useSendOTP, useVerifyOTP} from './useOTPVerificationQuery';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
-import {StyleSheet} from 'react-native';
+import {ScrollView, StyleSheet} from 'react-native';
 import {View} from 'react-native';
 import {commonStyles} from '../../asset/styles';
 
@@ -49,7 +49,7 @@ export const OTPVerif = ({onVerify}: {onVerify: () => void}) => {
     [otpSent, otp, isMobileValid],
   );
   return (
-    <>
+    <ScrollView keyboardShouldPersistTaps={'always'}>
       <RHFTextInput
         name={'mobile'}
         placeholder="Mobile Number"
@@ -100,7 +100,7 @@ export const OTPVerif = ({onVerify}: {onVerify: () => void}) => {
         titleStyle={{color: Color.primary}}
         onPress={onVerifyClick}
       />
-    </>
+    </ScrollView>
   );
 };
 
