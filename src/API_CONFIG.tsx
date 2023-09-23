@@ -22,3 +22,6 @@ export const CUSTOMER_URL = BASE_URL + '/customer';
 export const DOCUMENT = BASE_URL + '/document';
 export const getAvailableDates_Url = BASE_URL + '/getAvailableDates';
 export const createPayment_Url = BASE_URL + '/createPayment';
+export const checkMobile_Url = BASE_URL + '/customer/checkMobile/';
+export const sendOTP_Url = BASE_URL + '/sendOTP/';
+export const verifyOTP_Url = BASE_URL + '/verifyOTP';

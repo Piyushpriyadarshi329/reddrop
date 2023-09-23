@@ -7,6 +7,9 @@ export const errorAlert = (text1?: string, text2?: string) =>
 export const successAlert = (text1: string, text2?: string) =>
   Toast.show({type: 'success', text1, text2});
 
+export const infoAlert = (text1: string, text2?: string) =>
+  Toast.show({type: 'info', text1, text2, visibilityTime: 5000});
+
 export const axiosAlert = (e: any) => {
   try {
     if (e.response) {
@@ -22,7 +25,7 @@ export const axiosAlert = (e: any) => {
 };
 
 export const useAlert = () => {
-  return {errorAlert, successAlert, axiosAlert};
+  return {errorAlert, successAlert, axiosAlert, infoAlert};
 };
 
 export const errorCodeToReason = {

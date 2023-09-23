@@ -25,7 +25,13 @@ export const UserForm = ({
     <View style={{paddingHorizontal: 40}}>
       <FormProvider {...formMethods}>
         <RHFTextInput name="name" required placeholder="Name" label="Name" />
-        <RHFTextInput name="dob" required label="Age" placeholder="Age" />
+        <RHFTextInput
+          name="dob"
+          required
+          label="Age"
+          keyboardType="numeric"
+          placeholder="Age"
+        />
         <RHFDropdown
           name="gender"
           placeholder="Gender"

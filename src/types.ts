@@ -457,6 +457,7 @@ export enum CB_NOTIFICATION {
   LIVE_STATUS = 'LIVE_STATUS',
   NEW_BOOKING = 'NEW_BOOKING',
   PAYMENT_CLOSURE = 'PAYMENT_CLOSURE',
+  FIRST_SLOT_STARTED = 'FIRST_SLOT_STARTED',
 }
 export interface PaymentClosureNotification {
   name: CB_NOTIFICATION.PAYMENT_CLOSURE;
@@ -472,8 +473,12 @@ export interface NewBookingNotificationData {
   doctorId: string;
   date: string;
 }
+export interface FirstSlotStartedNotificationData {
+  name: CB_NOTIFICATION.FIRST_SLOT_STARTED;
+}
 
 export type NotificationData =
   | LiveStatusNotificationData
   | NewBookingNotificationData
-  | PaymentClosureNotification;
+  | PaymentClosureNotification
+  | FirstSlotStartedNotificationData;

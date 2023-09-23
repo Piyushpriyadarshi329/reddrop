@@ -10,6 +10,7 @@ export function useGetcliniclist(
   onSuccess?: (data: ClinicWithAddressAndImage[] | undefined) => void,
 ) {
   const cityName = useSelector((root: RootState) => root.Appstate.cityName);
+
   return useQuery(
     ['CLINIC_LIST', cityName, payload],
     () =>

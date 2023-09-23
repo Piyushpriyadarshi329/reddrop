@@ -12,6 +12,7 @@ import {b4LoginStyles} from './Home';
 import {OTPVerif} from './OTPVerif';
 import messaging from '@react-native-firebase/messaging';
 import {SignupRequest, UserType} from '../../types';
+import {useCheckMobile} from '../../customhook/useCheckMobile';
 
 export interface RegisterForm {
   name: string;
@@ -57,6 +58,24 @@ export default function Register() {
     }
   };
 
+  const mobile = formMethods.watch('mobile');
+
+  const {data: userData} = useCheckMobile({mobile});
+
+  async function onVerify(data: any) {
+    if (userData) {
+      dispatch(
+        updateuserdata({
+          islogin: true,
+          userid: data.id,
+          username: data.name,
+        }),
+      );
+    } else {
+      setOtpVerified(true);
+    }
+  }
+
   async function submitHandler(formValues: RegisterForm) {
     let payload: SignupRequest = {
       name: formValues.name,
@@ -91,7 +110,7 @@ export default function Register() {
                 Sign up to Continue
               </Text>
             </View>
-            {!otpVerified && <OTPVerif onVerify={() => setOtpVerified(true)} />}
+            {!otpVerified && <OTPVerif onVerify={onVerify} />}
             {otpVerified && (
               <CustomerDetails onSubmit={submitHandler} isLoading={isLoading} />
             )}
