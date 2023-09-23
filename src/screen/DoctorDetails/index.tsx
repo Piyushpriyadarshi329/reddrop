@@ -14,7 +14,7 @@ export default function BookApointment(props: {route: any}) {
   const navigation = useNavigation();
   const DoctorBookingStack = createNativeStackNavigator();
 
-  console.log('props.route.params?.id', props.route.params?.id);
+  console.log('props.route.params?.id', props.route.params);
 
   const {data: doctorDetails} = useGetDoctor(props.route.params?.id);
   const onBookingSuccess = () => {

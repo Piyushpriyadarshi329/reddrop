@@ -26,6 +26,8 @@ export const AppointmentList = ({
     }
     return {};
   }, [bookingStatus]);
+
+  console.log('useGetAppointments call');
   const {data: appointments} = useGetAppointments({
     customerId: userid,
     status: bookingStatus,

@@ -15,7 +15,8 @@ const DoctorDetails = ({
     | undefined;
   clinicDetails: ClinicWithAddressAndImage;
 }) => {
-  console.log('doctorDetails', doctorDetails);
+  console.log('clinicDetails', clinicDetails);
+
   return (
     <>
       <Text style={commonStyles.caption}>{doctorDetails?.speciality}</Text>

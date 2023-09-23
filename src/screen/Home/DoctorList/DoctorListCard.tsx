@@ -88,11 +88,19 @@ const DoctorListCard = ({
       console.log(error);
     }
   }
+
+  // const {data: clinicList} = useGetClinicsList({
+  //   doctor_id: details.id,
+  //   city: cityName,
+  // });
+
+  // console.log('clinicList', clinicList);
+
   async function clinicHandler(clinic: ClinicWithAddressAndImage | undefined) {
     try {
       navigation.navigate(AppPages.BookApointment, {
         id: details.id,
-        clinicDetails: clinic,
+        clinicDetails: clinicsList?.filter(j => j.id == clinic?.id)[0],
       });
       setModalVisible(false);
     } catch (error) {

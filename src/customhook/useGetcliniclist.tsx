@@ -20,6 +20,7 @@ export function useGetcliniclist(
     {
       select: data => data.data.data,
       onSuccess: onSuccess,
+      staleTime: Infinity,
     },
   );
 }
