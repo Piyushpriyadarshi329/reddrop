@@ -35,7 +35,9 @@ export const RHFCalendar = (props: {
               </Text>
             )}
             {field.value ? (
-              <Text>{moment(field.value).format(props.dateFormat)}</Text>
+              <Text>
+                {moment(Number(field.value)).format(props.dateFormat)}
+              </Text>
             ) : (
               <Text style={{borderBottomWidth: 1, borderColor: 'grey'}}>
                 {props.placeholder ?? 'Select Date'}
