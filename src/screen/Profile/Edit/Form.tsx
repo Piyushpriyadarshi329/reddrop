@@ -11,7 +11,7 @@ const CustomerProfileUpdateForm = ({onSubmit}: {onSubmit: () => void}) => {
   return (
     <ScrollView contentContainerStyle={{flex: 1}}>
       <RHFTextInput label="Name" name="name" required />
-      <RHFTextInput label="Email" name="email" required />
+      <RHFTextInput label="Email" name="email" />
       <RHFTextInput label="Mobile" name="mobile" required />
       <RHFDropdown
         label="Gender"
@@ -27,7 +27,7 @@ const CustomerProfileUpdateForm = ({onSubmit}: {onSubmit: () => void}) => {
         title={'Submit'}
         color={Color.primary}
         onPress={onSubmit}
-        containerStyle={{marginHorizontal: 10}}
+        containerStyle={{marginHorizontal: 10, marginBottom: 20}}
       />
     </ScrollView>
   );

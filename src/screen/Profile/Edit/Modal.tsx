@@ -1,7 +1,7 @@
 import {Text} from '@rneui/themed';
 import React, {useEffect} from 'react';
 import {FormProvider, useForm} from 'react-hook-form';
-import {Modal, TouchableOpacity, View} from 'react-native';
+import {Modal, ScrollView, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {CustomerDto} from '../../../types';
 import {useUpdateCustomer} from '../useCustomerQuery';
@@ -59,6 +59,7 @@ export const ProfileModal = ({
       dob: formValues.dob,
     });
   };
+  console.log('dob', details?.dob);
   return (
     <Modal
       animationType="slide"
@@ -66,45 +67,47 @@ export const ProfileModal = ({
       visible={editMode}
       onRequestClose={() => setEditMode(false)}>
       <ModalCloseOnEscape setVisible={setEditMode} />
-
-      <FormProvider {...formMethods}>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: Color.tertiary,
-            marginTop: 200,
-            borderTopEndRadius: 30,
-            borderTopStartRadius: 30,
-            borderColor: Color.primary,
-            borderWidth: 1,
-          }}>
+      <ScrollView>
+        <FormProvider {...formMethods}>
           <View
             style={{
-              marginTop: 10,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
+              flex: 1,
+              backgroundColor: Color.tertiary,
+              marginTop: 200,
+              borderTopEndRadius: 30,
+              borderTopStartRadius: 30,
+              borderColor: Color.primary,
+              borderWidth: 1,
             }}>
-            <View>
-              <Text style={{color: 'black', fontWeight: 'bold', fontSize: 20}}>
-                Profile
-              </Text>
+            <View
+              style={{
+                marginTop: 10,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <View>
+                <Text
+                  style={{color: 'black', fontWeight: 'bold', fontSize: 20}}>
+                  Profile
+                </Text>
+              </View>
+              <View style={{position: 'absolute', right: 30}}>
+                <TouchableOpacity onPress={() => setEditMode(false)}>
+                  <Icon
+                    name="close"
+                    style={{fontWeight: 'bold', fontSize: 25}}
+                    color={Color.primary}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
-            <View style={{position: 'absolute', right: 30}}>
-              <TouchableOpacity onPress={() => setEditMode(false)}>
-                <Icon
-                  name="close"
-                  style={{fontWeight: 'bold', fontSize: 25}}
-                  color={Color.primary}
-                />
-              </TouchableOpacity>
-            </View>
+            <CustomerProfileUpdateForm
+              onSubmit={formMethods.handleSubmit(updateProfileHandler)}
+            />
           </View>
-          <CustomerProfileUpdateForm
-            onSubmit={formMethods.handleSubmit(updateProfileHandler)}
-          />
-        </View>
-      </FormProvider>
+        </FormProvider>
+      </ScrollView>
     </Modal>
   );
 };
