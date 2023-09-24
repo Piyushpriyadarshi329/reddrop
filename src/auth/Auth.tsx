@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from 'react';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useDispatch, useSelector} from 'react-redux';
 import type {RootState} from './../redux/Store';
 import messaging from '@react-native-firebase/messaging';
@@ -10,12 +8,13 @@ import Afterlogin from './Afterlogin';
 import Beforelogin from './BeforeLogin';
 import Splashscreen from './Splashscreen';
 import {useNotificationHandler} from './notificationHandler';
-import {CB_NOTIFICATION} from '../types';
+import {useUpdateFCMToken} from './useUpdateFCMToken';
 
 export default function Auth() {
   const isLoggedIn = useSelector((state: RootState) => state.Appstate.islogin);
   const dispatch = useDispatch();
   const notificationHandler = useNotificationHandler();
+  useUpdateFCMToken();
   async function getsayncdata() {
     try {
       let asyncdata = await AsyncStorage.getItem('userdata');
