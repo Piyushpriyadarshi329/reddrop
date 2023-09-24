@@ -1,7 +1,7 @@
 import {useMutation} from '@tanstack/react-query';
 import {verifyOTP_Url, sendOTP_Url} from '../../API_CONFIG';
-import {useQuery} from '@tanstack/react-query';
 import axios from 'axios';
+import {axiosAlert} from '../../utils/useShowAlert';
 
 export const useSendOTP = ({onSuccess}: {onSuccess: () => void}) => {
   return useMutation(
@@ -26,6 +26,7 @@ export const useVerifyOTP = ({onSuccess}: {onSuccess: (data: any) => void}) => {
       onSuccess: data => {
         onSuccess(data.data.data);
       },
+      onError: axiosAlert,
     },
   );
 };

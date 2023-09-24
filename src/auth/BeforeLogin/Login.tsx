@@ -1,22 +1,14 @@
-import messaging from '@react-native-firebase/messaging';
 import {useNavigation} from '@react-navigation/native';
-import {Button, Text, Icon} from '@rneui/themed';
 import {} from '@rneui/base';
-import React, {useEffect, useState} from 'react';
+import {Text} from '@rneui/themed';
+import React from 'react';
 import {FormProvider, useForm} from 'react-hook-form';
 import {Image, Pressable, ScrollView, View} from 'react-native';
-import {Toast} from 'react-native-toast-message/lib/src/Toast';
-import {useDispatch, useSelector} from 'react-redux';
-import {commonStyles} from '../../asset/styles';
-import Btn from '../../component/Btn';
-import {useLogin} from '../../customhook/useLogin';
-import {RootState} from '../../redux/Store';
-import {validateEmailOrPhone} from '../../utils/validations';
+import {useDispatch} from 'react-redux';
 import Color from '../../asset/Color';
 import {updateuserdata} from '../../redux/reducer/Authreducer';
-import {AuthStyles} from '../authStyles';
-import {RHFTextInput} from '../../component/RHFInputs/RHFTextInput';
-import {authFieldStyleProps, b4LoginStyles} from './Home';
+import {b4LoginStyles} from './Home';
+import {OTPVerif} from './OTPVerif';
 
 interface LoginForm {
   username: string;
@@ -27,57 +19,17 @@ export default function Login() {
   const navigation = useNavigation<any>();
   const dispatch = useDispatch();
   const formMethods = useForm<LoginForm>();
-  const [fcm_token, setfcm_token] = useState('');
-  const [showPW, setShowPW] = useState(false);
-  useEffect(() => {
-    checkToken();
-  });
 
-  const checkToken = async () => {
-    try {
-      const fcmToken = await messaging().getToken();
-      if (fcmToken) {
-        console.log(fcmToken);
-        setfcm_token(fcmToken);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  const onOTPVerify = (data: any) => {
+    dispatch(
+      updateuserdata({
+        islogin: true,
+        userid: data.id,
+        username: data.name,
+      }),
+    );
   };
 
-  async function submitHandler(formValues: LoginForm) {
-    try {
-      let payload = {
-        userName: formValues.username,
-        password: formValues.password,
-        userType: 1,
-        fcm_token: fcm_token,
-      };
-
-      var res: any = await useLogin(payload);
-
-      if (res.Success) {
-        dispatch(
-          updateuserdata({
-            islogin: true,
-            userid: res.data.id,
-            username: res.data.name,
-          }),
-        );
-      } else {
-        Toast.show({
-          type: 'error',
-          text1: res.Message,
-        });
-      }
-    } catch (error) {
-      console.log('error', error);
-      Toast.show({
-        type: 'error',
-        text1: 'Something went wrong',
-      });
-    }
-  }
   return (
     <View style={b4LoginStyles.container}>
       <View style={b4LoginStyles.topContainer}>
@@ -97,42 +49,9 @@ export default function Login() {
                 Sign in to Continue
               </Text>
             </View>
-            <RHFTextInput
-              name="username"
-              placeholder="Email/Phone"
-              label="Email/Phone"
-              required
-              rules={{validate: validateEmailOrPhone}}
-              {...authFieldStyleProps}
-            />
-            <RHFTextInput
-              name="password"
-              secureTextEntry={!showPW}
-              placeholder="Password"
-              label="Password"
-              required
-              {...authFieldStyleProps}
-              rightIcon={
-                <Icon
-                  name={showPW ? 'eye' : 'eye-off'}
-                  color={'#95e8ff'}
-                  style={{fontSize: 20, padding: 5}}
-                  onPressIn={() => {
-                    setShowPW(true);
-                  }}
-                  onPressOut={() => {
-                    setShowPW(false);
-                  }}
-                />
-              }
-            />
 
-            <Button
-              title="Sign in"
-              color={'white'}
-              titleStyle={{color: Color.primary}}
-              onPress={formMethods.handleSubmit(submitHandler)}
-            />
+            <OTPVerif onVerify={onOTPVerify} />
+
             <View
               style={{
                 justifyContent: 'flex-end',
