@@ -72,7 +72,8 @@ export default function Doctor({details}: {details: DoctorDto}) {
           style={[
             {
               padding: 10,
-              width: 130,
+              width: 140,
+              height: 230,
               justifyContent: 'center',
               backgroundColor: 'white',
               borderRadius: 10,
@@ -93,8 +94,8 @@ export default function Doctor({details}: {details: DoctorDto}) {
           </View>
           <View style={{paddingTop: 5, flex: 1}}>
             <View style={commonStyles.flexRowAlignCenter}>
-              <Text style={commonStyles.font14}>Dr.</Text>
-              <Text style={commonStyles.font16} numberOfLines={1}>
+              <Text style={commonStyles.font16}>
+                <Text style={commonStyles.font12}>Dr. </Text>
                 {details.name}
               </Text>
             </View>

@@ -42,9 +42,7 @@ export default function Clinic({
           />
         </View>
         <View style={{paddingHorizontal: 5, paddingVertical: 5, width: '100%'}}>
-          <Text style={commonStyles.font14} numberOfLines={2}>
-            {details.name}
-          </Text>
+          <Text style={commonStyles.font14}>{details.name}</Text>
         </View>
       </TouchableOpacity>
     </ShadowWrapper>
