@@ -3,7 +3,6 @@ import {View, Modal, FlatList, TouchableOpacity} from 'react-native';
 import {Text} from '@rneui/themed';
 import {useGetLocation} from '../../../customhook/useGetLocation';
 import {IModalMethods, useModalMethods} from '../../../utils/useModalMethods';
-import {RHFTextInput} from '../../../component/RHFInputs/RHFTextInput';
 import useDebounce from '../../../utils/useDebounce';
 import {Icon, Input} from '@rneui/themed';
 import Color from '../../../asset/Color';
@@ -53,7 +52,13 @@ const LocationModal = (p: {modalMethods: IModalMethods}) => {
       visible={p.modalMethods.isOpen}
       onRequestClose={p.modalMethods.close}>
       <View
-        style={{flex: 1, backgroundColor: 'white', margin: 10, padding: 10}}>
+        style={{
+          flex: 1,
+          backgroundColor: 'white',
+          margin: 10,
+          padding: 10,
+          borderRadius: 10,
+        }}>
         <View style={{alignSelf: 'flex-end'}} onTouchEnd={p.modalMethods.close}>
           <Icon name="close" size={24} color={Color.primary} />
         </View>
@@ -80,6 +85,8 @@ const LocationModal = (p: {modalMethods: IModalMethods}) => {
                   paddingHorizontal: 10,
                   borderRadius: 5,
                   borderWidth: 1,
+                  borderColor: Color.tertiary,
+                  backgroundColor: Color.tertiary,
                 }}>
                 <Text>{item.name}</Text>
               </TouchableOpacity>

@@ -1,19 +1,18 @@
-import {Button, Icon, Text} from '@rneui/themed';
+import {Button, Text} from '@rneui/themed';
+import OTPInputView from '@twotalltotems/react-native-otp-input';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {useFormContext} from 'react-hook-form';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import Color from '../../asset/Color';
+import {commonStyles} from '../../asset/styles';
 import {RHFTextInput} from '../../component/RHFInputs/RHFTextInput';
-import {validateEmail, validatePhone} from '../../utils/validations';
+import {validatePhone} from '../../utils/validations';
 import {authFieldStyleProps} from './Home';
 import {RegisterForm} from './Register';
 import {useSendOTP, useVerifyOTP} from './useOTPVerificationQuery';
-import OTPInputView from '@twotalltotems/react-native-otp-input';
-import {ScrollView, StyleSheet} from 'react-native';
-import {View} from 'react-native';
-import {commonStyles} from '../../asset/styles';
 
 const OTPLength = 4;
-export const OTPVerif = ({onVerify}: {onVerify: () => void}) => {
+export const OTPVerif = ({onVerify}: {onVerify: (data: any) => void}) => {
   const formMethods = useFormContext<RegisterForm>();
   const mobile = formMethods.watch('mobile');
   const isMobileValid = useMemo(() => {
@@ -22,7 +21,7 @@ export const OTPVerif = ({onVerify}: {onVerify: () => void}) => {
   const [otpSent, setOTPSent] = useState(false);
   const [otp, setOTP] = useState('');
 
-  const otpInput = useRef();
+  const otpInput = useRef<any>();
   useEffect(() => {
     setTimeout(() => {
       otpInput.current?.focusField(0);
@@ -31,23 +30,24 @@ export const OTPVerif = ({onVerify}: {onVerify: () => void}) => {
   const {mutate: mutateSendOTP} = useSendOTP({
     onSuccess: () => setOTPSent(true),
   });
-  const {mutate} = useVerifyOTP({onSuccess: onVerify});
-  const onVerifyClick = () => {
+  const {mutate: mutateVerifyOTP} = useVerifyOTP({onSuccess: onVerify});
+  const onVerifyClick = (otpLocal?: string) => {
     if (!otpSent) {
       mutateSendOTP(formMethods.getValues('mobile'));
     }
     if (otpSent) {
-      mutate({
+      mutateVerifyOTP({
         mobile: formMethods.getValues('mobile'),
-        otp,
+        otp: otpLocal || otp,
       });
     }
   };
-  console.log('otp: ', otp, otp.length, otp.length !== OTPLength);
+
   const isVerifyDisabled = useMemo(
     () => (otpSent ? otp.length !== OTPLength : !isMobileValid),
     [otpSent, otp, isMobileValid],
   );
+
   return (
     <ScrollView keyboardShouldPersistTaps={'always'}>
       <RHFTextInput
@@ -87,8 +87,7 @@ export const OTPVerif = ({onVerify}: {onVerify: () => void}) => {
           codeInputFieldStyle={styles.underlineStyleBase}
           codeInputHighlightStyle={styles.underlineStyleHighLighted}
           onCodeFilled={code => {
-            onVerifyClick();
-            // console.log(`Code is ${code}, you are good to go!`);
+            onVerifyClick(code);
           }}
           keyboardType="phone-pad"
         />
@@ -98,7 +97,7 @@ export const OTPVerif = ({onVerify}: {onVerify: () => void}) => {
         color={'white'}
         disabled={isVerifyDisabled}
         titleStyle={{color: Color.primary}}
-        onPress={onVerifyClick}
+        onPress={() => onVerifyClick()}
       />
     </ScrollView>
   );

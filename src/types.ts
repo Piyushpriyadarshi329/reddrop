@@ -138,6 +138,7 @@ export interface CustomerDto {
   gender: string;
   dob: string;
   appointmentsCount: number;
+  referralCode: string;
 }
 export type UpdateCustomerRequest = {
   name?: string;
@@ -148,6 +149,7 @@ export type UpdateCustomerRequest = {
   is_agent?: boolean;
   gender?: string;
   dob?: string;
+  fcmToken?: string;
 };
 
 /** Clinic Controller */
@@ -199,6 +201,13 @@ export interface SignupRequest {
   usertype: UserType;
   fcm_token?: string;
 }
+export interface CustomerSignupRequest {
+  name: string;
+  email: string;
+  mobile: string;
+  password: string;
+  fcm_token?: string;
+}
 
 export type SignupResponse = DataResponse<any>;
 
@@ -243,6 +252,9 @@ export type BookSlotRequest = Omit<
   'id' | 'created_datetime' | 'modified_datetime' | 'group_id' | 'status'
 > & {
   group_id?: string;
+  discountAmount?: number;
+  offerCode?: string;
+  amount: number;
 };
 export type BookSlotResponse = DataResponse<any>;
 
@@ -425,11 +437,6 @@ export interface Slot {
   index: number;
   status: SlotStatus;
 }
-export type CreatePaymentResponse = DataResponse<{
-  orderId: string;
-  amount: string;
-  CFResponse: any;
-}>;
 
 export interface GetBookingsSummaryRequest {
   doctor_id: string;
@@ -457,15 +464,12 @@ export type GetAvailableDatesResponse = DataResponse<
 >;
 
 export enum CB_NOTIFICATION {
+  FIRST_SLOT_STARTED = 'FIRST_SLOT_STARTED',
   LIVE_STATUS = 'LIVE_STATUS',
   NEW_BOOKING = 'NEW_BOOKING',
   PAYMENT_CLOSURE = 'PAYMENT_CLOSURE',
-  FIRST_SLOT_STARTED = 'FIRST_SLOT_STARTED',
 }
-export interface PaymentClosureNotification {
-  name: CB_NOTIFICATION.PAYMENT_CLOSURE;
-  status: PaymentStatus;
-}
+
 export interface LiveStatusNotificationData {
   name: CB_NOTIFICATION.LIVE_STATUS;
   started_slot: string;
@@ -475,6 +479,10 @@ export interface NewBookingNotificationData {
   name: CB_NOTIFICATION.NEW_BOOKING;
   doctorId: string;
   date: string;
+}
+export interface PaymentClosureNotification {
+  name: CB_NOTIFICATION.PAYMENT_CLOSURE;
+  status: PaymentStatus;
 }
 export interface FirstSlotStartedNotificationData {
   name: CB_NOTIFICATION.FIRST_SLOT_STARTED;
@@ -486,10 +494,80 @@ export type NotificationData =
   | PaymentClosureNotification
   | FirstSlotStartedNotificationData;
 
+export type CreatePaymentResponse = DataResponse<{
+  orderId: string;
+  amount: string;
+  CFResponse: any;
+}>;
+
+export interface CFPaymentWebhookBody {
+  data: {
+    order: {
+      order_id: string;
+      order_amount: number;
+      order_currency: string;
+      order_tags: null;
+    };
+    payment: {
+      cf_payment_id: number;
+      payment_status: string;
+      payment_amount: number;
+      payment_currency: string;
+      payment_message: string;
+      payment_time: string;
+      bank_reference: string;
+      auth_id: null;
+      payment_method: {
+        upi: {
+          channel: null;
+          upi_id: string;
+        };
+      };
+      payment_group: string;
+    };
+    customer_details: {
+      customer_name: null;
+      customer_id: string;
+      customer_email: string;
+      customer_phone: string;
+    };
+    payment_gateway_details: {
+      gateway_name: string;
+      gateway_order_id: string;
+      gateway_payment_id: string;
+      gateway_status_code: null;
+    };
+    payment_offers: [
+      {
+        offer_id: string;
+        offer_type: string;
+        offer_meta: {
+          offer_title: string;
+          offer_description: string;
+          offer_code: string;
+          offer_start_time: string;
+          offer_end_time: string;
+        };
+        offer_redemption: {
+          redemption_status: string;
+          discount_amount: number;
+          cashback_amount: number;
+        };
+      },
+    ];
+  };
+  event_time: string;
+  type: CashFreeWebHookType;
+}
+export enum CashFreeWebHookType {
+  PAYMENT_SUCCESS_WEBHOOK = 'PAYMENT_SUCCESS_WEBHOOK',
+  PAYMENT_FAILED_WEBHOOK = 'PAYMENT_FAILED_WEBHOOK',
+}
+
 export interface SKUItemEntity {
   id: string;
   name: string;
-  baseRate: number;
+  amount: number;
   serviceCharges: number;
   gstRate: number;
 }
