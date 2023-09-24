@@ -13,6 +13,7 @@ import {OTPVerif} from './OTPVerif';
 import messaging from '@react-native-firebase/messaging';
 import {SignupRequest, UserType} from '../../types';
 import {useCheckMobile} from '../../customhook/useCheckMobile';
+import {useCustomerSignUp} from '../../customhook/useCustomerSignUp';
 
 export interface RegisterForm {
   name: string;
@@ -29,7 +30,7 @@ export default function Register() {
   const formMethods = useForm<RegisterForm>({
     mode: 'onTouched',
   });
-  const {mutate, isLoading} = useRegisterQuery({
+  const {mutate, isLoading} = useCustomerSignUp({
     onSuccess: (data: any) => {
       dispatch(
         updateuserdata({

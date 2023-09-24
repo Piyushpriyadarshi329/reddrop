@@ -1,7 +1,9 @@
+import {useNavigation} from '@react-navigation/native';
 import {Button} from '@rneui/themed';
 import moment from 'moment';
 import React, {useEffect, useMemo, useState} from 'react';
 import {FlatList, Image, ScrollView, Text, View} from 'react-native';
+import {AppPages} from '../../../appPages';
 import {useGetAvailableDates} from '../../../customhook/useGetAvailableDates';
 import {Appointmentdto, ClinicWithAddressAndImage, Slot} from '../../../types';
 import {getTimeStringFromDBTime, getToday} from '../../../utils/dateMethods';
@@ -26,6 +28,7 @@ const Booking = ({
     undefined,
   );
   const bookingModal = useModalMethods();
+  const navigation = useNavigation();
   const [selectedTime, setSelectedTime] = useState<
     (Slot & {id: string}) | undefined
   >(undefined);
@@ -193,7 +196,16 @@ const Booking = ({
             <Button
               title="Book Appointment"
               onPress={() => {
-                bookingModal.open();
+                navigation.navigate(AppPages.BookingConfirmation, {
+                  modalMethods: bookingModal,
+                  selectedTime: selectedTime,
+                  selectedDate: selectedDate,
+                  existingAppointment: existingAppointment,
+                  onBookingSuccess: onBookingSuccess,
+                  selectedClinic: clinicDetails,
+                  setSelectedTime: setSelectedTime,
+                });
+                // bookingModal.open();
               }}
             />
           </View>

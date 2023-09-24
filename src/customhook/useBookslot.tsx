@@ -4,7 +4,7 @@ import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {BookSlotRequest, BookSlotResponse} from '../types';
 import {axiosAlert} from '../utils/useShowAlert';
 
-export function useBookslot(props?: {onSuccess: any}) {
+export function useBookslot(props?: {onSuccess: any; onError: any}) {
   const qc = useQueryClient();
   return useMutation(
     (payload: BookSlotRequest) =>
@@ -15,7 +15,11 @@ export function useBookslot(props?: {onSuccess: any}) {
         qc.invalidateQueries(['APPOINTMENTS']);
         props?.onSuccess?.(...p);
       },
-      onError: axiosAlert,
+      onError: e => {
+        axiosAlert(e);
+        props?.onError();
+        qc.invalidateQueries(['AVAILABILITY']);
+      },
     },
   );
 }

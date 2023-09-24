@@ -2,6 +2,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import {AppPages} from '../../appPages';
 import BookApointment from '../../screen/DoctorDetails';
+import {BookingConfirmation} from '../../screen/DoctorDetails/BookingPanel/BookingConfirmation';
+import Offer from '../../screen/DoctorDetails/BookingPanel/Offer';
 import DoctorsList from '../../screen/Home/DoctorList';
 import DoctorlistSpecialitywise from '../../screen/Home/DoctorList/DoctorlistSpecialitywise';
 import Home from '../../screen/Home/Home';
@@ -28,6 +30,11 @@ export default function Homestack() {
         options={{headerShown: false}}
       />
       <Stack.Screen
+        name={AppPages.Offer}
+        component={Offer}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
         name={AppPages.Doctorlist}
         component={DoctorsList}
         options={{headerShown: false}}
@@ -35,6 +42,11 @@ export default function Homestack() {
       <Stack.Screen
         name={AppPages.DoctorlistSpecialitywise}
         component={DoctorlistSpecialitywise}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name={AppPages.BookingConfirmation}
+        component={BookingConfirmation}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

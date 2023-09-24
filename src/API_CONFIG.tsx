@@ -25,3 +25,6 @@ export const createPayment_Url = BASE_URL + '/createPayment';
 export const checkMobile_Url = BASE_URL + '/customer/checkMobile/';
 export const sendOTP_Url = BASE_URL + '/sendOTP/';
 export const verifyOTP_Url = BASE_URL + '/verifyOTP';
+export const customerSignUp_URL = BASE_URL + '/customer';
+export const sku_URL = BASE_URL + '/sku';
+export const checkCode_URL = BASE_URL + '/checkCode';

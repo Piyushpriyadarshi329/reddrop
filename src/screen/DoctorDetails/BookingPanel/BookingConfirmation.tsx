@@ -8,7 +8,8 @@ import {Gender, UserCard} from './UserCard';
 import {BookingOverview} from './BookingOverview';
 import {commonStyles} from '../../../asset/styles';
 import {useNavigation} from '@react-navigation/native';
-import messaging from '@react-native-firebase/messaging';
+import {useGetSKU} from '../../../customhook/useGetSKU';
+import {useCheckReferralCode} from '../../../customhook/useCheckReferralCode';
 
 import {
   CFErrorResponse,
@@ -29,6 +30,7 @@ import {
   CB_NOTIFICATION,
   ClinicWithAddressAndImage,
   CreatePaymentResponse,
+  OfferEntity,
   Slot,
 } from '../../../types';
 import {useBookslot as useBookSlot} from '../../../customhook/useBookslot';
@@ -44,24 +46,39 @@ import {
   errorAlert,
 } from './../../../utils/useShowAlert';
 import {updateuserdata} from '../../../redux/reducer/Authreducer';
+import {AppPages} from '../../../appPages';
 
-export const BookingConfirmation = ({
-  modalMethods,
-  selectedTime,
-  selectedDate,
-  existingAppointment,
-  selectedClinic,
-  onBookingSuccess,
-}: {
-  modalMethods: IModalMethods;
-  selectedTime: (Slot & {id: string}) | undefined;
-  selectedDate: number | undefined;
-  existingAppointment: Appointmentdto;
-  onBookingSuccess: any;
-  selectedClinic: ClinicWithAddressAndImage | undefined;
-}) => {
+export const BookingConfirmation = ({route}: {route: any}) => {
+  console.log('route.prams', route.params);
+  const {
+    selectedTime,
+    selectedDate,
+    existingAppointment,
+    selectedClinic,
+    onBookingSuccess,
+    setSelectedTime,
+  } = route.params;
+
+  // {
+  //   modalMethods,
+  //   selectedTime,
+  //   selectedDate,
+  //   existingAppointment,
+  //   selectedClinic,
+  //   onBookingSuccess,
+  // }: {
+  //   modalMethods: IModalMethods;
+  //   selectedTime: (Slot & {id: string}) | undefined;
+  //   selectedDate: number | undefined;
+  //   existingAppointment: Appointmentdto;
+  //   onBookingSuccess: any;
+  //   selectedClinic: ClinicWithAddressAndImage | undefined;
+  // }
+
   const AppState = useSelector((state: RootState) => state.Appstate);
   const [loader, setLoader] = useState(false);
+
+  const [selectedOffer, setSelectedOffer] = useState<OfferEntity | null>(null);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   useEffect(() => {
@@ -98,7 +115,10 @@ export const BookingConfirmation = ({
   }, []);
 
   let {data: customerData} = useGetCustomer(AppState.userid);
-  // console.log('customerData', customerData);
+
+  let {data: SKUData} = useGetSKU({customerId: AppState.userid});
+
+  console.log('SKUData', SKUData);
 
   const [user, setUser] = useState<BookingUserInterface | undefined>({
     dob: customerData?.dob ? getAge(Number(customerData?.dob)) : undefined,
@@ -122,6 +142,9 @@ export const BookingConfirmation = ({
       successAlert('Booked Successfully');
       onBookingSuccess();
     },
+    onError: () => {
+      setSelectedTime(undefined);
+    },
   });
 
   async function bookAppointmentHandler() {
@@ -142,6 +165,9 @@ export const BookingConfirmation = ({
         dob: user?.dob,
         gender: user?.gender,
         name: user?.name,
+        amount: SKUData.amounts.amount,
+        offerCode: '',
+        discountAmount: '',
       };
       if (existingAppointment) {
         bookSlotPayload.existing_booking_id = existingAppointment.id;
@@ -192,17 +218,11 @@ export const BookingConfirmation = ({
   }
 
   return (
-    <Modal
-      visible={modalMethods.isOpen}
-      onRequestClose={modalMethods.close}
-      transparent={true}
-      animationType="slide"
-      statusBarTranslucent>
-      {/* <ModalCloseOnEscape setVisible={modalMethods.close} /> */}
+    <>
       <View
         style={{
           flex: 1,
-          marginVertical: 100,
+          marginVertical: 20,
           marginHorizontal: 20,
           backgroundColor: 'white',
           borderRadius: 10,
@@ -220,7 +240,9 @@ export const BookingConfirmation = ({
               }}>
               <TouchableOpacity
                 style={commonStyles.flexRowAlignCenter}
-                onPress={modalMethods.close}>
+                onPress={() => {
+                  navigation.goBack();
+                }}>
                 <Icon name="arrow-left" color={Color.primary} />
                 <Text style={{color: Color.primary}}>Edit</Text>
               </TouchableOpacity>
@@ -243,7 +265,55 @@ export const BookingConfirmation = ({
                 <UserCard user={user} />
               </TouchableOpacity>
             )}
+            {/* Apply offer */}
+            {/* <View
+              style={{
+                marginTop: 10,
+              }}>
+              <TouchableOpacity
+                style={{
+                  flexDirection: 'row',
+                  backgroundColor: Color.lightgray,
+                  borderRadius: 10,
+                }}
+                onPress={() => {
+                  navigation.navigate(AppPages.Offer, {
+                    setSelectedOffer: setSelectedOffer,
+                  });
+                }}>
+                <Text style={{marginLeft: 10}}>Apply Offer</Text>
+                <View style={{flex: 1}}>
+                  <Icon
+                    name="chevron-right"
+                    style={{alignItems: 'flex-end', marginRight: 10}}
+                    color={Color.black}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View> */}
 
+            {/* selected offer */}
+
+            {selectedOffer ? (
+              <View
+                style={{
+                  marginTop: 10,
+                  backgroundColor: Color.lightgray,
+                  borderRadius: 10,
+                  padding: 5,
+                }}>
+                <View>
+                  <Text>Applied Offer details</Text>
+                </View>
+                <Text>Name:{selectedOffer?.name}</Text>
+                <Text>Code:{selectedOffer?.code}</Text>
+                <Text>{selectedOffer?.description}</Text>
+              </View>
+            ) : null}
+
+            {/* amount and GSt details */}
+
+            <View></View>
             <Button
               onPress={!isLoading ? bookAppointmentHandler : () => {}}
               title={'Book'}
@@ -258,6 +328,6 @@ export const BookingConfirmation = ({
           </View>
         )}
       </View>
-    </Modal>
+    </>
   );
 };

@@ -234,6 +234,9 @@ export interface BookingDto {
   dob: number;
   name: string;
   gender: Gender;
+  amount: string;
+  offerCode: string;
+  discountAmount: string;
 }
 export type BookSlotRequest = Omit<
   BookingDto,
@@ -482,3 +485,34 @@ export type NotificationData =
   | NewBookingNotificationData
   | PaymentClosureNotification
   | FirstSlotStartedNotificationData;
+
+export interface SKUItemEntity {
+  id: string;
+  name: string;
+  baseRate: number;
+  serviceCharges: number;
+  gstRate: number;
+}
+export interface OfferEntity {
+  id: string;
+  amount?: number | null;
+  percentage?: number | null;
+  maxOff?: number | null;
+  name: string;
+  description: string;
+  expiry: number;
+  code: string;
+  priority: number | null;
+  maxApplies: number | null;
+  validFrom: number;
+  skuID: string | null;
+}
+
+export type getAmountAndOffersResponse = DataResponse<{
+  amounts: SKUItemEntity;
+  offers: OfferEntity[];
+}>;
+
+export enum CodeType {
+  REFERRAL = 'REFERRAL',
+}
