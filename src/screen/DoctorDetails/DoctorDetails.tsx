@@ -3,6 +3,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import {commonStyles} from '../../asset/styles';
 import {ClinicWithAddressAndImage, DoctorDto} from '../../types';
 import ShadowWrapper, {shadowStyles} from '../../component/ShadowWrapper';
+import {VerticalLine} from './VerticalLine';
 
 const DoctorDetails = ({
   doctorDetails,
@@ -23,15 +24,12 @@ const DoctorDetails = ({
       <Text style={[commonStyles.font20, commonStyles.weight700]}>
         Dr.{doctorDetails?.name}
       </Text>
-      <Text style={[commonStyles.font16, commonStyles.weight700]}>
-        {clinicDetails.name}
-      </Text>
-      <Text style={[commonStyles.font16, commonStyles.weight700]}>
-        Consulting fees: {clinicDetails?.fees}
-      </Text>
       {doctorDetails?.degree && (
         <Text style={commonStyles.caption}>{doctorDetails?.degree}</Text>
       )}
+      <Text style={[commonStyles.font18, commonStyles.weight700]}>
+        {clinicDetails.name}
+      </Text>
       <View
         style={{
           marginTop: 10,
@@ -46,27 +44,31 @@ const DoctorDetails = ({
                   : ''}
               </Text>
             </View>
-            <View
-              style={{
-                borderLeftWidth: 1,
-                borderColor: 'grey',
-                height: '80%',
-                alignSelf: 'center',
-              }}
-            />
+            <VerticalLine />
             <View style={style.detailsCard}>
               <Text style={commonStyles.caption}>Patients</Text>
               <Text style={[commonStyles.font18, commonStyles.weight600]}>
                 {doctorDetails?.no_of_bookings || 'Newly Joined'}
               </Text>
             </View>
+            <VerticalLine />
+            <View style={style.detailsCard}>
+              <Text style={commonStyles.caption}>Fees</Text>
+              <Text style={[commonStyles.font18, commonStyles.weight600]}>
+                {clinicDetails?.fees}
+              </Text>
+            </View>
           </View>
         </ShadowWrapper>
       </View>
-      <View style={{paddingVertical: 20}}>
-        <Text style={[commonStyles.font18, commonStyles.weight800]}>About</Text>
-        <Text style={commonStyles.font14}>{doctorDetails?.about}</Text>
-      </View>
+      {!!doctorDetails?.about.trim().length && (
+        <View style={{paddingVertical: 20}}>
+          <Text style={[commonStyles.font18, commonStyles.weight800]}>
+            About
+          </Text>
+          <Text style={commonStyles.font14}>{doctorDetails?.about}</Text>
+        </View>
+      )}
     </>
   );
 };
