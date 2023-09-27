@@ -1,5 +1,4 @@
 import {Button, Text} from '@rneui/themed';
-import OTPInputView from '@twotalltotems/react-native-otp-input';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {useFormContext} from 'react-hook-form';
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
@@ -14,6 +13,7 @@ import {
   useVerifyOTP,
   useReSendOTP,
 } from './useOTPVerificationQuery';
+import {COTPInput} from '../../component/COTPInput';
 
 const OTPLength = 4;
 export const OTPVerif = ({onVerify}: {onVerify: (data: any) => void}) => {
@@ -118,22 +118,7 @@ export const OTPVerif = ({onVerify}: {onVerify: (data: any) => void}) => {
           </Text>
         </View>
       )}
-      {otpSent && (
-        <OTPInputView
-          style={{width: '80%', height: 50, alignSelf: 'center'}}
-          pinCount={OTPLength}
-          autoFocusOnLoad={false}
-          code={otp}
-          ref={otpInput}
-          onCodeChanged={code => setOTP(code)}
-          codeInputFieldStyle={styles.underlineStyleBase}
-          codeInputHighlightStyle={styles.underlineStyleHighLighted}
-          onCodeFilled={code => {
-            onVerifyClick(code);
-          }}
-          keyboardType="phone-pad"
-        />
-      )}
+      {otpSent && <COTPInput handleChange={setOTP} />}
 
       {resend ? (
         <View style={{flex: 1, alignItems: 'flex-end'}}>
