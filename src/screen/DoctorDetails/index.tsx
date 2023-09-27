@@ -43,16 +43,17 @@ export default function BookApointment(props: {route: any}) {
           <DoctorBookingStack.Screen
             name="Details"
             component={(route: any) => (
-              <View style={{marginBottom: 10}}>
+              <ScrollView style={{marginBottom: 10}}>
                 <DoctorDetails
                   doctorDetails={doctorDetails}
                   clinicDetails={props.route.params?.clinicDetails}
                 />
+                <View style={{height: 50}} />
                 <Btn
                   title="Schedule -> "
                   onPress={() => route.navigation.navigate('Book')}
                 />
-              </View>
+              </ScrollView>
             )}
             options={{headerShown: false}}
           />
