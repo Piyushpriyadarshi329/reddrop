@@ -34,10 +34,14 @@ export const OTPVerif = ({onVerify}: {onVerify: (data: any) => void}) => {
     }, 500);
   }, []);
   const {mutate: mutateSendOTP} = useSendOTP({
-    onSuccess: () => setOTPSent(true),
+    onSuccess: () => {
+      setOTPSent(true), setCount(1);
+    },
   });
   const {mutate: mutateReSendOTP} = useReSendOTP({
-    onSuccess: () => setOTPSent(true),
+    onSuccess: () => {
+      setOTPSent(true), setCount(1);
+    },
   });
   const {mutate: mutateVerifyOTP} = useVerifyOTP({onSuccess: onVerify});
 
@@ -58,11 +62,19 @@ export const OTPVerif = ({onVerify}: {onVerify: (data: any) => void}) => {
   function resendBtnVisible() {
     setTimeout(() => {
       setResend(true);
-    }, 30000);
+    }, 38000);
   }
 
   useEffect(() => {
-    setTimeout(() => {}, 1000);
+    console.log('count', count);
+    setTimeout(() => {
+      if (count == 30) {
+        setCount(0);
+        setResend(true);
+      } else if (count != 0 && otpSent) {
+        setCount(count + 1);
+      }
+    }, 1000);
   }, [count]);
 
   async function resendFun() {
@@ -130,13 +142,17 @@ export const OTPVerif = ({onVerify}: {onVerify: (data: any) => void}) => {
           </TouchableOpacity>
         </View>
       ) : (
-        <View style={{flex: 1, alignItems: 'flex-end'}}>
-          <TouchableOpacity>
-            <Text style={{color: 'red', fontSize: 12}}>
-              Resend OTP in {count}{' '}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <>
+          {otpSent ? (
+            <View style={{flex: 1, alignItems: 'flex-end'}}>
+              <TouchableOpacity>
+                <Text style={{color: 'black', fontSize: 12}}>
+                  Resend OTP in {30 - count}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ) : null}
+        </>
       )}
 
       <Button
