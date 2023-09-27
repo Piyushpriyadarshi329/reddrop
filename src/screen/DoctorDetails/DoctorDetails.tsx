@@ -125,7 +125,7 @@ const DoctorDetails = ({
           </View>
         </ShadowWrapper>
       </View>
-      {!!doctorDetails?.about.trim().length && (
+      {!!doctorDetails?.about?.trim().length && (
         <View style={{paddingVertical: 20}}>
           <Text style={[commonStyles.font18, commonStyles.weight800]}>
             About

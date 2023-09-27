@@ -211,16 +211,6 @@ const Booking = ({
           </View>
         </View>
       )}
-      {bookingModal.isOpen && (
-        <BookingConfirmation
-          modalMethods={bookingModal}
-          selectedTime={selectedTime}
-          selectedDate={selectedDate}
-          existingAppointment={existingAppointment}
-          onBookingSuccess={onBookingSuccess}
-          selectedClinic={clinicDetails}
-        />
-      )}
     </View>
   );
 };

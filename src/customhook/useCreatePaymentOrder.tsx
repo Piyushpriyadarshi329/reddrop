@@ -1,21 +1,12 @@
+import {useMutation} from '@tanstack/react-query';
 import axios from 'axios';
 import {createPayment_Url} from '../API_CONFIG';
 import {CreatePaymentResponse} from '../types';
+import {axiosAlert} from '../utils/useShowAlert';
 
-export async function useCreatePaymentOrder(payload: any) {
-  let myPromise = new Promise<CreatePaymentResponse>(async function (
-    myResolve,
-    myReject,
-  ) {
-    try {
-      var res = await axios.post(createPayment_Url, payload);
-
-      myResolve(res.data);
-    } catch (error: any) {
-      console.log('error', JSON.stringify(error));
-      myReject(error);
-    }
+export function useCreatePaymentOrder({onSuccess}: {onSuccess: any}) {
+  return useMutation((payload: any) => axios.post(createPayment_Url, payload), {
+    onSuccess: data => onSuccess(data.data.data),
+    onError: axiosAlert,
   });
-
-  return myPromise;
 }

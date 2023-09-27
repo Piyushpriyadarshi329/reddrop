@@ -7,7 +7,7 @@ import Color from '../../../asset/Color';
 import {Gender, UserCard} from './UserCard';
 import {BookingOverview} from './BookingOverview';
 import {commonStyles} from '../../../asset/styles';
-import {useNavigation} from '@react-navigation/native';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {useGetSKU} from '../../../customhook/useGetSKU';
 import {useCheckReferralCode} from '../../../customhook/useCheckReferralCode';
 
@@ -79,12 +79,16 @@ export const BookingConfirmation = ({route}: {route: any}) => {
   const [loader, setLoader] = useState(false);
 
   const [selectedOffer, setSelectedOffer] = useState<OfferEntity | null>(null);
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<any>>();
+
   const dispatch = useDispatch();
+  const onPaymentSuccess = () => {
+    navigation.navigate(AppPages.AppointmentStack);
+  };
   useEffect(() => {
     if (AppState.paymentStatus == 'COMPLETED') {
       successAlert('Payment Complete Successfully');
-      navigation.goBack();
+      onPaymentSuccess();
     } else if (AppState.paymentStatus == 'FAILED') {
       errorAlert('Payment Failed');
       navigation.goBack();
@@ -140,19 +144,14 @@ export const BookingConfirmation = ({route}: {route: any}) => {
   const {mutate: bookSlot, isLoading} = useBookSlot({
     onSuccess: () => {
       successAlert('Booked Successfully');
-      onBookingSuccess();
+      onPaymentSuccess();
     },
     onError: () => {
       setSelectedTime(undefined);
     },
   });
-
-  async function bookAppointmentHandler() {
+  const onPaymentOrderCreated = async (paymentOrder: any) => {
     try {
-      let createOrderRes = await useCreatePaymentOrder({
-        customerId: AppState.userid,
-      });
-
       let bookSlotPayload: BookSlotRequest = {
         customer_id: AppState.userid,
         doctor_clinic_id: selectedClinic?.clinic_doctor_id ?? '',
@@ -160,7 +159,7 @@ export const BookingConfirmation = ({route}: {route: any}) => {
         workingtime_id: selectedTime?.id ?? '',
         group_id: uuid.v4().toString(),
         // payment_order_id: uuid.v4().toString(),
-        payment_order_id: createOrderRes.data?.CFResponse.order_id,
+        payment_order_id: paymentOrder?.CFResponse.order_id,
         appointment_date: selectedDate ?? 0,
         dob: user?.dob,
         gender: user?.gender,
@@ -179,8 +178,8 @@ export const BookingConfirmation = ({route}: {route: any}) => {
       bookSlot(bookSlotPayload);
 
       const session = new CFSession(
-        createOrderRes.data?.CFResponse.payment_session_id,
-        createOrderRes.data?.CFResponse.order_id,
+        paymentOrder?.CFResponse.payment_session_id,
+        paymentOrder?.CFResponse.order_id,
         CFEnvironment.SANDBOX,
       );
       const paymentModes = new CFPaymentComponentBuilder()
@@ -212,10 +211,19 @@ export const BookingConfirmation = ({route}: {route: any}) => {
           paymentStatus: 'COMPLETED',
         }),
       );
-    } catch (error) {
-      console.log(error);
+    } catch (e) {
+      console.error(e);
     }
+  };
+
+  const {mutate: createPaymentOrder, isLoading: isCreatingPaymentOrder} =
+    useCreatePaymentOrder({onSuccess: onPaymentOrderCreated});
+  function bookAppointmentHandler() {
+    createPaymentOrder({
+      customerId: AppState.userid,
+    });
   }
+  const isSubmitLoading = isCreatingPaymentOrder || isLoading;
 
   return (
     <>
@@ -315,11 +323,11 @@ export const BookingConfirmation = ({route}: {route: any}) => {
 
             <View></View>
             <Button
-              onPress={!isLoading ? bookAppointmentHandler : () => {}}
+              onPress={!isSubmitLoading ? bookAppointmentHandler : () => {}}
               title={'Book'}
               color={Color.primary}
               disabled={!user}
-              loading={isLoading}
+              loading={isSubmitLoading}
             />
           </>
         ) : (

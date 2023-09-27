@@ -133,7 +133,7 @@ export const OTPVerif = ({onVerify}: {onVerify: (data: any) => void}) => {
       {resend ? (
         <View style={{flex: 1, alignItems: 'flex-end'}}>
           <TouchableOpacity onPress={resendFun}>
-            <Text style={{color: 'red', fontSize: 12}}>Resend OTP</Text>
+            <Text style={{color: Color.black, fontSize: 12}}>Resend OTP</Text>
           </TouchableOpacity>
         </View>
       ) : (
