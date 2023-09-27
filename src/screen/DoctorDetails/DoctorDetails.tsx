@@ -1,8 +1,14 @@
 import {default as React} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+
+import {useEffect, useState} from 'react';
+import {StyleSheet, Text, View, Platform} from 'react-native';
 import {commonStyles} from '../../asset/styles';
-import {ClinicWithAddressAndImage, DoctorDto} from '../../types';
+import {AddressDto, ClinicWithAddressAndImage, DoctorDto} from '../../types';
 import ShadowWrapper, {shadowStyles} from '../../component/ShadowWrapper';
+import {Icon} from '@rneui/themed';
+import Color from '../../asset/Color';
+import GetLocation from 'react-native-get-location';
+import {Linking} from 'react-native';
 
 const DoctorDetails = ({
   doctorDetails,
@@ -15,7 +21,49 @@ const DoctorDetails = ({
     | undefined;
   clinicDetails: ClinicWithAddressAndImage;
 }) => {
+  const [center, setcenter] = useState({
+    latitude: 17.0410971,
+    longitude: 74.7486717,
+  });
+
   console.log('clinicDetails', clinicDetails);
+
+  useEffect(() => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    })
+      .then(location => {
+        console.log('location', location);
+        setcenter(location);
+      })
+      .catch(error => {
+        console.log('error', error);
+        const {code, message} = error;
+      });
+  }, []);
+
+  function handleGetDirections(address: AddressDto) {
+    const url: string = Platform.select({
+      ios: 'maps:' + address.lat + ',' + address.lan,
+      android:
+        'geo:' +
+        address.lat +
+        ',' +
+        address.lan +
+        '?q=' +
+        address.lat +
+        ',' +
+        address.lan,
+      // 'geo:' +
+      // address.lat +
+      // ',' +
+      // address.lan +
+      // `?q=${address.address_line1},${address.address_line2},${address.city}`,
+    });
+
+    Linking.openURL(url);
+  }
 
   return (
     <>
@@ -26,6 +74,16 @@ const DoctorDetails = ({
       <Text style={[commonStyles.font16, commonStyles.weight700]}>
         {clinicDetails.name}
       </Text>
+
+      <Icon
+        name="map-marker"
+        color={Color.black}
+        containerStyle={{position: 'absolute', right: 10}}
+        onPress={() => {
+          handleGetDirections(clinicDetails.address);
+        }}
+      />
+
       <Text style={[commonStyles.font16, commonStyles.weight700]}>
         Consulting fees: {clinicDetails?.fees}
       </Text>

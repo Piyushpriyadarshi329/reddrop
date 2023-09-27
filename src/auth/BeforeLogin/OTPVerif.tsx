@@ -2,14 +2,18 @@ import {Button, Text} from '@rneui/themed';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {useFormContext} from 'react-hook-form';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Color from '../../asset/Color';
 import {commonStyles} from '../../asset/styles';
 import {RHFTextInput} from '../../component/RHFInputs/RHFTextInput';
 import {validatePhone} from '../../utils/validations';
 import {authFieldStyleProps} from './Home';
 import {RegisterForm} from './Register';
-import {useSendOTP, useVerifyOTP} from './useOTPVerificationQuery';
+import {
+  useSendOTP,
+  useVerifyOTP,
+  useReSendOTP,
+} from './useOTPVerificationQuery';
 
 const OTPLength = 4;
 export const OTPVerif = ({onVerify}: {onVerify: (data: any) => void}) => {
@@ -20,6 +24,8 @@ export const OTPVerif = ({onVerify}: {onVerify: (data: any) => void}) => {
   }, [mobile]);
   const [otpSent, setOTPSent] = useState(false);
   const [otp, setOTP] = useState('');
+  const [resend, setResend] = useState(false);
+  const [count, setCount] = useState(0);
 
   const otpInput = useRef<any>();
   useEffect(() => {
@@ -30,9 +36,15 @@ export const OTPVerif = ({onVerify}: {onVerify: (data: any) => void}) => {
   const {mutate: mutateSendOTP} = useSendOTP({
     onSuccess: () => setOTPSent(true),
   });
+  const {mutate: mutateReSendOTP} = useReSendOTP({
+    onSuccess: () => setOTPSent(true),
+  });
   const {mutate: mutateVerifyOTP} = useVerifyOTP({onSuccess: onVerify});
+
   const onVerifyClick = (otpLocal?: string) => {
     if (!otpSent) {
+      setResend(false);
+      resendBtnVisible();
       mutateSendOTP(formMethods.getValues('mobile'));
     }
     if (otpSent) {
@@ -42,6 +54,23 @@ export const OTPVerif = ({onVerify}: {onVerify: (data: any) => void}) => {
       });
     }
   };
+
+  function resendBtnVisible() {
+    setTimeout(() => {
+      setResend(true);
+    }, 30000);
+  }
+
+  useEffect(() => {
+    setTimeout(() => {}, 1000);
+  }, [count]);
+
+  async function resendFun() {
+    setResend(false);
+    resendBtnVisible();
+
+    mutateReSendOTP(formMethods.getValues('mobile'));
+  }
 
   const isVerifyDisabled = useMemo(
     () => (otpSent ? otp.length !== OTPLength : !isMobileValid),
@@ -71,6 +100,7 @@ export const OTPVerif = ({onVerify}: {onVerify: (data: any) => void}) => {
             onPress={() => {
               setOTP('');
               setOTPSent(false);
+              setResend(false);
             }}>
             Change
           </Text>
@@ -92,6 +122,23 @@ export const OTPVerif = ({onVerify}: {onVerify: (data: any) => void}) => {
           keyboardType="phone-pad"
         />
       )}
+
+      {resend ? (
+        <View style={{flex: 1, alignItems: 'flex-end'}}>
+          <TouchableOpacity onPress={resendFun}>
+            <Text style={{color: 'red', fontSize: 12}}>Resend OTP</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View style={{flex: 1, alignItems: 'flex-end'}}>
+          <TouchableOpacity>
+            <Text style={{color: 'red', fontSize: 12}}>
+              Resend OTP in {count}{' '}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
       <Button
         title="Verify"
         color={'white'}

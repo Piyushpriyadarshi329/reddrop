@@ -18,6 +18,8 @@ import DoctorListCard from './DoctorListCard';
 import Address from '../../../component/Address';
 import openMap from 'react-native-open-maps';
 import {useScrollAnimation} from '../ScrollAnimation';
+import {ActivityIndicator} from 'react-native';
+import {ScreenWidth} from '@rneui/base';
 
 export default function DoctorsList({route}: any) {
   const {data} = route.params;
@@ -106,9 +108,9 @@ export default function DoctorsList({route}: any) {
                         : require('./../../../asset/image/Clinic.jpeg')
                     }
                     style={{
-                      width: 110,
-                      height: 110,
-                      borderRadius: 110,
+                      width: ScreenWidth * 0.25,
+                      height: ScreenWidth * 0.25,
+                      borderRadius: ScreenWidth * 0.25,
                     }}
                     resizeMode="cover"
                   />
@@ -120,7 +122,7 @@ export default function DoctorsList({route}: any) {
                     {fontSize: 18, color: 'grey'},
                     {color: Pallet3.textOnPrimary},
                   ]}>
-                  {doctors?.length ?? 0} Doctors Listed
+                  {doctors?.length ? `${doctors?.length} Doctors Listed` : ''}
                 </Text>
 
                 <Text
@@ -135,16 +137,28 @@ export default function DoctorsList({route}: any) {
           </View>
         </View>
         <>
-          {sectionedData.map(section => (
-            <View style={{backgroundColor: Color.greybgc}}>
-              <View style={{padding: 10}}>
-                <Text>{section.title}</Text>
-              </View>
-              {section.data.map(doctor => (
-                <DoctorListCard details={doctor} clinicDetails={thisClinic} />
+          {doctors?.length > 0 ? (
+            <>
+              {sectionedData.map(section => (
+                <View style={{backgroundColor: Color.greybgc}}>
+                  <View style={{padding: 10}}>
+                    <Text>{section.title}</Text>
+                  </View>
+                  {section.data.map(doctor => (
+                    <DoctorListCard
+                      details={doctor}
+                      clinicDetails={thisClinic}
+                    />
+                  ))}
+                </View>
               ))}
+            </>
+          ) : (
+            <View style={{flex: 1, justifyContent: 'center'}}>
+              <ActivityIndicator size={30} color={Color.black} />
             </View>
-          ))}
+          )}
+
           <View style={{height: 100}}></View>
         </>
       </ScrollView>

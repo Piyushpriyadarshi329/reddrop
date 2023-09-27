@@ -165,6 +165,8 @@ export interface ClinicDto {
 }
 export interface ClinicWithAddress extends ClinicDto {
   address: ShowAddress;
+  lat?: string;
+  lan?: string;
 }
 export type ClinicWithAddressAndImage = ClinicWithAddress & {
   profile_image: string;
