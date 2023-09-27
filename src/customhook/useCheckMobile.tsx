@@ -18,3 +18,14 @@ export function useCheckMobile(props: {onSuccess?: any; mobile: string}) {
     },
   );
 }
+
+export function useCheckMobileMutation(props: {onSuccess?: any}) {
+  const qc = useQueryClient();
+
+  return useMutation((mobile: string) => axios.get(checkMobile_Url + mobile), {
+    onSuccess: data => {
+      props?.onSuccess?.(data.data);
+    },
+    onError: axiosAlert,
+  });
+}

@@ -14,6 +14,10 @@ import {
   useReSendOTP,
 } from './useOTPVerificationQuery';
 import {COTPInput} from '../../component/COTPInput';
+import {
+  useCheckMobile,
+  useCheckMobileMutation,
+} from '../../customhook/useCheckMobile';
 
 const OTPLength = 4;
 export const OTPVerif = ({onVerify}: {onVerify: (data: any) => void}) => {
@@ -45,11 +49,17 @@ export const OTPVerif = ({onVerify}: {onVerify: (data: any) => void}) => {
   });
   const {mutate: mutateVerifyOTP} = useVerifyOTP({onSuccess: onVerify});
 
+  const {mutate: checkMobile} = useCheckMobileMutation({
+    onSuccess: () => {
+      mutateSendOTP(formMethods.getValues('mobile'));
+    },
+  });
+
   const onVerifyClick = (otpLocal?: string) => {
     if (!otpSent) {
       setResend(false);
       resendBtnVisible();
-      mutateSendOTP(formMethods.getValues('mobile'));
+      checkMobile(formMethods.getValues('mobile'));
     }
     if (otpSent) {
       mutateVerifyOTP({
