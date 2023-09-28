@@ -61,11 +61,13 @@ export default function Doctor({details}: {details: DoctorDto}) {
   return (
     <ShadowWrapper>
       <View>
-        <ClinicsListModel
-          doctorDetails={details}
-          setModalVisible={setModalVisible}
-          modalVisible={modalVisible}
-        />
+        {modalVisible && (
+          <ClinicsListModel
+            doctorDetails={details}
+            setModalVisible={setModalVisible}
+            modalVisible={modalVisible}
+          />
+        )}
 
         <TouchableOpacity
           onPress={clickhandler}
