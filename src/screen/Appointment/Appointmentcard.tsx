@@ -28,6 +28,7 @@ import {getTimeStringFromDBTime} from '../../utils/dateMethods';
 import {useGetDoctor} from '../DoctorDetails/useDoctorQuery';
 import {useAlert} from '../../utils/useShowAlert';
 import {useUpdateSlotStatus} from '../../customhook/useUpdateSlotStatus';
+import {useGetcliniclist} from '../../customhook/useGetcliniclist';
 
 export default function AppointmentCard({
   appointment,
@@ -39,6 +40,9 @@ export default function AppointmentCard({
   const navigation = useNavigation<NavigationProp<any>>();
   const isFocused = useIsFocused();
   const {data: doctorDetails} = useGetDoctor(appointment.doctor_id ?? '');
+  const {data: clinicDetails} = useGetcliniclist({
+    clinic_id: appointment.clinic_id ?? '',
+  });
 
   const {successAlert} = useAlert();
   const [deleteModal, setDeleteModal] = useState(false);
@@ -250,6 +254,7 @@ export default function AppointmentCard({
           navigation.navigate(AppPages.BookApointment, {
             existing_appointment: appointment,
             id: doctorDetails?.id,
+            clinicDetails: clinicDetails?.[0],
           });
         }}
         modalVisible={rescheduleModal}

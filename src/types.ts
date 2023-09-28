@@ -1,6 +1,7 @@
 export type DataResponse<T> = {
   Success: boolean;
   Message: string;
+  Message2?: string;
   data?: T;
 };
 
@@ -30,6 +31,8 @@ export interface SpecialityDto {
 export interface LocationDto {
   id: string;
   name: string;
+  latitude: number;
+  longitude: number;
 }
 export type GetLocationListResponse = DataResponse<(LocationDto & {})[]>;
 
@@ -165,8 +168,6 @@ export interface ClinicDto {
 }
 export interface ClinicWithAddress extends ClinicDto {
   address: ShowAddress;
-  lat?: string;
-  lan?: string;
 }
 export type ClinicWithAddressAndImage = ClinicWithAddress & {
   profile_image: string;
@@ -245,9 +246,6 @@ export interface BookingDto {
   dob: number;
   name: string;
   gender: Gender;
-  amount: string;
-  offerCode: string;
-  discountAmount: string;
 }
 export type BookSlotRequest = Omit<
   BookingDto,
@@ -365,6 +363,7 @@ export interface Appointmentdto extends BookingDto {
   clinic_name?: string;
   from_working_time?: string;
   address: ShowAddress;
+  clinic_id?: string;
 }
 
 export interface ShowAddress {
@@ -467,6 +466,7 @@ export type GetAvailableDatesResponse = DataResponse<
 
 export enum CB_NOTIFICATION {
   FIRST_SLOT_STARTED = 'FIRST_SLOT_STARTED',
+  VISIBLE_NOTIFICATION = 'VISIBLE_NOTIFICATION',
   LIVE_STATUS = 'LIVE_STATUS',
   NEW_BOOKING = 'NEW_BOOKING',
   PAYMENT_CLOSURE = 'PAYMENT_CLOSURE',
@@ -486,7 +486,10 @@ export interface PaymentClosureNotification {
   name: CB_NOTIFICATION.PAYMENT_CLOSURE;
   status: PaymentStatus;
 }
-export interface FirstSlotStartedNotificationData {
+export interface VisibleNotification {
+  name: CB_NOTIFICATION.VISIBLE_NOTIFICATION;
+}
+export interface FirstSlotStartedNotification {
   name: CB_NOTIFICATION.FIRST_SLOT_STARTED;
 }
 
@@ -494,7 +497,8 @@ export type NotificationData =
   | LiveStatusNotificationData
   | NewBookingNotificationData
   | PaymentClosureNotification
-  | FirstSlotStartedNotificationData;
+  | FirstSlotStartedNotification
+  | VisibleNotification;
 
 export type CreatePaymentResponse = DataResponse<{
   orderId: string;

@@ -27,8 +27,6 @@ const DoctorDetails = ({
     longitude: 74.7486717,
   });
 
-  console.log('clinicDetails', clinicDetails);
-
   useEffect(() => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
@@ -73,7 +71,7 @@ const DoctorDetails = ({
         Dr.{doctorDetails?.name}
       </Text>
       <Text style={[commonStyles.font16, commonStyles.weight700]}>
-        {clinicDetails.name}
+        {clinicDetails?.name}
       </Text>
 
       <Icon
@@ -81,7 +79,7 @@ const DoctorDetails = ({
         color={Color.black}
         containerStyle={{position: 'absolute', right: 10}}
         onPress={() => {
-          handleGetDirections(clinicDetails.address);
+          handleGetDirections(clinicDetails?.address);
         }}
       />
 
@@ -92,7 +90,7 @@ const DoctorDetails = ({
         <Text style={commonStyles.caption}>{doctorDetails?.degree}</Text>
       )}
       <Text style={[commonStyles.font18, commonStyles.weight700]}>
-        {clinicDetails.name}
+        {clinicDetails?.name}
       </Text>
       <View
         style={{

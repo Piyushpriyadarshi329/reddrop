@@ -1,6 +1,6 @@
-// export const BASE_URL = 'http://43.204.45.2:5002/api/v1'; //dev
+export const BASE_URL = 'http://43.204.45.2:5002/api/v1'; //dev
 
-export const BASE_URL = 'http://43.204.45.2:5000/api/v1'; //QA
+// export const BASE_URL = 'http://43.204.45.2:5000/api/v1'; //QA
 // export const BASE_URL = 'http://43.204.45.2:5001/api/v1'; //prod
 
 export const LOGIN_URL = BASE_URL + '/login';
@@ -29,3 +29,4 @@ export const verifyOTP_Url = BASE_URL + '/verifyOTP/';
 export const customerSignUp_URL = BASE_URL + '/customer';
 export const sku_URL = BASE_URL + '/sku';
 export const checkCode_URL = BASE_URL + '/checkCode';
+export const reverseSearchCity_URL = BASE_URL + '/customerSearchCity';

@@ -38,30 +38,6 @@ export default function Appointment() {
       return () => subscription.remove();
     }, []),
   );
-  // useEffect(() => {
-  //   const event = BackHandler.addEventListener(
-  //     'hardwareBackPress',
-  //     function () {
-  //       /**
-  //        * this.onMainScreen and this.goBack are just examples,
-  //        * you need to use your own implementation here.
-  //        *
-  //        * Typically you would use the navigator here to go to the last state.
-  //        */
-  //       console.log('yes working.');
-  //       navigation.navigate(AppPages.HomeStack, {
-  //         screen: AppPages.Home,
-  //         initial: true,
-  //       });
-  //       /**
-  //        * Returning false will let the event to bubble up & let other event listeners
-  //        * or the system's default back action to be executed.
-  //        */
-  //       return true;
-  //     },
-  //   );
-  //   return event.remove();
-  // }, []);
   return (
     <View style={{flex: 1, flexDirection: 'column', gap: 10}}>
       <Navbar title="Appointments" />

@@ -1,6 +1,6 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {SearchBar, Skeleton} from '@rneui/themed';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   FlatList,
   ImageBackground,
@@ -29,7 +29,11 @@ import {useGetDoctorList} from '../DoctorDetails/useDoctorQuery';
 import LocationModal from './LocationSelect';
 import {useScrollAnimation} from './ScrollAnimation';
 import {ScrollWP} from './ScrollWP';
-import messaging from '@react-native-firebase/messaging';
+import GetLocation from 'react-native-get-location';
+import {useReverseSearchCity} from './../../customhook/useReverseSearchCity';
+import {updateuserdata} from '../../redux/reducer/Authreducer';
+
+import {useDispatch} from 'react-redux';
 
 const bgc = '#dcedec';
 
@@ -38,6 +42,19 @@ export default function Home() {
     (root: RootState) => root.Appstate,
   );
   const navigation = useNavigation<NavigationProp<any>>();
+  const dispatch = useDispatch();
+
+  const {mutate, isLoading} = useReverseSearchCity({
+    onSuccess: (data: any) => {
+      console.log('search city', data);
+      dispatch(
+        updateuserdata({
+          cityName: data[0],
+        }),
+      );
+    },
+  });
+
   const {
     data: topdoctorlist,
     dataUpdatedAt,
@@ -45,18 +62,37 @@ export default function Home() {
   } = useGetDoctorList({
     orderBy: 'BOOKINGS',
   });
-  const checkToken = async () => {
-    try {
-      const fcmToken = await messaging().getToken();
-      if (fcmToken) {
-        console.log(fcmToken);
-        // setfcm_token(fcmToken);
-      }
-    } catch (error) {
-      console.log(error);
+
+  useEffect(() => {
+    if (!cityName) {
+      GetLocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 15000,
+      })
+        .then(location => {
+          console.log('location', location);
+
+          mutate({lat: location.latitude, lan: location.longitude});
+        })
+        .catch(error => {
+          console.log('error', error);
+          const {code, message} = error;
+        });
     }
-  };
-  checkToken();
+  }, []);
+
+  // const checkToken = async () => {
+  //   try {
+  //     const fcmToken = await messaging().getToken();
+  //     if (fcmToken) {
+  //       console.log(fcmToken);
+  //       // setfcm_token(fcmToken);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // checkToken();
 
   const {data: topcliniclist, isLoading: isClinicsLoading} = useGetcliniclist(
     {},

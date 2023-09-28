@@ -13,6 +13,7 @@ import {
   useVerifyOTP,
   useReSendOTP,
 } from './useOTPVerificationQuery';
+
 import {COTPInput} from '../../component/COTPInput';
 import {
   useCheckMobile,
@@ -20,7 +21,13 @@ import {
 } from '../../customhook/useCheckMobile';
 
 const OTPLength = 4;
-export const OTPVerif = ({onVerify}: {onVerify: (data: any) => void}) => {
+export const OTPVerif = ({
+  onVerify,
+  flow,
+}: {
+  onVerify: (data: any) => void;
+  flow?: string;
+}) => {
   const formMethods = useFormContext<RegisterForm>();
   const mobile = formMethods.watch('mobile');
   const isMobileValid = useMemo(() => {
@@ -59,7 +66,12 @@ export const OTPVerif = ({onVerify}: {onVerify: (data: any) => void}) => {
     if (!otpSent) {
       setResend(false);
       resendBtnVisible();
-      checkMobile(formMethods.getValues('mobile'));
+
+      if (flow == 'login') {
+        checkMobile(formMethods.getValues('mobile'));
+      } else {
+        mutateSendOTP(formMethods.getValues('mobile'));
+      }
     }
     if (otpSent) {
       mutateVerifyOTP({

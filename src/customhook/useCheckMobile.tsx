@@ -5,6 +5,7 @@ import {axiosAlert} from '../utils/useShowAlert';
 
 export function useCheckMobile(props: {onSuccess?: any; mobile: string}) {
   const qc = useQueryClient();
+  console.log('checkMobile', props.mobile);
 
   return useQuery(
     ['checkMobile', props.mobile],
@@ -14,6 +15,7 @@ export function useCheckMobile(props: {onSuccess?: any; mobile: string}) {
       onSuccess: data => {
         props?.onSuccess?.(data.data);
       },
+      onError: error => console.log('error', error),
       enabled: props.mobile?.length == 10,
     },
   );
