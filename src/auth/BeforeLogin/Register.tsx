@@ -30,7 +30,7 @@ export default function Register() {
   const formMethods = useForm<RegisterForm>({
     mode: 'onTouched',
   });
-  const {mutate, isLoading} = useCustomerSignUp({
+  const {mutate: mutateSignUp, isLoading} = useCustomerSignUp({
     onSuccess: (data: any) => {
       dispatch(
         updateuserdata({
@@ -86,7 +86,7 @@ export default function Register() {
       usertype: UserType.CUSTOMER,
       fcm_token: fcm_token,
     };
-    mutate(payload);
+    mutateSignUp(payload);
   }
 
   return (
@@ -111,7 +111,7 @@ export default function Register() {
                 Sign up to Continue
               </Text>
             </View>
-            {!otpVerified && <OTPVerif onVerify={onVerify} />}
+            {!otpVerified && <OTPVerif onVerify={onVerify} flow={'sighup'} />}
             {otpVerified && (
               <CustomerDetails onSubmit={submitHandler} isLoading={isLoading} />
             )}

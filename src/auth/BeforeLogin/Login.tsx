@@ -50,7 +50,7 @@ export default function Login() {
               </Text>
             </View>
 
-            <OTPVerif onVerify={onOTPVerify} />
+            <OTPVerif onVerify={onOTPVerify} flow={'login'} />
 
             <View
               style={{

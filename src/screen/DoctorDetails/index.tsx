@@ -9,8 +9,23 @@ import DoctorDetails from './DoctorDetails';
 import {useGetDoctor} from './useDoctorQuery';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {AppPages} from '../../appPages';
+import {
+  Appointmentdto,
+  ClinicDto,
+  ClinicWithAddressAndImage,
+  WorkingTimeDto,
+} from '../../types';
+import {AppointmentTab} from '../Appointment/helper';
 
-export default function BookApointment(props: {route: any}) {
+export default function BookApointment(props: {
+  route: {
+    params: {
+      clinicDetails?: ClinicWithAddressAndImage;
+      id: string;
+      existing_appointment?: Appointmentdto;
+    };
+  };
+}) {
   const navigation = useNavigation();
   const DoctorBookingStack = createNativeStackNavigator();
 
@@ -46,7 +61,10 @@ export default function BookApointment(props: {route: any}) {
               <ScrollView style={{marginBottom: 10}}>
                 <DoctorDetails
                   doctorDetails={doctorDetails}
-                  clinicDetails={props.route.params?.clinicDetails}
+                  clinicDetails={
+                    props.route.params?.clinicDetails ||
+                    ({} as ClinicWithAddressAndImage)
+                  }
                 />
                 <View style={{height: 50}} />
                 <Btn

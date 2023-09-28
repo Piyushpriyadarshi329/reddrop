@@ -9,7 +9,7 @@ export const useNotificationHandler = () => {
   const dispatch = useDispatch();
   const handler = (remoteMessage: {
     data: NotificationData;
-    notification: {title: string};
+    notification: {title: string; body?: string};
   }) => {
     const {data, notification} = remoteMessage;
 
@@ -26,6 +26,9 @@ export const useNotificationHandler = () => {
       case CB_NOTIFICATION.FIRST_SLOT_STARTED:
         qc.invalidateQueries(['APPOINTMENTS']);
         infoAlert(notification.title);
+        return;
+      case CB_NOTIFICATION.VISIBLE_NOTIFICATION:
+        infoAlert(notification.title, notification.body);
         return;
     }
   };
