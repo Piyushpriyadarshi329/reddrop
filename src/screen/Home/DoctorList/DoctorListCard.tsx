@@ -110,11 +110,13 @@ const DoctorListCard = ({
 
   return (
     <>
-      <ClinicsListModel
-        setModalVisible={setModalVisible}
-        modalVisible={modalVisible}
-        doctorDetails={details}
-      />
+      {modalVisible && (
+        <ClinicsListModel
+          setModalVisible={setModalVisible}
+          modalVisible={modalVisible}
+          doctorDetails={details}
+        />
+      )}
       <TouchableOpacity
         onPress={clickHandler}
         style={[
