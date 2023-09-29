@@ -1,20 +1,13 @@
-import React, {useEffect, useMemo, useState} from 'react';
-import {IModalMethods} from '../../../utils/useModalMethods';
-import {View, Modal, TouchableOpacity, ActivityIndicator} from 'react-native';
-import {Button, CheckBox, Icon, Text} from '@rneui/themed';
-import ModalCloseOnEscape from '../../../utils/ModalCloseOnEscape';
-import Color from '../../../asset/Color';
-import {Gender, UserCard} from './UserCard';
-import {BookingOverview} from './BookingOverview';
-import {commonStyles} from '../../../asset/styles';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {Button, Icon, Text} from '@rneui/themed';
+import React, {useEffect, useState} from 'react';
+import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
+import Color from '../../../asset/Color';
+import {commonStyles} from '../../../asset/styles';
 import {useGetSKU} from '../../../customhook/useGetSKU';
-import {useCheckReferralCode} from '../../../customhook/useCheckReferralCode';
+import {BookingOverview} from './BookingOverview';
+import {Gender, UserCard} from './UserCard';
 
-import {
-  CFErrorResponse,
-  CFPaymentGatewayService,
-} from 'react-native-cashfree-pg-sdk';
 import {
   CFDropCheckoutPayment,
   CFEnvironment,
@@ -23,31 +16,24 @@ import {
   CFSession,
   CFThemeBuilder,
 } from 'cashfree-pg-api-contract';
-import {BookingUserInterface, UserForm} from './UserForm';
-import {
-  Appointmentdto,
-  BookSlotRequest,
-  CB_NOTIFICATION,
-  ClinicWithAddressAndImage,
-  CreatePaymentResponse,
-  OfferEntity,
-  Slot,
-} from '../../../types';
-import {useBookslot as useBookSlot} from '../../../customhook/useBookslot';
-import {getAge, getToday} from '../../../utils/dateMethods';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../../redux/Store';
-import uuid from 'react-native-uuid';
-import {useGetCustomer} from '../../Profile/useCustomerQuery';
-import {useCreatePaymentOrder} from '../../../customhook/useCreatePaymentOrder';
-import {
-  axiosAlert,
-  successAlert,
-  errorAlert,
-} from './../../../utils/useShowAlert';
-import {updateuserdata} from '../../../redux/reducer/Authreducer';
-import {AppPages} from '../../../appPages';
 import _ from 'lodash';
+import {
+  CFErrorResponse,
+  CFPaymentGatewayService,
+} from 'react-native-cashfree-pg-sdk';
+import uuid from 'react-native-uuid';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppPages} from '../../../appPages';
+import {useBookslot as useBookSlot} from '../../../customhook/useBookslot';
+import {useCreatePaymentOrder} from '../../../customhook/useCreatePaymentOrder';
+import {RootState} from '../../../redux/Store';
+import {updateuserdata} from '../../../redux/reducer/Authreducer';
+import {BookSlotRequest, OfferEntity} from '../../../types';
+import {getAge} from '../../../utils/dateMethods';
+import {useGetCustomer} from '../../Profile/useCustomerQuery';
+import {errorAlert, successAlert} from './../../../utils/useShowAlert';
+import {NameNote} from './NameNote';
+import {BookingUserInterface, UserForm} from './UserForm';
 
 export const BookingConfirmation = ({route}: {route: any}) => {
   console.log('route.prams', route.params);
@@ -270,13 +256,16 @@ export const BookingConfirmation = ({route}: {route: any}) => {
                 }}
               />
             ) : (
-              <TouchableOpacity
-                onPress={() => {
-                  setUser(undefined);
-                  setShowUserForm(true);
-                }}>
-                <UserCard user={user} />
-              </TouchableOpacity>
+              <View style={{gap: 5}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setUser(undefined);
+                    setShowUserForm(true);
+                  }}>
+                  <UserCard user={user} />
+                </TouchableOpacity>
+                <NameNote />
+              </View>
             )}
             {/* Apply offer */}
             <View
