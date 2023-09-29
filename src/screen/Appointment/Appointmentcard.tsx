@@ -42,7 +42,10 @@ export default function AppointmentCard({
   const {data: doctorDetails} = useGetDoctor(appointment.doctor_id ?? '');
   const {data: clinicDetails} = useGetcliniclist({
     clinic_id: appointment.clinic_id ?? '',
+    doctor_id: appointment.doctor_id,
   });
+
+  console.log('clinicDetails card', clinicDetails);
 
   const {successAlert} = useAlert();
   const [deleteModal, setDeleteModal] = useState(false);

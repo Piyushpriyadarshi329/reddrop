@@ -26,6 +26,7 @@ export default function BookApointment(props: {
     };
   };
 }) {
+  console.log('clinicDetails in Booking', props.route.params.clinicDetails);
   const navigation = useNavigation();
   const DoctorBookingStack = createNativeStackNavigator();
 

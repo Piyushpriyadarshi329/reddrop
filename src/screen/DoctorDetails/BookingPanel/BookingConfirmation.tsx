@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {IModalMethods} from '../../../utils/useModalMethods';
 import {View, Modal, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {Button, CheckBox, Icon, Text} from '@rneui/themed';
@@ -47,6 +47,7 @@ import {
 } from './../../../utils/useShowAlert';
 import {updateuserdata} from '../../../redux/reducer/Authreducer';
 import {AppPages} from '../../../appPages';
+import _ from 'lodash';
 
 export const BookingConfirmation = ({route}: {route: any}) => {
   console.log('route.prams', route.params);
@@ -57,23 +58,8 @@ export const BookingConfirmation = ({route}: {route: any}) => {
     selectedClinic,
     onBookingSuccess,
     setSelectedTime,
+    doctor_id,
   } = route.params;
-
-  // {
-  //   modalMethods,
-  //   selectedTime,
-  //   selectedDate,
-  //   existingAppointment,
-  //   selectedClinic,
-  //   onBookingSuccess,
-  // }: {
-  //   modalMethods: IModalMethods;
-  //   selectedTime: (Slot & {id: string}) | undefined;
-  //   selectedDate: number | undefined;
-  //   existingAppointment: Appointmentdto;
-  //   onBookingSuccess: any;
-  //   selectedClinic: ClinicWithAddressAndImage | undefined;
-  // }
 
   const AppState = useSelector((state: RootState) => state.Appstate);
   const [loader, setLoader] = useState(false);
@@ -83,7 +69,9 @@ export const BookingConfirmation = ({route}: {route: any}) => {
 
   const dispatch = useDispatch();
   const onPaymentSuccess = () => {
-    navigation.navigate(AppPages.AppointmentStack);
+    navigation.navigate(AppPages.AppointmentStack, {
+      screen: AppPages.Appointment,
+    });
   };
   useEffect(() => {
     if (AppState.paymentStatus == 'COMPLETED') {
@@ -122,7 +110,12 @@ export const BookingConfirmation = ({route}: {route: any}) => {
 
   let {data: SKUData} = useGetSKU({customerId: AppState.userid});
 
-  console.log('SKUData', SKUData);
+  useEffect(() => {
+    console.log('SKUData', SKUData?.offers);
+    console.log('SKUDatas', _.sortBy(SKUData?.offers, 'priority'));
+
+    setSelectedOffer(_.sortBy(SKUData?.offers, 'priority')[0]);
+  }, [SKUData]);
 
   const [user, setUser] = useState<BookingUserInterface | undefined>({
     dob: customerData?.dob ? getAge(Number(customerData?.dob)) : undefined,
@@ -154,7 +147,9 @@ export const BookingConfirmation = ({route}: {route: any}) => {
     try {
       let bookSlotPayload: BookSlotRequest = {
         customer_id: AppState.userid,
-        doctor_clinic_id: selectedClinic?.clinic_doctor_id ?? '',
+        // doctor_clinic_id: selectedClinic?.clinic_doctor_id ?? '',
+        doctor_id: doctor_id ?? '',
+        clinic_id: selectedClinic?.id ?? '',
         slot_index: selectedTime?.index ?? 0,
         workingtime_id: selectedTime?.id ?? '',
         group_id: uuid.v4().toString(),
@@ -274,7 +269,7 @@ export const BookingConfirmation = ({route}: {route: any}) => {
               </TouchableOpacity>
             )}
             {/* Apply offer */}
-            {/* <View
+            <View
               style={{
                 marginTop: 10,
               }}>
@@ -298,7 +293,7 @@ export const BookingConfirmation = ({route}: {route: any}) => {
                   />
                 </View>
               </TouchableOpacity>
-            </View> */}
+            </View>
 
             {/* selected offer */}
 
@@ -321,7 +316,33 @@ export const BookingConfirmation = ({route}: {route: any}) => {
 
             {/* amount and GSt details */}
 
-            <View></View>
+            <View style={{marginTop: 20}}>
+              <View>
+                <Text>Payment Details</Text>
+              </View>
+
+              <View>
+                <Text>Amount</Text>
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={{flex: 1}}>Discount</Text>
+                <Text style={{flex: 1}}>Discount</Text>
+              </View>
+              <View>
+                <Text>GST</Text>
+              </View>
+
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: Color.black,
+                  height: 1,
+                }}></View>
+              <View>
+                <Text>Pay amount</Text>
+              </View>
+            </View>
+
             <Button
               onPress={!isSubmitLoading ? bookAppointmentHandler : () => {}}
               title={'Book'}

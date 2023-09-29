@@ -204,6 +204,7 @@ const Booking = ({
                   onBookingSuccess: onBookingSuccess,
                   selectedClinic: clinicDetails,
                   setSelectedTime: setSelectedTime,
+                  doctor_id: doctorId,
                 });
                 // bookingModal.open();
               }}

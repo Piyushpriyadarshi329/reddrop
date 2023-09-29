@@ -70,9 +70,6 @@ const DoctorDetails = ({
       <Text style={[commonStyles.font20, commonStyles.weight700]}>
         Dr.{doctorDetails?.name}
       </Text>
-      <Text style={[commonStyles.font16, commonStyles.weight700]}>
-        {clinicDetails?.name}
-      </Text>
 
       <Icon
         name="map-marker"
@@ -83,9 +80,6 @@ const DoctorDetails = ({
         }}
       />
 
-      <Text style={[commonStyles.font16, commonStyles.weight700]}>
-        Consulting fees: {clinicDetails?.fees}
-      </Text>
       {doctorDetails?.degree && (
         <Text style={commonStyles.caption}>{doctorDetails?.degree}</Text>
       )}
