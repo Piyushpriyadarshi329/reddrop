@@ -5,7 +5,13 @@ import {
 } from '@react-navigation/native';
 import {Text} from '@rneui/themed';
 import React, {useState, useRef} from 'react';
-import {Image, TouchableOpacity, View, BackHandler} from 'react-native';
+import {
+  Image,
+  TouchableOpacity,
+  View,
+  BackHandler,
+  StyleSheet,
+} from 'react-native';
 import openMap from 'react-native-open-maps';
 import {
   Menu,
@@ -134,44 +140,32 @@ export default function AppointmentCard({
         </View>
       </View>
 
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginHorizontal: 15,
-          backgroundColor: '#f5f9fa',
-          borderRadius: 10,
-          paddingHorizontal: 10,
-        }}>
-        <Text style={commonStyles.font14}>
-          {new Date(Number(appointment.appointment_date)).toDateString()}
-        </Text>
-        <Text style={commonStyles.font14}>
-          {getTimeStringFromDBTime(appointment.from_working_time)} -
-          {getTimeStringFromDBTime(appointment.to_working_time)}
-        </Text>
+      <View style={appointmentStyles.tagLine}>
+        <View>
+          <Text style={commonStyles.font14}>
+            {new Date(Number(appointment.appointment_date)).toDateString()}
+          </Text>
 
-        <View
-          style={[commonStyles.flexRowAlignCenter, {alignSelf: 'flex-end'}]}>
-          <Text style={commonStyles.font14}>Slot:</Text>
-          <Text style={commonStyles.font18}>{appointment.slot_index}</Text>
+          <View
+            style={[commonStyles.flexRowAlignCenter, {alignSelf: 'flex-end'}]}>
+            <Text style={commonStyles.font14}>
+              {getTimeStringFromDBTime(appointment.from_working_time)}
+              &nbsp;-&nbsp;
+              {getTimeStringFromDBTime(appointment.to_working_time)}
+            </Text>
+          </View>
         </View>
-      </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginHorizontal: 15,
-          backgroundColor: '#f5f9fa',
-          borderRadius: 10,
-          paddingHorizontal: 10,
-        }}>
-        <View
-          style={[commonStyles.flexRowAlignCenter, {alignSelf: 'flex-end'}]}>
-          <Text style={commonStyles.font14}>Patient:</Text>
-          <Text style={commonStyles.font16}>{appointment.name}</Text>
+        <View>
+          <View
+            style={[commonStyles.flexRowAlignCenter, {alignSelf: 'flex-end'}]}>
+            <Text style={commonStyles.font14}>Slot: &nbsp;</Text>
+            <Text style={commonStyles.font18}>{appointment.slot_index}</Text>
+          </View>
+          <View
+            style={[commonStyles.flexRowAlignCenter, {alignSelf: 'flex-end'}]}>
+            <Text style={commonStyles.font14}>Patient:&nbsp;</Text>
+            <Text style={commonStyles.font16}>{appointment.name}</Text>
+          </View>
         </View>
       </View>
 
@@ -254,10 +248,13 @@ export default function AppointmentCard({
       />
       <ConfirmationModal
         onsubmit={() => {
-          navigation.navigate(AppPages.BookApointment, {
-            existing_appointment: appointment,
-            id: doctorDetails?.id,
-            clinicDetails: clinicDetails?.[0],
+          navigation.navigate(AppPages.HomeStack, {
+            screen: AppPages.BookApointment,
+            params: {
+              existing_appointment: appointment,
+              id: doctorDetails?.id,
+              clinicDetails: clinicDetails?.[0],
+            },
           });
         }}
         modalVisible={rescheduleModal}
@@ -269,3 +266,15 @@ export default function AppointmentCard({
     </View>
   );
 }
+
+const appointmentStyles = StyleSheet.create({
+  tagLine: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: 15,
+    backgroundColor: '#f5f9fa',
+    paddingHorizontal: 10,
+    borderRadius: 10,
+  },
+});

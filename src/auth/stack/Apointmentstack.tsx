@@ -16,7 +16,7 @@ export default function Apointmentstack() {
         options={{headerShown: false}}
       />
 
-      <Apointmentstack.Screen
+      {/* <Apointmentstack.Screen
         name={AppPages.BookApointment}
         component={BookApointment}
         options={{headerShown: false}}
@@ -25,7 +25,7 @@ export default function Apointmentstack() {
         name={AppPages.Payment}
         component={Payment}
         options={{headerShown: false}}
-      />
+      /> */}
     </Apointmentstack.Navigator>
   );
 }

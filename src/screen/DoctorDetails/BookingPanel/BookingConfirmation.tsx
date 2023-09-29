@@ -120,10 +120,11 @@ export const BookingConfirmation = ({route}: {route: any}) => {
   let {data: SKUData} = useGetSKU({customerId: AppState.userid});
 
   useEffect(() => {
-    console.log('SKUData', SKUData?.offers);
-    console.log('SKUDatas', _.sortBy(SKUData?.offers, 'priority'));
+    console.log('SKUData', SKUData);
 
-    setSelectedOffer(_.sortBy(SKUData?.offers, 'priority')[0]);
+    if (SKUData?.offers.length > 0) {
+      setSelectedOffer(_.sortBy(SKUData?.offers, 'priority')[0]);
+    }
   }, [SKUData]);
 
   const [user, setUser] = useState<BookingUserInterface | undefined>({
