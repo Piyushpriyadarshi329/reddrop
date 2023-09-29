@@ -23,6 +23,7 @@ const CustomerProfileUpdateForm = ({onSubmit}: {onSubmit: () => void}) => {
         ]}
       />
       <RHFCalendar label="Date of Birth" name="dob" dateFormat="ll" />
+
       <Button
         title={'Submit'}
         color={Color.primary}

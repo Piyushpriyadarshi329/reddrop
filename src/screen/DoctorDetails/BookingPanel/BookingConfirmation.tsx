@@ -65,6 +65,7 @@ export const BookingConfirmation = ({route}: {route: any}) => {
   const [loader, setLoader] = useState(false);
 
   const [selectedOffer, setSelectedOffer] = useState<OfferEntity | null>(null);
+  const [discount, setDiscount] = useState<number>(0);
   const navigation = useNavigation<NavigationProp<any>>();
 
   const dispatch = useDispatch();
@@ -73,6 +74,15 @@ export const BookingConfirmation = ({route}: {route: any}) => {
       screen: AppPages.Appointment,
     });
   };
+
+  useEffect(() => {
+    if (selectedOffer?.percentage) {
+      setDiscount(SKUData?.amounts?.amount * selectedOffer.percentage * 0.01);
+    } else if (selectedOffer?.amount) {
+      setDiscount(selectedOffer.amount);
+    }
+  }, [selectedOffer]);
+
   useEffect(() => {
     if (AppState.paymentStatus == 'COMPLETED') {
       successAlert('Payment Complete Successfully');
@@ -321,15 +331,21 @@ export const BookingConfirmation = ({route}: {route: any}) => {
                 <Text>Payment Details</Text>
               </View>
 
-              <View>
-                <Text>Amount</Text>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={{flex: 1}}>Base Amount</Text>
+                <Text style={{flex: 1}}>{SKUData?.amounts?.amount}</Text>
               </View>
               <View style={{flexDirection: 'row'}}>
                 <Text style={{flex: 1}}>Discount</Text>
-                <Text style={{flex: 1}}>Discount</Text>
+                <Text style={{flex: 1}}>{discount}</Text>
               </View>
-              <View>
-                <Text>GST</Text>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={{flex: 1}}>GST</Text>
+                <Text style={{flex: 1}}>
+                  {(SKUData.amounts.amount - discount) *
+                    SKUData.amounts.gstRate *
+                    0.01}
+                </Text>
               </View>
 
               <View
@@ -338,8 +354,15 @@ export const BookingConfirmation = ({route}: {route: any}) => {
                   borderColor: Color.black,
                   height: 1,
                 }}></View>
-              <View>
-                <Text>Pay amount</Text>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={{flex: 1}}>Pay amount</Text>
+                <Text style={{flex: 1}}>
+                  {SKUData.amounts.amount -
+                    discount +
+                    (SKUData.amounts.amount - discount) *
+                      SKUData.amounts.gstRate *
+                      0.01}
+                </Text>
               </View>
             </View>
 

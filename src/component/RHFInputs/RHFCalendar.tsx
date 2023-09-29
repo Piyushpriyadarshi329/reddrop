@@ -16,6 +16,7 @@ export const RHFCalendar = (props: {
   minDate?: string;
   dateFormat?: string;
   label?: string;
+  labelStyles?: any;
 }) => {
   const {control} = useFormContext();
   const [modalVisible, setModalVisible] = useState(false);
@@ -30,6 +31,7 @@ export const RHFCalendar = (props: {
                 style={[
                   commonStyles.caption,
                   {fontWeight: '700', color: '#8795a0'},
+                  props.labelStyles,
                 ]}>
                 {props.label}
               </Text>
