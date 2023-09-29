@@ -1,20 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {IModalMethods} from '../../../utils/useModalMethods';
-import {View, Modal, TouchableOpacity, ActivityIndicator} from 'react-native';
-import {Button, CheckBox, Icon, Text} from '@rneui/themed';
-import ModalCloseOnEscape from '../../../utils/ModalCloseOnEscape';
-import Color from '../../../asset/Color';
-import {Gender, UserCard} from './UserCard';
-import {BookingOverview} from './BookingOverview';
-import {commonStyles} from '../../../asset/styles';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {Button, Icon, Text} from '@rneui/themed';
+import React, {useEffect, useState} from 'react';
+import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
+import Color from '../../../asset/Color';
+import {commonStyles} from '../../../asset/styles';
 import {useGetSKU} from '../../../customhook/useGetSKU';
-import {useCheckReferralCode} from '../../../customhook/useCheckReferralCode';
+import {BookingOverview} from './BookingOverview';
+import {Gender, UserCard} from './UserCard';
 
-import {
-  CFErrorResponse,
-  CFPaymentGatewayService,
-} from 'react-native-cashfree-pg-sdk';
 import {
   CFDropCheckoutPayment,
   CFEnvironment,
@@ -23,31 +16,24 @@ import {
   CFSession,
   CFThemeBuilder,
 } from 'cashfree-pg-api-contract';
-import {BookingUserInterface, UserForm} from './UserForm';
+import _ from 'lodash';
 import {
-  Appointmentdto,
-  BookSlotRequest,
-  CB_NOTIFICATION,
-  ClinicWithAddressAndImage,
-  CreatePaymentResponse,
-  OfferEntity,
-  Slot,
-} from '../../../types';
-import {useBookslot as useBookSlot} from '../../../customhook/useBookslot';
-import {getAge, getToday} from '../../../utils/dateMethods';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../../redux/Store';
+  CFErrorResponse,
+  CFPaymentGatewayService,
+} from 'react-native-cashfree-pg-sdk';
 import uuid from 'react-native-uuid';
-import {useGetCustomer} from '../../Profile/useCustomerQuery';
-import {useCreatePaymentOrder} from '../../../customhook/useCreatePaymentOrder';
-import {
-  axiosAlert,
-  successAlert,
-  errorAlert,
-} from './../../../utils/useShowAlert';
-import {updateuserdata} from '../../../redux/reducer/Authreducer';
+import {useDispatch, useSelector} from 'react-redux';
 import {AppPages} from '../../../appPages';
+import {useBookslot as useBookSlot} from '../../../customhook/useBookslot';
+import {useCreatePaymentOrder} from '../../../customhook/useCreatePaymentOrder';
+import {RootState} from '../../../redux/Store';
+import {updateuserdata} from '../../../redux/reducer/Authreducer';
+import {BookSlotRequest, OfferEntity} from '../../../types';
+import {getAge} from '../../../utils/dateMethods';
+import {useGetCustomer} from '../../Profile/useCustomerQuery';
+import {errorAlert, successAlert} from './../../../utils/useShowAlert';
 import {NameNote} from './NameNote';
+import {BookingUserInterface, UserForm} from './UserForm';
 
 export const BookingConfirmation = ({route}: {route: any}) => {
   console.log('route.prams', route.params);
@@ -58,23 +44,8 @@ export const BookingConfirmation = ({route}: {route: any}) => {
     selectedClinic,
     onBookingSuccess,
     setSelectedTime,
+    doctor_id,
   } = route.params;
-
-  // {
-  //   modalMethods,
-  //   selectedTime,
-  //   selectedDate,
-  //   existingAppointment,
-  //   selectedClinic,
-  //   onBookingSuccess,
-  // }: {
-  //   modalMethods: IModalMethods;
-  //   selectedTime: (Slot & {id: string}) | undefined;
-  //   selectedDate: number | undefined;
-  //   existingAppointment: Appointmentdto;
-  //   onBookingSuccess: any;
-  //   selectedClinic: ClinicWithAddressAndImage | undefined;
-  // }
 
   const AppState = useSelector((state: RootState) => state.Appstate);
   const [loader, setLoader] = useState(false);
@@ -84,7 +55,9 @@ export const BookingConfirmation = ({route}: {route: any}) => {
 
   const dispatch = useDispatch();
   const onPaymentSuccess = () => {
-    navigation.navigate(AppPages.AppointmentStack);
+    navigation.navigate(AppPages.AppointmentStack, {
+      screen: AppPages.Appointment,
+    });
   };
   useEffect(() => {
     if (AppState.paymentStatus == 'COMPLETED') {
@@ -123,7 +96,12 @@ export const BookingConfirmation = ({route}: {route: any}) => {
 
   let {data: SKUData} = useGetSKU({customerId: AppState.userid});
 
-  console.log('SKUData', SKUData);
+  useEffect(() => {
+    console.log('SKUData', SKUData?.offers);
+    console.log('SKUDatas', _.sortBy(SKUData?.offers, 'priority'));
+
+    setSelectedOffer(_.sortBy(SKUData?.offers, 'priority')[0]);
+  }, [SKUData]);
 
   const [user, setUser] = useState<BookingUserInterface | undefined>({
     dob: customerData?.dob ? getAge(Number(customerData?.dob)) : undefined,
@@ -155,7 +133,9 @@ export const BookingConfirmation = ({route}: {route: any}) => {
     try {
       let bookSlotPayload: BookSlotRequest = {
         customer_id: AppState.userid,
-        doctor_clinic_id: selectedClinic?.clinic_doctor_id ?? '',
+        // doctor_clinic_id: selectedClinic?.clinic_doctor_id ?? '',
+        doctor_id: doctor_id ?? '',
+        clinic_id: selectedClinic?.id ?? '',
         slot_index: selectedTime?.index ?? 0,
         workingtime_id: selectedTime?.id ?? '',
         group_id: uuid.v4().toString(),
@@ -278,7 +258,7 @@ export const BookingConfirmation = ({route}: {route: any}) => {
               </View>
             )}
             {/* Apply offer */}
-            {/* <View
+            <View
               style={{
                 marginTop: 10,
               }}>
@@ -302,7 +282,7 @@ export const BookingConfirmation = ({route}: {route: any}) => {
                   />
                 </View>
               </TouchableOpacity>
-            </View> */}
+            </View>
 
             {/* selected offer */}
 
@@ -325,7 +305,33 @@ export const BookingConfirmation = ({route}: {route: any}) => {
 
             {/* amount and GSt details */}
 
-            <View></View>
+            <View style={{marginTop: 20}}>
+              <View>
+                <Text>Payment Details</Text>
+              </View>
+
+              <View>
+                <Text>Amount</Text>
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={{flex: 1}}>Discount</Text>
+                <Text style={{flex: 1}}>Discount</Text>
+              </View>
+              <View>
+                <Text>GST</Text>
+              </View>
+
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: Color.black,
+                  height: 1,
+                }}></View>
+              <View>
+                <Text>Pay amount</Text>
+              </View>
+            </View>
+
             <Button
               onPress={!isSubmitLoading ? bookAppointmentHandler : () => {}}
               title={'Book'}
