@@ -43,7 +43,7 @@ export default function Offer({route}: {route: any}) {
   return (
     <View style={{flex: 1}}>
       <View style={{marginTop: 20, marginHorizontal: 10}}>
-        <TextInput
+        {/* <TextInput
           style={{borderWidth: 1, borderRadius: 10, height: 40}}
           placeholder="Please Enter Referral Code"
           onChangeText={text => {
@@ -56,7 +56,7 @@ export default function Offer({route}: {route: any}) {
           title={'Apply'}
           color={Color.primary}
           // loading={isLoading}
-        />
+        /> */}
       </View>
 
       <View style={{marginTop: 20, marginHorizontal: 10}}>
@@ -64,24 +64,52 @@ export default function Offer({route}: {route: any}) {
       </View>
 
       <View style={{marginTop: 10, marginHorizontal: 10, borderRadius: 5}}>
-        {SKUData.offers.map((offer: OfferEntity) => {
-          return (
-            <TouchableOpacity
-              onPress={() => {
-                setSelectedOffer(offer);
-                navigation.goBack();
+        {SKUData.offers.length > 0 ? (
+          <>
+            {SKUData.offers.map((offer: OfferEntity) => {
+              return (
+                <TouchableOpacity
+                  onPress={() => {
+                    setSelectedOffer(offer);
+                    navigation.goBack();
+                  }}>
+                  <View
+                    style={{backgroundColor: Color.lightgray, borderRadius: 5}}>
+                    <Text style={{padding: 5, color: Color.black}}>
+                      Code:{offer.name}
+                    </Text>
+                    <Text style={{color: Color.black, padding: 5}}>
+                      {offer.description}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </>
+        ) : (
+          <View>
+            <View
+              style={{
+                marginTop: 20,
+                marginHorizontal: 10,
+                justifyContent: 'center',
               }}>
-              <View style={{backgroundColor: Color.lightgray, borderRadius: 5}}>
-                <Text style={{padding: 5, color: Color.black}}>
-                  Code:{offer.name}
-                </Text>
-                <Text style={{color: Color.black, padding: 5}}>
-                  {offer.description}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          );
-        })}
+              <Text style={{color: Color.black, textAlign: 'center'}}>
+                No Offer found
+              </Text>
+            </View>
+          </View>
+        )}
+      </View>
+
+      <View style={{marginHorizontal: 100, marginTop: 50}}>
+        <Button
+          onPress={() => {
+            navigation.goBack();
+          }}
+          title={'Back'}
+          color={Color.primary}
+        />
       </View>
     </View>
   );

@@ -19,25 +19,7 @@ export default function Appointment() {
     AppointmentTab.Scheduled,
   );
   const navigation = useNavigation();
-  useFocusEffect(
-    React.useCallback(() => {
-      const onBackPress = () => {
-        console.log('handling.');
-        navigation.navigate(AppPages.HomeStack, {
-          screen: AppPages.Home,
-          initial: true,
-        });
-        return true;
-      };
 
-      const subscription = BackHandler.addEventListener(
-        'hardwareBackPress',
-        onBackPress,
-      );
-
-      return () => subscription.remove();
-    }, []),
-  );
   return (
     <View style={{flex: 1, flexDirection: 'column', gap: 10}}>
       <Navbar title="Appointments" />

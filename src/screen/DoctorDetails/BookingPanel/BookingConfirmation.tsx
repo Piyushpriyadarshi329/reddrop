@@ -1,6 +1,10 @@
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {
+  NavigationProp,
+  useNavigation,
+  CommonActions,
+} from '@react-navigation/native';
 import {Button, Icon, Text} from '@rneui/themed';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import Color from '../../../asset/Color';
 import {commonStyles} from '../../../asset/styles';
@@ -51,23 +55,32 @@ export const BookingConfirmation = ({route}: {route: any}) => {
   const [loader, setLoader] = useState(false);
 
   const [selectedOffer, setSelectedOffer] = useState<OfferEntity | null>(null);
-  const [discount, setDiscount] = useState<number>(0);
   const navigation = useNavigation<NavigationProp<any>>();
 
   const dispatch = useDispatch();
   const onPaymentSuccess = () => {
-    navigation.navigate(AppPages.AppointmentStack, {
-      screen: AppPages.Appointment,
-    });
-  };
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [
+          {
+            name: AppPages.AppointmentStack,
+            state: {
+              routes: [
+                {
+                  name: AppPages.Appointment,
+                },
+              ],
+            },
+          },
+        ],
+      }),
+    );
 
-  useEffect(() => {
-    if (selectedOffer?.percentage) {
-      setDiscount(SKUData?.amounts?.amount * selectedOffer.percentage * 0.01);
-    } else if (selectedOffer?.amount) {
-      setDiscount(selectedOffer.amount);
-    }
-  }, [selectedOffer]);
+    // navigation.navigate(AppPages.AppointmentStack, {
+    //   screen: AppPages.Appointment,
+    // });
+  };
 
   useEffect(() => {
     if (AppState.paymentStatus == 'COMPLETED') {
@@ -139,6 +152,29 @@ export const BookingConfirmation = ({route}: {route: any}) => {
       setSelectedTime(undefined);
     },
   });
+
+  const discount = useMemo(() => {
+    if (selectedOffer?.percentage) {
+      return SKUData?.amounts?.amount * selectedOffer.percentage * 0.01;
+    } else if (selectedOffer?.amount) {
+      return selectedOffer.amount;
+    }
+    return 0;
+  }, [selectedOffer, SKUData]);
+
+  const payableAmount = useMemo(() => {
+    return (
+      SKUData?.amounts.amount -
+      discount +
+      (SKUData?.amounts.amount - discount) * SKUData?.amounts.gstRate * 0.01
+    );
+  }, [selectedOffer, SKUData]);
+  const gstAmount = useMemo(() => {
+    return (
+      (SKUData?.amounts.amount - discount) * SKUData?.amounts.gstRate * 0.01
+    );
+  }, [selectedOffer, SKUData]);
+
   const onPaymentOrderCreated = async (paymentOrder: any) => {
     try {
       let bookSlotPayload: BookSlotRequest = {
@@ -155,9 +191,11 @@ export const BookingConfirmation = ({route}: {route: any}) => {
         dob: user?.dob,
         gender: user?.gender,
         name: user?.name,
-        amount: SKUData.amounts.amount,
-        offerCode: '',
-        discountAmount: '',
+        amount: payableAmount,
+        baseAmount: SKUData.amounts.amount,
+        gstAmount: gstAmount,
+        offerCode: selectedOffer ? selectedOffer.code : '',
+        discountAmount: discount,
       };
       if (existingAppointment) {
         bookSlotPayload.existing_booking_id = existingAppointment.id;
@@ -197,11 +235,11 @@ export const BookingConfirmation = ({route}: {route: any}) => {
 
       // CFPaymentGatewayService.doPayment(dropPayment);
 
-      dispatch(
-        updateuserdata({
-          paymentStatus: 'COMPLETED',
-        }),
-      );
+      // dispatch(
+      //   updateuserdata({
+      //     paymentStatus: 'COMPLETED',
+      //   }),
+      // );
     } catch (e) {
       console.error(e);
     }
@@ -330,11 +368,7 @@ export const BookingConfirmation = ({route}: {route: any}) => {
               </View>
               <View style={{flexDirection: 'row'}}>
                 <Text style={{flex: 1}}>GST</Text>
-                <Text style={{flex: 1}}>
-                  {(SKUData.amounts.amount - discount) *
-                    SKUData.amounts.gstRate *
-                    0.01}
-                </Text>
+                <Text style={{flex: 1}}>{gstAmount}</Text>
               </View>
 
               <View
@@ -345,13 +379,7 @@ export const BookingConfirmation = ({route}: {route: any}) => {
                 }}></View>
               <View style={{flexDirection: 'row'}}>
                 <Text style={{flex: 1}}>Pay amount</Text>
-                <Text style={{flex: 1}}>
-                  {SKUData.amounts.amount -
-                    discount +
-                    (SKUData.amounts.amount - discount) *
-                      SKUData.amounts.gstRate *
-                      0.01}
-                </Text>
+                <Text style={{flex: 1}}>{payableAmount}</Text>
               </View>
             </View>
 
