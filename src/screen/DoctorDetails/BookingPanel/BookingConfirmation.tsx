@@ -47,6 +47,7 @@ import {
 } from './../../../utils/useShowAlert';
 import {updateuserdata} from '../../../redux/reducer/Authreducer';
 import {AppPages} from '../../../appPages';
+import {NameNote} from './NameNote';
 
 export const BookingConfirmation = ({route}: {route: any}) => {
   console.log('route.prams', route.params);
@@ -265,13 +266,16 @@ export const BookingConfirmation = ({route}: {route: any}) => {
                 }}
               />
             ) : (
-              <TouchableOpacity
-                onPress={() => {
-                  setUser(undefined);
-                  setShowUserForm(true);
-                }}>
-                <UserCard user={user} />
-              </TouchableOpacity>
+              <View style={{gap: 5}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setUser(undefined);
+                    setShowUserForm(true);
+                  }}>
+                  <UserCard user={user} />
+                </TouchableOpacity>
+                <NameNote />
+              </View>
             )}
             {/* Apply offer */}
             {/* <View
