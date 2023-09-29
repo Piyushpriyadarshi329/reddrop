@@ -19,14 +19,17 @@ import {
   useCheckMobile,
   useCheckMobileMutation,
 } from '../../customhook/useCheckMobile';
+import {LoginMethod} from './Login';
 
 const OTPLength = 4;
 export const OTPVerif = ({
   onVerify,
   flow,
+  setLoginMethod,
 }: {
   onVerify: (data: any) => void;
-  flow?: string;
+  flow?: 'LOGIN' | 'SIGN_UP';
+  setLoginMethod?: any;
 }) => {
   const formMethods = useFormContext<RegisterForm>();
   const mobile = formMethods.watch('mobile');
@@ -67,7 +70,7 @@ export const OTPVerif = ({
       setResend(false);
       resendBtnVisible();
 
-      if (flow == 'login') {
+      if (flow == 'LOGIN') {
         checkMobile(formMethods.getValues('mobile'));
       } else {
         mutateSendOTP(formMethods.getValues('mobile'));
@@ -161,7 +164,13 @@ export const OTPVerif = ({
           ) : null}
         </>
       )}
-
+      {flow === 'LOGIN' && (
+        <Text
+          style={{textAlign: 'center', color: 'white'}}
+          onPress={() => setLoginMethod?.(LoginMethod.PASSWORD)}>
+          Login via Password instead
+        </Text>
+      )}
       <Button
         title="Verify"
         color={'white'}

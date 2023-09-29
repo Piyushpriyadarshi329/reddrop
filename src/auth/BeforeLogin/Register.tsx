@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {Text} from '@rneui/themed';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {FormProvider, useForm} from 'react-hook-form';
 import {Image, Pressable, ScrollView, View} from 'react-native';
 import {useDispatch} from 'react-redux';
@@ -10,10 +10,10 @@ import {updateuserdata} from '../../redux/reducer/Authreducer';
 import {CustomerDetails} from './CustomerDetails';
 import {b4LoginStyles} from './Home';
 import {OTPVerif} from './OTPVerif';
-import messaging from '@react-native-firebase/messaging';
 import {SignupRequest, UserType} from '../../types';
 import {useCheckMobile} from '../../customhook/useCheckMobile';
 import {useCustomerSignUp} from '../../customhook/useCustomerSignUp';
+import {useFCMToken} from '../../common/hooks/useFCMToken';
 
 export interface RegisterForm {
   name: string;
@@ -42,22 +42,7 @@ export default function Register() {
     },
   });
 
-  const [fcm_token, setfcm_token] = useState('');
-  useEffect(() => {
-    checkToken();
-  }, []);
-
-  const checkToken = async () => {
-    try {
-      const fcmToken = await messaging().getToken();
-      if (fcmToken) {
-        console.log(fcmToken);
-        setfcm_token(fcmToken);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const fcm_token = useFCMToken();
 
   const mobile = formMethods.watch('mobile');
 
@@ -111,7 +96,7 @@ export default function Register() {
                 Sign up to Continue
               </Text>
             </View>
-            {!otpVerified && <OTPVerif onVerify={onVerify} flow={'sighup'} />}
+            {!otpVerified && <OTPVerif onVerify={onVerify} flow={'SIGN_UP'} />}
             {otpVerified && (
               <CustomerDetails onSubmit={submitHandler} isLoading={isLoading} />
             )}

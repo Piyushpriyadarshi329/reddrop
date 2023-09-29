@@ -1,7 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
-import {} from '@rneui/base';
 import {Text} from '@rneui/themed';
-import React from 'react';
+import React, {useState} from 'react';
 import {FormProvider, useForm} from 'react-hook-form';
 import {Image, Pressable, ScrollView, View} from 'react-native';
 import {useDispatch} from 'react-redux';
@@ -9,25 +8,33 @@ import Color from '../../asset/Color';
 import {updateuserdata} from '../../redux/reducer/Authreducer';
 import {b4LoginStyles} from './Home';
 import {OTPVerif} from './OTPVerif';
+import {PasswordLogin} from './PasswordLogin';
 
 interface LoginForm {
   username: string;
   password: string;
 }
-
+export enum LoginMethod {
+  PASSWORD = 'PASSWORD',
+  OTP = 'OTP',
+}
 export default function Login() {
   const navigation = useNavigation<any>();
   const dispatch = useDispatch();
   const formMethods = useForm<LoginForm>();
-
-  const onOTPVerify = (data: any) => {
-    dispatch(
-      updateuserdata({
-        islogin: true,
-        userid: data.id,
-        username: data.name,
-      }),
-    );
+  const [loginMethod, setLoginMethod] = useState<LoginMethod>(
+    LoginMethod.PASSWORD,
+  );
+  const onOTPVerify = (data?: {id: string; name: string}) => {
+    if (data?.id) {
+      dispatch(
+        updateuserdata({
+          islogin: true,
+          userid: data.id,
+          username: data.name,
+        }),
+      );
+    }
   };
 
   return (
@@ -50,7 +57,19 @@ export default function Login() {
               </Text>
             </View>
 
-            <OTPVerif onVerify={onOTPVerify} flow={'login'} />
+            {loginMethod === LoginMethod.OTP && (
+              <OTPVerif
+                onVerify={onOTPVerify}
+                flow={'LOGIN'}
+                setLoginMethod={setLoginMethod}
+              />
+            )}
+            {loginMethod === LoginMethod.PASSWORD && (
+              <PasswordLogin
+                onLogin={onOTPVerify}
+                setLoginMethod={setLoginMethod}
+              />
+            )}
 
             <View
               style={{

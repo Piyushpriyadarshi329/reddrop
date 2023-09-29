@@ -2,21 +2,18 @@ import {useEffect} from 'react';
 import {useUpdateCustomer} from '../screen/Profile/useCustomerQuery';
 import {useSelector} from 'react-redux';
 import {RootState} from '../redux/Store';
-import messaging from '@react-native-firebase/messaging';
+import {useFCMToken} from '../common/hooks/useFCMToken';
 
 export const useUpdateFCMToken = () => {
   const userId = useSelector((state: RootState) => state.Appstate.userid);
   const {mutate} = useUpdateCustomer(userId);
-
+  const fcmToken = useFCMToken();
   useEffect(() => {
-    (async () => {
-      if (userId) {
-        const fcmToken = await messaging().getToken();
-        mutate({
-          fcmToken: fcmToken,
-        });
-      }
-    })();
-  }, [userId, mutate]);
+    if (userId && fcmToken) {
+      mutate({
+        fcmToken: fcmToken,
+      });
+    }
+  }, [userId, mutate, fcmToken]);
   return;
 };
