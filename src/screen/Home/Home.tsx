@@ -1,5 +1,5 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {SearchBar, Skeleton} from '@rneui/themed';
+import {SearchBar, Skeleton, makeStyles} from '@rneui/themed';
 import React, {useEffect} from 'react';
 import {
   FlatList,
@@ -35,7 +35,35 @@ import {updateuserdata} from '../../redux/reducer/Authreducer';
 
 import {useDispatch} from 'react-redux';
 
-const bgc = '#dcedec';
+// const bgc = '#dcedec';
+const bgc = Color.primary;
+const textColor = Color.white;
+
+type Props = {
+  fullWidth?: boolean;
+};
+
+const useStyles = makeStyles((theme, props: Props) => ({
+  container: {
+    background: theme.colors.white,
+    width: props.fullWidth ? '100%' : 'auto',
+  },
+  text: {
+    color: theme.colors.white,
+  },
+  heading: {
+    fontSize: 18,
+    color: Color.white,
+  },
+  searhBarContainer: {
+    borderColor: undefined,
+    borderWidth: undefined,
+    backgroundColor: undefined,
+    borderTopColor: 'transparent',
+    borderBottomColor: 'transparent',
+    padding: 0,
+  },
+}));
 
 export default function Home() {
   const {username, userid, cityName} = useSelector(
@@ -43,7 +71,7 @@ export default function Home() {
   );
   const navigation = useNavigation<NavigationProp<any>>();
   const dispatch = useDispatch();
-
+  const styles = useStyles();
   const {mutate, isLoading} = useReverseSearchCity({
     onSuccess: (data: any) => {
       console.log('search city', data);
@@ -54,7 +82,6 @@ export default function Home() {
       );
     },
   });
-
   const {
     data: topdoctorlist,
     dataUpdatedAt,
@@ -62,6 +89,18 @@ export default function Home() {
   } = useGetDoctorList({
     orderBy: 'BOOKINGS',
   });
+
+  const {data: topcliniclist, isLoading: isClinicsLoading} = useGetcliniclist(
+    {},
+  );
+  const {data: Specialitylist, isLoading: isSpecialitiesLoading} =
+    usegetSpeciality();
+  const locatinModalMethods = useModalMethods();
+  const {fontScale} = useWindowDimensions();
+
+  const height = 50 * fontScale;
+  const bottomContainerTopPaddding = height + 30;
+  const {AnimatedScrollView, AnimatedView} = ScrollWP(height, 1);
 
   useEffect(() => {
     if (!cityName) {
@@ -81,208 +120,181 @@ export default function Home() {
     }
   }, []);
 
-  // const checkToken = async () => {
-  //   try {
-  //     const fcmToken = await messaging().getToken();
-  //     if (fcmToken) {
-  //       console.log(fcmToken);
-  //       // setfcm_token(fcmToken);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  // checkToken();
-
-  const {data: topcliniclist, isLoading: isClinicsLoading} = useGetcliniclist(
-    {},
-  );
-  const {data: Specialitylist, isLoading: isSpecialitiesLoading} =
-    usegetSpeciality();
-  const locatinModalMethods = useModalMethods();
-  const {fontScale} = useWindowDimensions();
-  // const {AnimatedScrollView, AnimatedView: AnimatedView} = useScrollAnimation(50);
-
-  const height = 50 * fontScale;
-  const bottomContainerTopPaddding = height + 30;
-  const {AnimatedScrollView, AnimatedView} = ScrollWP(height, 1);
-
   return (
-    <View style={{flex: 1, gap: 5}}>
-      <ImageBackground
-        source={require('../../asset/image/gradient.jpg')}
-        resizeMode="cover"
-        style={{
-          borderRadius: 10,
-        }}
-        imageStyle={{
-          borderRadius: 10,
-          opacity: 0.1,
-        }}>
-        <View
-          style={[
-            commonStyles.flexRowAlignCenter,
-            commonStyles.justifyCenter,
-            commonStyles.p10,
-            {height: 50, zIndex: 20, backgroundColor: bgc},
-          ]}>
-          <TouchableOpacity
-            onPress={locatinModalMethods.open}
-            style={{
-              flexDirection: 'row',
-              position: 'absolute',
-              left: 0,
-              padding: 10,
-              alignItems: 'center',
-            }}>
-            <Icon name="map-marker-alt" size={16} color={Color.primary} />
-            <Text style={{marginLeft: 10, color: Color.primary}}>
-              {cityName}
+    <View style={{flex: 1, gap: 5, backgroundColor: bgc}}>
+      <View
+        style={[
+          commonStyles.flexRowAlignCenter,
+          commonStyles.justifyCenter,
+          commonStyles.p10,
+          {height: 50, zIndex: 20, backgroundColor: bgc},
+        ]}>
+        <TouchableOpacity
+          onPress={locatinModalMethods.open}
+          style={{
+            flexDirection: 'row',
+            position: 'absolute',
+            left: 0,
+            padding: 10,
+            alignItems: 'center',
+          }}>
+          <Icon name="map-marker-alt" size={16} color={Color.white} />
+          <Text style={{marginLeft: 10, color: Color.white}}>{cityName}</Text>
+        </TouchableOpacity>
+        <Text style={styles.heading}>Home</Text>
+      </View>
+      <AnimatedView>
+        <View style={{backgroundColor: bgc, padding: 5}}>
+          <View style={{paddingHorizontal: 10}}>
+            <Text style={[commonStyles.font20, styles.text]}>
+              Hello {username}👋
             </Text>
-          </TouchableOpacity>
-          <Text style={commonStyles.font18}>Home</Text>
-        </View>
-        <AnimatedView>
-          <View style={{backgroundColor: bgc, padding: 5}}>
-            <View style={{paddingHorizontal: 10}}>
-              <Text style={commonStyles.font20}>Hello {username}👋</Text>
-              <Text style={commonStyles.caption}>How are you today ?</Text>
-            </View>
-            <Pressable
-              style={{padding: 10, backgroundColor: bgc, marginTop: -2}}
-              onPress={() => {
-                navigation.navigate(AppPages.Search);
-              }}>
-              <SearchBar
-                round
-                lightTheme
-                containerStyle={homeStyles.searhBarContainer}
-                placeholder="Search Doctors and Clinics"
-                onFocus={() => {
-                  navigation.navigate(AppPages.Search);
-                }}
-                disabled
-              />
-            </Pressable>
+            <Text style={[commonStyles.caption, styles.text]}>
+              How are you today ?
+            </Text>
           </View>
-        </AnimatedView>
-        <AnimatedScrollView>
-          <View
-            style={{
-              marginHorizontal: 10,
-              gap: 10,
-              paddingTop: bottomContainerTopPaddding,
+          <Pressable
+            style={{padding: 10, backgroundColor: bgc, marginTop: -2}}
+            onPress={() => {
+              navigation.navigate(AppPages.Search);
             }}>
-            <View style={{flexDirection: 'column', gap: 10}}>
-              <Text style={[commonStyles.font16, commonStyles.weight600]}>
-                Top Doctors
-              </Text>
-              {isDoctorsLoading ? (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    gap: 10,
-                    justifyContent: 'center',
-                  }}>
-                  <Skeleton animation="pulse" width={100} height={100} />
-                  <Skeleton animation="pulse" width={100} height={100} />
-                  <Skeleton animation="pulse" width={100} height={100} />
-                </View>
-              ) : (
-                <FlatList
-                  contentContainerStyle={{gap: 10, height: '100%'}}
-                  horizontal={true}
-                  data={topdoctorlist}
-                  key={dataUpdatedAt}
-                  renderItem={({item}) => (
-                    <Doctor details={item} key={item.id} />
-                  )}
-                  keyExtractor={c => c.id}
-                  ListEmptyComponent={
-                    <View>
-                      <Text style={commonStyles.caption}>
-                        No Doctors Listed in the area yet.
-                      </Text>
-                    </View>
-                  }
-                />
-              )}
-            </View>
-            <View style={{flexDirection: 'column', gap: 10}}>
-              <Text style={[commonStyles.font16, commonStyles.weight600]}>
-                Top Clinics
-              </Text>
-              {isClinicsLoading ? (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    gap: 10,
-                    justifyContent: 'center',
-                  }}>
-                  <Skeleton animation="pulse" width={100} height={100} />
-                  <Skeleton animation="pulse" width={100} height={100} />
-                  <Skeleton animation="pulse" width={100} height={100} />
-                </View>
-              ) : (
-                <FlatList
-                  contentContainerStyle={{gap: 10, height: '100%'}}
-                  horizontal={true}
-                  data={topcliniclist}
-                  renderItem={({item}) => (
-                    <Clinic details={item} key={item.id} />
-                  )}
-                  keyExtractor={c => c.id}
-                  ListEmptyComponent={
-                    <View>
-                      <Text style={commonStyles.caption}>
-                        No Clinics Listed in the area yet.
-                      </Text>
-                    </View>
-                  }
-                />
-              )}
-            </View>
-            <View style={{flexDirection: 'column', gap: 10}}>
-              <Text
-                style={[
-                  {
-                    fontWeight: '400',
-                    fontSize: 16,
-                    textAlign: 'center',
-                    color: 'grey',
-                  },
-                ]}>
-                Select from a category
-              </Text>
-              <View style={{gap: 10, paddingHorizontal: 30}}>
-                {isSpecialitiesLoading ? (
-                  <View style={{flexDirection: 'row', gap: 10}}>
-                    <Skeleton animation="pulse" width={100} height={100} />
-                    <Skeleton animation="pulse" width={100} height={100} />
-                    <Skeleton animation="pulse" width={100} height={100} />
-                  </View>
-                ) : (
-                  <>
-                    {sliceIntoChunks(Specialitylist?.data, 3)?.map(
-                      (chunk: SpecialityDto[]) => (
-                        <View
-                          style={{flex: 1, flexDirection: 'row', gap: 10}}
-                          key={`speciality_row_${chunk[0].id}`}>
-                          {chunk.map(item => (
-                            <Specialty details={item} key={item.id} />
-                          ))}
-                        </View>
-                      ),
-                    )}
-                    <View style={{height: 50}}></View>
-                  </>
-                )}
+            <SearchBar
+              round
+              lightTheme
+              containerStyle={styles.searhBarContainer}
+              placeholder="Search Doctors and Clinics"
+              onFocus={() => {
+                navigation.navigate(AppPages.Search);
+              }}
+              inputContainerStyle={{backgroundColor: 'white'}}
+              disabled
+            />
+          </Pressable>
+        </View>
+      </AnimatedView>
+      <AnimatedScrollView>
+        <View
+          style={{
+            marginHorizontal: 10,
+            gap: 10,
+            paddingTop: bottomContainerTopPaddding,
+          }}>
+          <View style={{flexDirection: 'column', gap: 10}}>
+            <Text
+              style={[
+                commonStyles.font16,
+                commonStyles.weight600,
+                styles.text,
+              ]}>
+              Top Doctors
+            </Text>
+            {isDoctorsLoading ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  gap: 10,
+                  justifyContent: 'center',
+                }}>
+                <Skeleton animation="pulse" width={100} height={100} />
+                <Skeleton animation="pulse" width={100} height={100} />
+                <Skeleton animation="pulse" width={100} height={100} />
               </View>
+            ) : (
+              <FlatList
+                contentContainerStyle={{gap: 10, height: '100%'}}
+                horizontal={true}
+                data={topdoctorlist}
+                key={dataUpdatedAt}
+                renderItem={({item}) => <Doctor details={item} key={item.id} />}
+                keyExtractor={c => c.id}
+                ListEmptyComponent={
+                  <View>
+                    <Text style={[commonStyles.caption, styles.text]}>
+                      No Doctors Listed in the area yet.
+                    </Text>
+                  </View>
+                }
+              />
+            )}
+          </View>
+          <View style={{flexDirection: 'column', gap: 10}}>
+            <Text
+              style={[
+                commonStyles.font16,
+                commonStyles.weight600,
+                styles.text,
+              ]}>
+              Top Clinics
+            </Text>
+            {isClinicsLoading ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  gap: 10,
+                  justifyContent: 'center',
+                }}>
+                <Skeleton animation="pulse" width={100} height={100} />
+                <Skeleton animation="pulse" width={100} height={100} />
+                <Skeleton animation="pulse" width={100} height={100} />
+              </View>
+            ) : (
+              <FlatList
+                contentContainerStyle={{gap: 10, height: '100%'}}
+                horizontal={true}
+                data={topcliniclist}
+                renderItem={({item}) => <Clinic details={item} key={item.id} />}
+                keyExtractor={c => c.id}
+                ListEmptyComponent={
+                  <View>
+                    <Text style={[commonStyles.caption, styles.text]}>
+                      No Clinics Listed in the area yet.
+                    </Text>
+                  </View>
+                }
+              />
+            )}
+          </View>
+          <View style={{flexDirection: 'column', gap: 10}}>
+            <Text
+              style={[
+                {
+                  fontWeight: '400',
+                  fontSize: 16,
+                  textAlign: 'center',
+                  color: 'grey',
+                },
+                styles.text,
+              ]}>
+              Select from a category
+            </Text>
+            <View style={{gap: 10, paddingHorizontal: 30}}>
+              {isSpecialitiesLoading ? (
+                <View style={{flexDirection: 'row', gap: 10}}>
+                  <Skeleton animation="pulse" width={100} height={100} />
+                  <Skeleton animation="pulse" width={100} height={100} />
+                  <Skeleton animation="pulse" width={100} height={100} />
+                </View>
+              ) : (
+                <>
+                  {sliceIntoChunks(Specialitylist?.data, 3)?.map(
+                    (chunk: SpecialityDto[]) => (
+                      <View
+                        style={{flex: 1, flexDirection: 'row', gap: 10}}
+                        key={`speciality_row_${chunk[0].id}`}>
+                        {chunk.map(item => (
+                          <Specialty details={item} key={item.id} />
+                        ))}
+                      </View>
+                    ),
+                  )}
+                  <View style={{height: 50}}></View>
+                </>
+              )}
             </View>
           </View>
-        </AnimatedScrollView>
-        <LocationModal modalMethods={locatinModalMethods} />
-      </ImageBackground>
+        </View>
+      </AnimatedScrollView>
+      <LocationModal modalMethods={locatinModalMethods} />
     </View>
   );
 }

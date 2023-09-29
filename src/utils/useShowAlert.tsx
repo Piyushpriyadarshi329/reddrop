@@ -14,7 +14,12 @@ export const axiosAlert = (e: any) => {
   try {
     if (e.response) {
       if (e.response.data) {
-        errorAlert(e.response.data.data?.message || e.response.data.Message);
+        errorAlert(
+          e.response.data.data?.message || e.response.data.Message,
+          e.response.data.data?.message2 ||
+            e.response.data.Message2 ||
+            undefined,
+        );
       } else {
         errorAlert(texts.SomethingWentWrong);
       }
