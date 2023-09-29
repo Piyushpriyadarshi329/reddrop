@@ -209,7 +209,7 @@ export default function Home() {
                 keyExtractor={c => c.id}
                 ListEmptyComponent={
                   <View>
-                    <Text style={commonStyles.caption}>
+                    <Text style={[commonStyles.caption, styles.text]}>
                       No Doctors Listed in the area yet.
                     </Text>
                   </View>
@@ -246,7 +246,7 @@ export default function Home() {
                 keyExtractor={c => c.id}
                 ListEmptyComponent={
                   <View>
-                    <Text style={commonStyles.caption}>
+                    <Text style={[commonStyles.caption, styles.text]}>
                       No Clinics Listed in the area yet.
                     </Text>
                   </View>
