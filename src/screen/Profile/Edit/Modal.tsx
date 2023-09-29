@@ -47,6 +47,7 @@ export const ProfileModal = ({
       });
     }
   }, [details]);
+
   const {mutate: update} = useUpdateCustomer(details?.id ?? '', () =>
     setEditMode(false),
   );

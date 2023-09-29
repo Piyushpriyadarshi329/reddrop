@@ -18,6 +18,7 @@ export const RHFDropdown = (props: {
   zIndex?: number;
   componentProps?: any;
   value?: 'value' | 'label' | 'object';
+  labelStyles?: any;
 }) => {
   const {control, getValues} = useFormContext();
   const [open, setOpen] = useState(false);
@@ -37,6 +38,7 @@ export const RHFDropdown = (props: {
               style={[
                 commonStyles.caption,
                 {fontWeight: '700', color: '#8795a0'},
+                props.labelStyles,
               ]}>
               {props.label}
             </Text>

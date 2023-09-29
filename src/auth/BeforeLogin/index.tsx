@@ -6,6 +6,7 @@ import OTP from '../OTP';
 import Register from './Register';
 import {AppPages} from '../../appPages';
 import {AuthHome} from './Home';
+import Register2 from './Register2';
 
 export default function Beforelogin() {
   const Stack = createNativeStackNavigator();
@@ -31,6 +32,11 @@ export default function Beforelogin() {
         <Stack.Screen
           name="Register"
           component={Register}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Register2"
+          component={Register2}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

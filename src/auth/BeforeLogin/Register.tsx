@@ -34,11 +34,13 @@ export default function Register() {
     onSuccess: (data: any) => {
       dispatch(
         updateuserdata({
-          islogin: true,
+          // islogin: true,
           userid: data?.id,
           username: data?.name,
         }),
       );
+
+      navigation.navigate('Register2');
     },
   });
 
