@@ -12,5 +12,6 @@ export const AppPages = {
   ProfileStack: 'ProfileStack',
   Profile: 'Profile',
   Offer: 'Offer',
+  Contact: 'Contact',
   BookingConfirmation: 'BookingConfirmation',
 };

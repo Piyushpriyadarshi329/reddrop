@@ -21,6 +21,8 @@ import {updateuserdata} from '../../redux/reducer/Authreducer';
 import {ProfileEntry} from './ProfileEntry';
 
 import {Text} from '@rneui/themed';
+import {useNavigation} from '@react-navigation/native';
+import {AppPages} from '../../appPages';
 
 export default function Profile() {
   const AppState = useSelector((state: RootState) => state.Appstate);
@@ -28,7 +30,8 @@ export default function Profile() {
   const [editModalVisible, setEditModalVisible] = useState(false);
   const {data: customer} = useGetCustomer(AppState.userid);
 
-  console.log('customer', customer);
+  const navigation = useNavigation();
+
   const {mutate: updateCustomer} = useUpdateCustomer(AppState.userid);
   function onUploadPic(data: VisibleDocument | undefined) {
     updateCustomer({
@@ -43,6 +46,9 @@ export default function Profile() {
         endAdornment={
           <AboutMenuOptions
             setEditMode={() => setEditModalVisible(true)}
+            setContactUs={() => {
+              navigation.navigate(AppPages.Contact);
+            }}
             onLogout={() => {
               dispatch(
                 updateuserdata({

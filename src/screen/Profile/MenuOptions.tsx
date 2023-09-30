@@ -9,8 +9,10 @@ import MenuOptionsComponent from '../../component/MenuOptionsComponent';
 const AboutMenuOptions = ({
   onLogout,
   setEditMode,
+  setContactUs,
 }: {
   setEditMode: () => void;
+  setContactUs: () => void;
   onLogout?: () => void;
 }) => {
   const options = [
@@ -23,7 +25,17 @@ const AboutMenuOptions = ({
       ),
       onPress: setEditMode,
     },
+    {
+      item: (
+        <View style={[commonStyles.flexRowAlignCenter, {gap: 20}]}>
+          <Icon name="edit" size={17} color={Color.primary} />
+          <Text style={commonStyles.font18}>Contact us</Text>
+        </View>
+      ),
+      onPress: setContactUs,
+    },
   ];
+
   if (onLogout) {
     options.push({
       item: (

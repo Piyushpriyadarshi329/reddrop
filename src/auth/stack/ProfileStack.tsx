@@ -4,6 +4,7 @@ import {AppPages} from '../../appPages';
 import BookApointment from '../../screen/DoctorDetails';
 import DoctorsList from '../../screen/Home/DoctorList';
 import Profile from '../../screen/Profile';
+import Contact from '../../screen/Profile/Contact';
 
 export default function ProfileStack() {
   const Stack = createNativeStackNavigator();
@@ -23,6 +24,11 @@ export default function ProfileStack() {
       <Stack.Screen
         name={AppPages.Doctorlist}
         component={DoctorsList}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name={AppPages.Contact}
+        component={Contact}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

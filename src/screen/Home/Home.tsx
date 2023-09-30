@@ -1,6 +1,6 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {SearchBar, Skeleton, makeStyles} from '@rneui/themed';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   ImageBackground,
@@ -35,6 +35,10 @@ import {updateuserdata} from '../../redux/reducer/Authreducer';
 
 import {useDispatch} from 'react-redux';
 
+import AppIntroSlider from 'react-native-app-intro-slider';
+import Carousel, {Pagination} from 'react-native-snap-carousel';
+import MyCarousel from './CarousalWithPagination';
+
 // const bgc = '#dcedec';
 const bgc = Color.primary;
 const textColor = Color.white;
@@ -65,6 +69,30 @@ const useStyles = makeStyles((theme, props: Props) => ({
   },
 }));
 
+const slides = [
+  {
+    key: 1,
+    title: 'Title 1',
+    text: 'Description.\nSay something cool',
+    // image: require('./assets/1.jpg'),
+    backgroundColor: '#59b2ab',
+  },
+  {
+    key: 2,
+    title: 'Title 2',
+    text: 'Other cool stuff',
+    // image: require('./assets/2.jpg'),
+    backgroundColor: '#febe29',
+  },
+  {
+    key: 3,
+    title: 'Rocket guy',
+    text: "I'm already out of descriptions\n\nLorem ipsum bla bla bla",
+    // image: require('./assets/3.jpg'),
+    backgroundColor: '#22bcb5',
+  },
+];
+
 export default function Home() {
   const {username, userid, cityName} = useSelector(
     (root: RootState) => root.Appstate,
@@ -72,6 +100,7 @@ export default function Home() {
   const navigation = useNavigation<NavigationProp<any>>();
   const dispatch = useDispatch();
   const styles = useStyles();
+  const [activeSlide, setActiveSlide] = useState<number>(0);
   const {mutate, isLoading} = useReverseSearchCity({
     onSuccess: (data: any) => {
       console.log('search city', data);
@@ -119,7 +148,11 @@ export default function Home() {
         });
     }
   }, []);
-
+  const onSnapToItem = (index: number) => {
+    console.log('index', index);
+    setActiveSlide(index);
+  };
+  console.log(activeSlide);
   return (
     <View style={{flex: 1, gap: 5, backgroundColor: bgc}}>
       <View
@@ -179,6 +212,31 @@ export default function Home() {
             gap: 10,
             paddingTop: bottomContainerTopPaddding,
           }}>
+          <View style={{height: 100, width: '100%'}}>
+            <Carousel
+              loop
+              autoplay
+              data={slides}
+              renderItem={({item}: {item: any}) => {
+                return (
+                  <View style={{flex: 1}}>
+                    <View
+                      style={{
+                        height: 70,
+                        backgroundColor: item.backgroundColor,
+                      }}>
+                      <Text>{JSON.stringify(item.title)}</Text>
+                    </View>
+                  </View>
+                );
+              }}
+              pagingEnabled
+              sliderWidth={useWindowDimensions().width - 20}
+              itemWidth={useWindowDimensions().width - 20}
+            />
+            <MyCarousel />
+          </View>
+
           <View style={{flexDirection: 'column', gap: 10}}>
             <Text
               style={[
