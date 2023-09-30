@@ -40,7 +40,7 @@ const ClinicButton = ({
             setSelectedClinic(clinic);
           }}>
           <Text style={{textAlign: 'center'}}>{clinic.name}</Text>
-          <Address details={clinic.address} compact={true} />
+          <Address details={clinic.address} cityOnly={true} />
         </TouchableOpacity>
         {true && (
           <TouchableOpacity
