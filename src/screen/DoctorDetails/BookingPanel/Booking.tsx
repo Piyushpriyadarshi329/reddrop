@@ -11,7 +11,7 @@ import {useModalMethods} from '../../../utils/useModalMethods';
 import {DateCard} from '../DateCard';
 import SlotCard from '../SlotCard';
 import {useGetBookingAvailability} from '../useGetBookingAvailability';
-import {BookingConfirmation} from './BookingConfirmation';
+import {BookingConfirmation} from './Confirmation';
 export interface BookingProps {
   doctorId: string;
   existingAppointment: Appointmentdto;
@@ -28,7 +28,7 @@ const Booking = ({
     undefined,
   );
   const bookingModal = useModalMethods();
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const [selectedTime, setSelectedTime] = useState<
     (Slot & {id: string}) | undefined
   >(undefined);
@@ -39,8 +39,6 @@ const Booking = ({
     clinic_id: clinicDetails?.id || '',
     // clinic_id: '244e7e5f-761b-4063-83cf-0314bb623f2c',
   });
-
-  console.log('dateList', dateList);
 
   const {data: bookingAvailability, isLoading: isSlotsLoading} =
     useGetBookingAvailability({

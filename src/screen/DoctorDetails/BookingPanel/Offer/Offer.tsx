@@ -2,14 +2,17 @@ import {View, TextInput, TouchableOpacity} from 'react-native';
 import {Button, CheckBox, Icon, Text} from '@rneui/themed';
 
 import React, {useState} from 'react';
-import {useGetSKU} from '../../../customhook/useGetSKU';
+import {useGetSKU} from '../../../../customhook/useGetSKU';
 import {useSelector} from 'react-redux';
-import {RootState} from '../../../redux/Store';
-import {RHFTextInput} from '../../../component/RHFInputs/RHFTextInput';
-import {CodeType, OfferEntity} from '../../../types';
-import Color from '../../../asset/Color';
-import {useCheckReferralCode} from '../../../customhook/useCheckReferralCode';
+import {RootState} from '../../../../redux/Store';
+import {RHFTextInput} from '../../../../component/RHFInputs/RHFTextInput';
+import {CodeType, OfferEntity} from '../../../../types';
+import Color from '../../../../asset/Color';
+import {useCheckReferralCode} from '../../../../customhook/useCheckReferralCode';
 import {useNavigation} from '@react-navigation/native';
+import {commonStyles} from '../../../../asset/styles';
+import {OfferCard} from './OfferCard';
+import {OfferDetails} from './OfferDetails';
 
 export default function Offer({route}: {route: any}) {
   const {setSelectedOffer} = route.params;
@@ -41,51 +44,45 @@ export default function Offer({route}: {route: any}) {
   }
 
   return (
-    <View style={{flex: 1}}>
-      <View style={{marginTop: 20, marginHorizontal: 10}}>
-        {/* <TextInput
-          style={{borderWidth: 1, borderRadius: 10, height: 40}}
-          placeholder="Please Enter Referral Code"
-          onChangeText={text => {
-            setReferralCode(text);
-          }}
-        />
-
-        <Button
-          onPress={checkReferralFun}
-          title={'Apply'}
-          color={Color.primary}
-          // loading={isLoading}
-        /> */}
-      </View>
-
-      <View style={{marginTop: 20, marginHorizontal: 10}}>
-        <Text style={{color: Color.black}}>Choose Offer</Text>
+    <View style={{flex: 1, padding: 10}}>
+      <View
+        style={{
+          width: '100%',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}>
+        <TouchableOpacity
+          style={commonStyles.flexRowAlignCenter}
+          onPress={() => {
+            navigation.goBack();
+          }}>
+          <Icon name="arrow-left" color={Color.primary} />
+          <Text style={{color: Color.primary}}>Edit</Text>
+        </TouchableOpacity>
+        <Text style={{fontSize: 20}}>Choose Offer</Text>
       </View>
 
       <View style={{marginTop: 10, marginHorizontal: 10, borderRadius: 5}}>
         {SKUData.offers.length > 0 ? (
-          <>
+          <View style={{gap: 10}}>
             {SKUData.offers.map((offer: OfferEntity) => {
               return (
                 <TouchableOpacity
                   onPress={() => {
                     setSelectedOffer(offer);
                     navigation.goBack();
+                  }}
+                  style={{
+                    backgroundColor: Color.tertiary,
+                    padding: 10,
+                    borderRadius: 10,
                   }}>
-                  <View
-                    style={{backgroundColor: Color.lightgray, borderRadius: 5}}>
-                    <Text style={{padding: 5, color: Color.black}}>
-                      Code:{offer.name}
-                    </Text>
-                    <Text style={{color: Color.black, padding: 5}}>
-                      {offer.description}
-                    </Text>
-                  </View>
+                  <OfferDetails selectedOffer={offer} />
                 </TouchableOpacity>
               );
             })}
-          </>
+          </View>
         ) : (
           <View>
             <View
@@ -100,16 +97,6 @@ export default function Offer({route}: {route: any}) {
             </View>
           </View>
         )}
-      </View>
-
-      <View style={{marginHorizontal: 100, marginTop: 50}}>
-        <Button
-          onPress={() => {
-            navigation.goBack();
-          }}
-          title={'Back'}
-          color={Color.primary}
-        />
       </View>
     </View>
   );
