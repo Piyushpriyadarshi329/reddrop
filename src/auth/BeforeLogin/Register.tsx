@@ -50,7 +50,7 @@ export default function Register() {
 
   const {data: userData} = useCheckMobile({mobile});
 
-  async function onVerify(data: any) {
+  function onVerify(data: any) {
     if (userData) {
       dispatch(
         updateuserdata({

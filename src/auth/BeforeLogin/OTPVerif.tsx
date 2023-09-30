@@ -127,6 +127,9 @@ export const OTPVerif = ({
           validate: validatePhone,
         }}
         {...authFieldStyleProps}
+        containerStyle={{
+          paddingBottom: 10,
+        }}
       />
       {otpSent && (
         <View

@@ -17,6 +17,7 @@ export const RHFCalendar = (props: {
   dateFormat?: string;
   label?: string;
   labelStyles?: any;
+  inputStyles?: any;
 }) => {
   const {control} = useFormContext();
   const [modalVisible, setModalVisible] = useState(false);
@@ -36,15 +37,17 @@ export const RHFCalendar = (props: {
                 {props.label}
               </Text>
             )}
-            {field.value ? (
-              <Text>
-                {moment(Number(field.value)).format(props.dateFormat)}
-              </Text>
-            ) : (
-              <Text style={{borderBottomWidth: 1, borderColor: 'grey'}}>
-                {props.placeholder ?? 'Select Date'}
-              </Text>
-            )}
+            <View style={props.inputStyles}>
+              {field.value ? (
+                <Text>
+                  {moment(Number(field.value)).format(props.dateFormat)}
+                </Text>
+              ) : (
+                <Text style={{borderBottomWidth: 1, borderColor: 'grey'}}>
+                  {props.placeholder ?? 'Select Date'}
+                </Text>
+              )}
+            </View>
           </TouchableOpacity>
           <CalendarModal
             {...{

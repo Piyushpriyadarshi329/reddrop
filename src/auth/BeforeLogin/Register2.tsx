@@ -20,6 +20,7 @@ import {RootState} from '../../redux/Store';
 import {RHFDropdown} from '../../component/RHFInputs/RHFDropdown';
 import {RHFCalendar} from '../../component/RHFInputs/RHFCalendar';
 import {getToday} from '../../utils/dateMethods';
+import {genderOptions} from '../../screen/DoctorDetails/BookingPanel/User/UserForm/constants';
 export interface ProfileForm {
   name?: string;
   email?: string;
@@ -82,15 +83,9 @@ export default function Register2() {
 
       <View style={b4LoginStyles.bottomContainerForm}>
         <FormProvider {...formMethods}>
-          {/* <ScrollView
-            contentContainerStyle={b4LoginStyles.signUpFormContainer}
-            keyboardShouldPersistTaps="always"> */}
           <View style={{paddingBottom: 20}}>
-            {/* <Text style={{fontSize: 22, color: 'white'}}>
-                Create An Account
-              </Text> */}
-            <Text style={{fontSize: 14, color: '#dae0ff'}}>
-              Enter Your Details
+            <Text style={{fontSize: 22, color: 'white'}}>
+              Some Details about you
             </Text>
           </View>
           <>
@@ -98,18 +93,22 @@ export default function Register2() {
               label="Gender"
               labelStyles={{color: Color.black}}
               name="gender"
-              options={[
-                {label: 'Male', value: Gender.MALE},
-                {label: 'Female', value: Gender.FEMALE},
-                {label: 'Others', value: Gender.OTHERS},
-              ]}
+              placeholder="Select Gender"
+              options={genderOptions}
             />
-            <RHFCalendar
-              labelStyles={{color: Color.black}}
-              label="Date of Birth"
-              name="dob"
-              dateFormat="ll"
-            />
+            <View>
+              <RHFCalendar
+                labelStyles={{color: Color.black}}
+                label="Date of Birth"
+                name="dob"
+                dateFormat="ll"
+                inputStyles={{
+                  backgroundColor: 'white',
+                  padding: 10,
+                  borderRadius: 10,
+                }}
+              />
+            </View>
 
             <Button
               title="Submit"
@@ -130,7 +129,6 @@ export default function Register2() {
               alignItems: 'center',
               paddingTop: 10,
             }}></View>
-          {/* </ScrollView> */}
         </FormProvider>
       </View>
     </View>
