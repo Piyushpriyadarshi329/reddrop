@@ -16,7 +16,9 @@ export const RHFDropdown = (props: {
   options: {label: string; value: string}[];
   label?: string;
   zIndex?: number;
-  componentProps?: any;
+  componentProps?: {
+    dropDownContainerStyle?: any;
+  };
   value?: 'value' | 'label' | 'object';
   labelStyles?: any;
 }) => {
@@ -56,7 +58,6 @@ export const RHFDropdown = (props: {
               {
                 borderWidth: 0,
                 borderBottomWidth: 1,
-                marginVertical: 10,
               },
             ]}
             items={props.options}

@@ -3,14 +3,18 @@ import {
   useNavigation,
   CommonActions,
 } from '@react-navigation/native';
-import {Button, Icon, Text} from '@rneui/themed';
+import {Button, Icon, Input, Text} from '@rneui/themed';
 import React, {useEffect, useMemo, useState} from 'react';
-import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Color from '../../../asset/Color';
 import {commonStyles} from '../../../asset/styles';
 import {useGetSKU} from '../../../customhook/useGetSKU';
-import {BookingOverview} from './BookingOverview';
-import {Gender, UserCard} from './UserCard';
+import {UserCard} from './User/UserCard';
 
 import {
   CFDropCheckoutPayment,
@@ -32,12 +36,15 @@ import {useBookslot as useBookSlot} from '../../../customhook/useBookslot';
 import {useCreatePaymentOrder} from '../../../customhook/useCreatePaymentOrder';
 import {RootState} from '../../../redux/Store';
 import {updateuserdata} from '../../../redux/reducer/Authreducer';
-import {BookSlotRequest, OfferEntity} from '../../../types';
+import {BookSlotRequest, Gender, OfferEntity} from '../../../types';
 import {getAge} from '../../../utils/dateMethods';
 import {useGetCustomer} from '../../Profile/useCustomerQuery';
-import {errorAlert, successAlert} from './../../../utils/useShowAlert';
+import {errorAlert, successAlert} from '../../../utils/useShowAlert';
 import {NameNote} from './NameNote';
-import {BookingUserInterface, UserForm} from './UserForm';
+import {BookingUserInterface, UserForm} from './User/UserForm';
+import {OfferCard} from './Offer/OfferCard';
+import {ApplyOfferButton} from './Offer/ApplyOfferButton';
+import {PaymentAmount} from './Amount';
 
 export const BookingConfirmation = ({route}: {route: any}) => {
   console.log('route.prams', route.params);
@@ -286,103 +293,48 @@ export const BookingConfirmation = ({route}: {route: any}) => {
               </TouchableOpacity>
               <Text style={{fontSize: 20}}>Confirm Booking</Text>
             </View>
-            <BookingOverview />
-            {showUserForm || !user ? (
-              <UserForm
-                onSubmit={user => {
-                  setUser(user);
-                  setShowUserForm(false);
-                }}
-              />
-            ) : (
-              <View style={{gap: 5}}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setUser(undefined);
-                    setShowUserForm(true);
-                  }}>
-                  <UserCard user={user} />
-                </TouchableOpacity>
-                <NameNote />
-              </View>
-            )}
-            {/* Apply offer */}
-            <View
-              style={{
-                marginTop: 10,
-              }}>
-              <TouchableOpacity
-                style={{
-                  flexDirection: 'row',
-                  backgroundColor: Color.lightgray,
-                  borderRadius: 10,
-                }}
-                onPress={() => {
-                  navigation.navigate(AppPages.Offer, {
-                    setSelectedOffer: setSelectedOffer,
-                  });
-                }}>
-                <Text style={{marginLeft: 10}}>Apply Offer</Text>
-                <View style={{flex: 1}}>
-                  <Icon
-                    name="chevron-right"
-                    style={{alignItems: 'flex-end', marginRight: 10}}
-                    color={Color.black}
+            <ScrollView>
+              {showUserForm ? (
+                <UserForm
+                  onClose={() => setShowUserForm(false)}
+                  onSubmit={user => {
+                    setUser(user);
+                    setShowUserForm(false);
+                  }}
+                />
+              ) : (
+                <View style={{gap: 5, padding: 10}}>
+                  <UserCard
+                    user={user}
+                    onEdit={() => {
+                      setShowUserForm(true);
+                    }}
+                  />
+                  <NameNote />
+                </View>
+              )}
+              {!selectedOffer && (
+                <ApplyOfferButton setSelectedOffer={setSelectedOffer} />
+              )}
+
+              {selectedOffer && (
+                <View style={{padding: 10}}>
+                  <OfferCard
+                    selectedOffer={selectedOffer}
+                    setSelectedOffer={setSelectedOffer}
                   />
                 </View>
-              </TouchableOpacity>
-            </View>
-
-            {/* selected offer */}
-
-            {selectedOffer ? (
-              <View
-                style={{
-                  marginTop: 10,
-                  backgroundColor: Color.lightgray,
-                  borderRadius: 10,
-                  padding: 5,
-                }}>
-                <View>
-                  <Text>Applied Offer details</Text>
-                </View>
-                <Text>Name:{selectedOffer?.name}</Text>
-                <Text>Code:{selectedOffer?.code}</Text>
-                <Text>{selectedOffer?.description}</Text>
+              )}
+              <View style={{marginTop: 20, padding: 10, gap: 10}}>
+                <Text style={{textAlign: 'center'}}>Bill Summary</Text>
+                <PaymentAmount
+                  discount={discount}
+                  gstAmount={gstAmount}
+                  payableAmount={payableAmount}
+                  SKUData={SKUData}
+                />
               </View>
-            ) : null}
-
-            {/* amount and GSt details */}
-
-            <View style={{marginTop: 20}}>
-              <View>
-                <Text>Payment Details</Text>
-              </View>
-
-              <View style={{flexDirection: 'row'}}>
-                <Text style={{flex: 1}}>Base Amount</Text>
-                <Text style={{flex: 1}}>{SKUData?.amounts?.amount}</Text>
-              </View>
-              <View style={{flexDirection: 'row'}}>
-                <Text style={{flex: 1}}>Discount</Text>
-                <Text style={{flex: 1}}>{discount}</Text>
-              </View>
-              <View style={{flexDirection: 'row'}}>
-                <Text style={{flex: 1}}>GST</Text>
-                <Text style={{flex: 1}}>{gstAmount}</Text>
-              </View>
-
-              <View
-                style={{
-                  borderWidth: 1,
-                  borderColor: Color.black,
-                  height: 1,
-                }}></View>
-              <View style={{flexDirection: 'row'}}>
-                <Text style={{flex: 1}}>Pay amount</Text>
-                <Text style={{flex: 1}}>{payableAmount}</Text>
-              </View>
-            </View>
+            </ScrollView>
 
             <Button
               onPress={!isSubmitLoading ? bookAppointmentHandler : () => {}}

@@ -67,6 +67,11 @@ const useStyles = makeStyles((theme, props: Props) => ({
     borderBottomColor: 'transparent',
     padding: 0,
   },
+  sectionTitle: {
+    color: theme.colors.white,
+    fontWeight: '800',
+    fontSize: 16,
+  },
 }));
 
 const slides = [
@@ -238,14 +243,7 @@ export default function Home() {
           </View>
 
           <View style={{flexDirection: 'column', gap: 10}}>
-            <Text
-              style={[
-                commonStyles.font16,
-                commonStyles.weight600,
-                styles.text,
-              ]}>
-              Top Doctors
-            </Text>
+            <Text style={styles.sectionTitle}>Top Doctors</Text>
             {isDoctorsLoading ? (
               <View
                 style={{
@@ -276,14 +274,7 @@ export default function Home() {
             )}
           </View>
           <View style={{flexDirection: 'column', gap: 10}}>
-            <Text
-              style={[
-                commonStyles.font16,
-                commonStyles.weight600,
-                styles.text,
-              ]}>
-              Top Clinics
-            </Text>
+            <Text style={styles.sectionTitle}>Top Clinics</Text>
             {isClinicsLoading ? (
               <View
                 style={{
@@ -313,16 +304,7 @@ export default function Home() {
             )}
           </View>
           <View style={{flexDirection: 'column', gap: 10}}>
-            <Text
-              style={[
-                {
-                  fontWeight: '400',
-                  fontSize: 16,
-                  textAlign: 'center',
-                  color: 'grey',
-                },
-                styles.text,
-              ]}>
+            <Text style={[{textAlign: 'center'}, styles.sectionTitle]}>
               Select from a category
             </Text>
             <View style={{gap: 10, paddingHorizontal: 30}}>

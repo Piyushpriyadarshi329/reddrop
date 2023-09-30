@@ -15,7 +15,7 @@ export function useGetAvailableDates(payload: {
   return useQuery(
     [payload],
     () =>
-      axios.post<DataResponse<{date: number; available: boolean}>>(
+      axios.post<DataResponse<{date: number; available: boolean}[]>>(
         getAvailableDates_Url,
         payload,
       ),

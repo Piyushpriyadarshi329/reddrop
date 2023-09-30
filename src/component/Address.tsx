@@ -2,25 +2,25 @@ import {Text} from '@rneui/themed';
 import React from 'react';
 import {View} from 'react-native';
 import {commonStyles} from '../asset/styles';
-import {AddressDto, ShowAddress} from '../types';
+import {ShowAddress} from '../types';
 
 const Address = ({
   details,
-  compact,
+  cityOnly,
 }: {
   details: ShowAddress | undefined;
-  compact?: boolean;
+  cityOnly?: boolean;
 }) => {
   return (
     <View style={{justifyContent: 'center', alignItems: 'center'}}>
-      {!compact && (
+      {!cityOnly && (
         <Text style={commonStyles.font16}>{details?.address_line1}</Text>
       )}
-      {!compact && (
+      {!cityOnly && (
         <Text style={commonStyles.font}>{details?.address_line2}</Text>
       )}
       <Text style={commonStyles.font}>{details?.city}</Text>
-      {!compact && (
+      {!cityOnly && (
         <Text style={commonStyles.font}>
           {details?.state}
           {!!details?.pincode && ` - ${details?.pincode}`}

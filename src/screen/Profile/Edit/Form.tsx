@@ -5,7 +5,7 @@ import {RHFDropdown} from '../../../component/RHFInputs/RHFDropdown';
 import {RHFCalendar} from '../../../component/RHFInputs/RHFCalendar';
 import {Button} from '@rneui/themed';
 import Color from '../../../asset/Color';
-import {Gender} from '../../DoctorDetails/BookingPanel/UserCard';
+import {Gender} from '../../../types';
 
 const CustomerProfileUpdateForm = ({onSubmit}: {onSubmit: () => void}) => {
   return (

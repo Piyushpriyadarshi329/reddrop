@@ -16,6 +16,7 @@ import {
   WorkingTimeDto,
 } from '../../types';
 import {AppointmentTab} from '../Appointment/helper';
+import {Button} from '@rneui/themed';
 
 export default function BookApointment(props: {
   route: {
@@ -59,20 +60,33 @@ export default function BookApointment(props: {
           <DoctorBookingStack.Screen
             name="Details"
             component={(route: any) => (
-              <ScrollView style={{marginBottom: 10}}>
-                <DoctorDetails
-                  doctorDetails={doctorDetails}
-                  clinicDetails={
-                    props.route.params?.clinicDetails ||
-                    ({} as ClinicWithAddressAndImage)
-                  }
-                />
-                <View style={{height: 50}} />
-                <Btn
-                  title="Schedule -> "
-                  onPress={() => route.navigation.navigate('Book')}
-                />
-              </ScrollView>
+              <View>
+                <ScrollView
+                  style={{
+                    marginBottom: 10,
+                    height: '95%',
+                  }}>
+                  <DoctorDetails
+                    doctorDetails={doctorDetails}
+                    clinicDetails={
+                      props.route.params?.clinicDetails ||
+                      ({} as ClinicWithAddressAndImage)
+                    }
+                  />
+                  <View style={{height: 50}} />
+                </ScrollView>
+                <View
+                  style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    width: '100%',
+                  }}>
+                  <Button
+                    title="Schedule -> "
+                    onPress={() => route.navigation.navigate('Book')}
+                  />
+                </View>
+              </View>
             )}
             options={{headerShown: false}}
           />
