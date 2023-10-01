@@ -24,8 +24,9 @@ export const useNotificationHandler = () => {
         dispatch(updateuserdata({paymentStatus: data.status}));
         return;
       case CB_NOTIFICATION.FIRST_SLOT_STARTED:
+        console.log(CB_NOTIFICATION.FIRST_SLOT_STARTED, notification);
         qc.invalidateQueries(['APPOINTMENTS']);
-        infoAlert(notification.title);
+        infoAlert(notification.title, undefined, 2000);
         return;
       case CB_NOTIFICATION.VISIBLE_NOTIFICATION:
         infoAlert(notification.title, notification.body);
