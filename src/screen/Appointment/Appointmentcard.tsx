@@ -32,7 +32,7 @@ import {
 } from '../../types';
 import {getTimeStringFromDBTime} from '../../utils/dateMethods';
 import {useGetDoctor} from '../DoctorDetails/useDoctorQuery';
-import {useAlert} from '../../utils/useShowAlert';
+import {errorAlert, useAlert} from '../../utils/useShowAlert';
 import {useUpdateSlotStatus} from '../../customhook/useUpdateSlotStatus';
 import {useGetcliniclist} from '../../customhook/useGetcliniclist';
 import Color, {Pallet3} from '../../asset/Color';
@@ -58,6 +58,7 @@ export default function AppointmentCard({
   const [deleteModal, setDeleteModal] = useState(false);
   const [rescheduleModal, setReScheduleModal] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
+  const [remarks, setRemarks] = useState('');
   const popupRef = useRef(null);
   const {mutate: updateSlotStatus} = useUpdateSlotStatus(() => {
     successAlert('Updated Booking.');
@@ -231,14 +232,21 @@ export default function AppointmentCard({
 
       <ConfirmationModal
         onsubmit={() => {
-          updateSlotStatus({
-            id: appointment.id,
-            status: 'CANCELLED',
-          });
+          if (remarks) {
+            updateSlotStatus({
+              id: appointment.id,
+              status: 'CANCELLED',
+              remarks: remarks,
+            });
+          } else {
+            errorAlert('Please provide Remarks');
+          }
         }}
+        setRemarks={setRemarks}
         modalVisible={deleteModal}
         setModalVisible={setDeleteModal}
-        subtitle="Are you sure you want to cancel the booking"
+        subtitle="Let us know the reason"
+        // subtitle="Are you sure you want to cancel the booking"
         title="Cancel Booking ?"
       />
       <ConfirmationModal

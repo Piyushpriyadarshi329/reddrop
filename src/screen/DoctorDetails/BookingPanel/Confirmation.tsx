@@ -126,11 +126,27 @@ export const BookingConfirmation = ({route}: {route: any}) => {
 
   let {data: SKUData} = useGetSKU({customerId: AppState.userid});
 
-  useEffect(() => {
-    console.log('SKUData', SKUData);
+  const amountObject = useMemo(
+    () =>
+      !existingAppointment
+        ? SKUData?.amounts
+        : {
+            id: '',
+            name: 'Reschedule',
+            amount: 0,
+            serviceCharges: 0,
+            gstRate: 0,
+          },
+    [SKUData],
+  );
+  const offerObject = useMemo(
+    () => (!existingAppointment ? SKUData?.offers : []),
+    [SKUData],
+  );
 
-    if (SKUData?.offers.length > 0) {
-      setSelectedOffer(_.sortBy(SKUData?.offers, 'priority')[0]);
+  useEffect(() => {
+    if (!!offerObject?.length) {
+      setSelectedOffer(_.sortBy(offerObject, 'priority')[0]);
     }
   }, [SKUData]);
 
@@ -163,7 +179,7 @@ export const BookingConfirmation = ({route}: {route: any}) => {
 
   const discount = useMemo(() => {
     if (selectedOffer?.percentage) {
-      return SKUData?.amounts?.amount * selectedOffer.percentage * 0.01;
+      return (amountObject?.amount ?? 0) * selectedOffer.percentage * 0.01;
     } else if (selectedOffer?.amount) {
       return selectedOffer.amount;
     }
@@ -172,14 +188,18 @@ export const BookingConfirmation = ({route}: {route: any}) => {
 
   const payableAmount = useMemo(() => {
     return (
-      SKUData?.amounts.amount -
+      (amountObject?.amount ?? 0) -
       discount +
-      (SKUData?.amounts.amount - discount) * SKUData?.amounts.gstRate * 0.01
+      ((amountObject?.amount ?? 0) - discount) *
+        (amountObject?.gstRate ?? 0) *
+        0.01
     );
   }, [selectedOffer, SKUData]);
   const gstAmount = useMemo(() => {
     return (
-      (SKUData?.amounts.amount - discount) * SKUData?.amounts.gstRate * 0.01
+      ((amountObject?.amount ?? 0) - discount) *
+      (amountObject?.gstRate ?? 0) *
+      0.01
     );
   }, [selectedOffer, SKUData]);
 
@@ -200,15 +220,11 @@ export const BookingConfirmation = ({route}: {route: any}) => {
         gender: existingAppointment ? existingAppointment.gender : user?.gender,
         name: existingAppointment ? existingAppointment.name : user?.name,
 
-        amount: existingAppointment ? 0 : payableAmount,
-        baseAmount: existingAppointment ? 0 : SKUData.amounts.amount,
-        gstAmount: existingAppointment ? 0 : gstAmount,
-        offerCode: existingAppointment
-          ? ''
-          : selectedOffer
-          ? selectedOffer.code
-          : '',
-        discountAmount: existingAppointment ? 0 : discount,
+        amount: payableAmount,
+        baseAmount: amountObject?.amount ?? 0,
+        gstAmount: gstAmount,
+        offerCode: selectedOffer ? selectedOffer.code : '',
+        discountAmount: discount,
       };
       if (existingAppointment) {
         bookSlotPayload.existing_booking_id = existingAppointment.id;
@@ -334,18 +350,18 @@ export const BookingConfirmation = ({route}: {route: any}) => {
                       />
                     </View>
                   )}
-
-                  <View style={{marginTop: 20, padding: 10, gap: 10}}>
-                    <Text style={{textAlign: 'center'}}>Bill Summary</Text>
-                    <PaymentAmount
-                      discount={discount}
-                      gstAmount={gstAmount}
-                      payableAmount={payableAmount}
-                      SKUData={SKUData}
-                    />
-                  </View>
                 </>
               )}
+
+              <View style={{marginTop: 20, padding: 10, gap: 10}}>
+                <Text style={{textAlign: 'center'}}>Bill Summary</Text>
+                <PaymentAmount
+                  discount={discount}
+                  gstAmount={gstAmount}
+                  payableAmount={payableAmount}
+                  amount={amountObject?.amount ?? 0}
+                />
+              </View>
             </ScrollView>
 
             <Button

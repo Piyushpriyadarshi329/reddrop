@@ -10,6 +10,7 @@ import {
 } from '../../DoctorDetails/useDoctorQuery';
 import DoctorListCard from '../DoctorList/DoctorListCard';
 import {Pallet3} from '../../../asset/Color';
+import ClinicListCard from '../DoctorList/ClinicListCard';
 
 const Search = () => {
   const [value, setValue] = useState('');
@@ -67,7 +68,13 @@ const Search = () => {
         <FlatList
           data={doctors}
           keyExtractor={item => item.id}
-          renderItem={({item}) => <DoctorListCard details={item} />}
+          renderItem={({item}) =>
+            item.type == 'CLINIC' ? (
+              <ClinicListCard details={item.data} />
+            ) : (
+              <DoctorListCard details={item.data} />
+            )
+          }
         />
       )}
     </View>

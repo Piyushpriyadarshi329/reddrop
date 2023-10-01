@@ -6,12 +6,12 @@ import Color from '../../../../asset/Color';
 import ShadowWrapper from '../../../../component/ShadowWrapper';
 
 export const PaymentAmount = ({
-  SKUData,
+  amount,
   discount,
   gstAmount,
   payableAmount,
 }: {
-  SKUData?: {amounts?: SKUItemEntity};
+  amount: number;
   discount: number;
   gstAmount: number;
   payableAmount: number;
@@ -24,7 +24,7 @@ export const PaymentAmount = ({
 
         <View style={styles.row}>
           <Text>Base Amount</Text>
-          <Text>₹&nbsp;{SKUData?.amounts?.amount || 0}</Text>
+          <Text>₹&nbsp;{amount || 0}</Text>
         </View>
         <View style={styles.row}>
           <Text>Discount</Text>
