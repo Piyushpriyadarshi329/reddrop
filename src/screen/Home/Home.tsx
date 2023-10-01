@@ -195,14 +195,14 @@ export default function Home() {
                 renderItem={({item}) => {
                   return (
                     <View style={{flex: 1}}>
-                      {banners?.[0]?.image_key && (
+                      {item?.image_key && (
                         <Image
                           style={{
                             height: 300,
                             width: 300,
                           }}
                           source={{
-                            uri: banners?.[0]?.image_key,
+                            uri: item?.image_key,
                           }}
                         />
                       )}
