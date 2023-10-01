@@ -35,6 +35,7 @@ import {useGetDoctor} from '../DoctorDetails/useDoctorQuery';
 import {useAlert} from '../../utils/useShowAlert';
 import {useUpdateSlotStatus} from '../../customhook/useUpdateSlotStatus';
 import {useGetcliniclist} from '../../customhook/useGetcliniclist';
+import Color, {Pallet3} from '../../asset/Color';
 
 export default function AppointmentCard({
   appointment,
@@ -72,6 +73,7 @@ export default function AppointmentCard({
         backgroundColor: 'white',
         borderRadius: 10,
         paddingVertical: 10,
+        gap: 5,
       }}>
       <View style={{flexDirection: 'row', flex: 1.6}}>
         <View style={{flex: 1}}>
@@ -169,35 +171,28 @@ export default function AppointmentCard({
         </View>
       </View>
 
-      {appointment?.latestBookingStatus ? (
-        <View
-          style={[
-            commonStyles.flexRowAlignCenter,
-            {alignSelf: 'flex-start', marginLeft: 20},
-          ]}>
-          {appointment?.latestBookingStatus?.started_slot ? (
-            <>
-              <Text style={commonStyles.font16}>Current ongoing Slot:</Text>
+      {appointment?.latestBookingStatus && (
+        <>
+          {appointment?.latestBookingStatus?.started_slot && (
+            <View style={appointmentStyles.onGoingSlotContainer}>
+              <Text style={commonStyles.font16}>Ongoing Slot:&nbsp;</Text>
               <Text style={commonStyles.font24}>
                 {appointment?.latestBookingStatus?.started_slot}
               </Text>
-            </>
-          ) : (
-            <>
-              {appointment?.latestBookingStatus?.completed_slot ? (
-                <>
-                  <Text style={commonStyles.font16}>Completed Slot:</Text>
-                  <Text style={commonStyles.font24}>
-                    {appointment?.latestBookingStatus?.completed_slot}
-                  </Text>
-                </>
-              ) : null}
-            </>
+            </View>
           )}
-        </View>
-      ) : null}
+          {appointment?.latestBookingStatus?.completed_slot ? (
+            <View style={appointmentStyles.completedSlotContainer}>
+              <Text style={commonStyles.font16}>Completed Slot:&nbsp;</Text>
+              <Text style={commonStyles.font24}>
+                {appointment?.latestBookingStatus?.completed_slot}
+              </Text>
+            </View>
+          ) : null}
+        </>
+      )}
 
-      <View style={{flexDirection: 'row', flex: 0.7, marginTop: 5}}>
+      <View style={{flexDirection: 'row', flex: 0.7}}>
         <View style={{flexDirection: 'column', flex: 1, marginHorizontal: 15}}>
           <Text style={[commonStyles.font16, commonStyles.weight600]}>
             {appointment.address.address_line1}
@@ -276,5 +271,23 @@ const appointmentStyles = StyleSheet.create({
     backgroundColor: '#f5f9fa',
     paddingHorizontal: 10,
     borderRadius: 10,
+  },
+  onGoingSlotContainer: {
+    marginHorizontal: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 10,
+    backgroundColor: Color.tertiary,
+  },
+  completedSlotContainer: {
+    marginHorizontal: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 10,
+    backgroundColor: Pallet3.secondary,
   },
 });
