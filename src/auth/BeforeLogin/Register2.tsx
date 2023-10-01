@@ -43,9 +43,7 @@ export default function Register2() {
     mode: 'onTouched',
   });
 
-  const {username, userid, cityName} = useSelector(
-    (root: RootState) => root.Appstate,
-  );
+  const {userid, cityName} = useSelector((root: RootState) => root.Appstate);
 
   // async function submitHandler(formValues: RegisterForm) {
   // let payload: SignupRequest = {

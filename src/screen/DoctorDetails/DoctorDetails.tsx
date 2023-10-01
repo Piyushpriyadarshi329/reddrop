@@ -87,11 +87,11 @@ const DoctorDetails = ({
         {clinicDetails?.name}
       </Text>
       <Text style={[commonStyles.font14]}>
-        {clinicDetails?.address.address_line1}
-        {clinicDetails.address.address_line2
-          ? `, ${clinicDetails.address.address_line2}`
+        {clinicDetails?.address?.address_line1}
+        {clinicDetails?.address?.address_line2
+          ? `, ${clinicDetails?.address.address_line2}`
           : ''}
-        ,&nbsp;{clinicDetails.address.city}
+        ,&nbsp;{clinicDetails?.address.city}
       </Text>
       <View
         style={{

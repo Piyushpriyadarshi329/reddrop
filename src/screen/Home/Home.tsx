@@ -34,6 +34,7 @@ import Specialty from './Specialty';
 import {useDispatch} from 'react-redux';
 import Carousel from 'react-native-snap-carousel';
 import {useAdBannerQuery} from './useAdBannerQuery';
+import {useGetCustomer} from '../Profile/useCustomerQuery';
 
 // const bgc = '#dcedec';
 const bgc = Color.primary;
@@ -76,6 +77,8 @@ export default function Home() {
   );
   const navigation = useNavigation<NavigationProp<any>>();
   const dispatch = useDispatch();
+  const {data: customer} = useGetCustomer(userid);
+
   const styles = useStyles();
   const {data: banners} = useAdBannerQuery();
   const {mutate, isLoading} = useReverseSearchCity({
@@ -154,7 +157,7 @@ export default function Home() {
         <View style={{backgroundColor: bgc, padding: 5}}>
           <View style={{paddingHorizontal: 10}}>
             <Text style={[commonStyles.font20, styles.text]}>
-              Hello {username}👋
+              Hello {customer?.name}👋
             </Text>
             <Text style={[commonStyles.caption, styles.text]}>
               How are you today ?
@@ -187,7 +190,7 @@ export default function Home() {
             paddingTop: bottomContainerTopPaddding,
           }}>
           {banners && banners.filter(b => Boolean(b.image_key))?.length && (
-            <View style={{height: 100, width: '100%'}}>
+            <View style={{height: (width * 500) / 1024, width: '100%'}}>
               <Carousel
                 loop
                 autoplay
@@ -198,8 +201,8 @@ export default function Home() {
                       {item?.image_key && (
                         <Image
                           style={{
-                            height: 300,
-                            width: 300,
+                            height: (width * 500) / 1024,
+                            width: width,
                           }}
                           source={{
                             uri: item?.image_key,
