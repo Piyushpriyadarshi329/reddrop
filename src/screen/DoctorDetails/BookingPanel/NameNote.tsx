@@ -7,9 +7,9 @@ export const NameNote = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>
-        Kindly make sure to enter correct patient's Details. During physical
-        appointment these details will be checked and in case of irregularities
-        the booking would be cancelled without refund.
+        *Note:&nbsp;&nbsp;Enter correct patient's Details. In case of
+        irregularities during physical appointment, the booking would be
+        cancelled without any refund.
       </Text>
     </View>
   );

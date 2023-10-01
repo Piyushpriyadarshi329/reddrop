@@ -1,4 +1,4 @@
-import {Text} from '@rneui/themed';
+import {Image, Text} from '@rneui/themed';
 import React from 'react';
 import {View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
@@ -20,7 +20,7 @@ const AboutMenuOptions = ({
       item: (
         <View style={[commonStyles.flexRowAlignCenter, {gap: 20}]}>
           <Icon name="edit" size={17} color={Color.primary} />
-          <Text style={commonStyles.font18}>Edit</Text>
+          <Text style={commonStyles.font18}>Edit Profile</Text>
         </View>
       ),
       onPress: setEditMode,
@@ -28,8 +28,11 @@ const AboutMenuOptions = ({
     {
       item: (
         <View style={[commonStyles.flexRowAlignCenter, {gap: 20}]}>
-          <Icon name="edit" size={17} color={Color.primary} />
-          <Text style={commonStyles.font18}>Contact us</Text>
+          <Image
+            source={require('../../asset/image/logoImg_rmbg.png')}
+            style={{height: 17, width: 17}}
+          />
+          <Text style={commonStyles.font18}>About us</Text>
         </View>
       ),
       onPress: setContactUs,
