@@ -159,7 +159,6 @@ export default function Home() {
     console.log('index', index);
     setActiveSlide(index);
   };
-  console.log(activeSlide);
   return (
     <View style={{flex: 1, gap: 5, backgroundColor: bgc}}>
       <View
@@ -224,7 +223,7 @@ export default function Home() {
               <Carousel
                 loop
                 autoplay
-                data={banners}
+                data={banners.filter(b => Boolean(b.image_key))}
                 renderItem={({item}) => {
                   return (
                     <View style={{flex: 1}}>
