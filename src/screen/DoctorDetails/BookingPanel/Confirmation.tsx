@@ -196,14 +196,19 @@ export const BookingConfirmation = ({route}: {route: any}) => {
         // payment_order_id: uuid.v4().toString(),
         payment_order_id: paymentOrder?.CFResponse.order_id,
         appointment_date: selectedDate ?? 0,
-        dob: user?.dob,
-        gender: user?.gender,
-        name: user?.name,
-        amount: payableAmount,
-        baseAmount: SKUData.amounts.amount,
-        gstAmount: gstAmount,
-        offerCode: selectedOffer ? selectedOffer.code : '',
-        discountAmount: discount,
+        dob: existingAppointment ? existingAppointment.dob : user?.dob,
+        gender: existingAppointment ? existingAppointment.gender : user?.gender,
+        name: existingAppointment ? existingAppointment.name : user?.name,
+
+        amount: existingAppointment ? 0 : payableAmount,
+        baseAmount: existingAppointment ? 0 : SKUData.amounts.amount,
+        gstAmount: existingAppointment ? 0 : gstAmount,
+        offerCode: existingAppointment
+          ? ''
+          : selectedOffer
+          ? selectedOffer.code
+          : '',
+        discountAmount: existingAppointment ? 0 : discount,
       };
       if (existingAppointment) {
         bookSlotPayload.existing_booking_id = existingAppointment.id;
@@ -305,7 +310,8 @@ export const BookingConfirmation = ({route}: {route: any}) => {
               ) : (
                 <View style={{gap: 5, padding: 10}}>
                   <UserCard
-                    user={user}
+                    user={existingAppointment ? existingAppointment : user}
+                    existingAppointment={existingAppointment}
                     onEdit={() => {
                       setShowUserForm(true);
                     }}
@@ -313,32 +319,38 @@ export const BookingConfirmation = ({route}: {route: any}) => {
                   <NameNote />
                 </View>
               )}
-              {!selectedOffer && (
-                <ApplyOfferButton setSelectedOffer={setSelectedOffer} />
-              )}
 
-              {selectedOffer && (
-                <View style={{padding: 10}}>
-                  <OfferCard
-                    selectedOffer={selectedOffer}
-                    setSelectedOffer={setSelectedOffer}
-                  />
-                </View>
+              {existingAppointment ? null : (
+                <>
+                  {!selectedOffer && (
+                    <ApplyOfferButton setSelectedOffer={setSelectedOffer} />
+                  )}
+
+                  {selectedOffer && (
+                    <View style={{padding: 10}}>
+                      <OfferCard
+                        selectedOffer={selectedOffer}
+                        setSelectedOffer={setSelectedOffer}
+                      />
+                    </View>
+                  )}
+
+                  <View style={{marginTop: 20, padding: 10, gap: 10}}>
+                    <Text style={{textAlign: 'center'}}>Bill Summary</Text>
+                    <PaymentAmount
+                      discount={discount}
+                      gstAmount={gstAmount}
+                      payableAmount={payableAmount}
+                      SKUData={SKUData}
+                    />
+                  </View>
+                </>
               )}
-              <View style={{marginTop: 20, padding: 10, gap: 10}}>
-                <Text style={{textAlign: 'center'}}>Bill Summary</Text>
-                <PaymentAmount
-                  discount={discount}
-                  gstAmount={gstAmount}
-                  payableAmount={payableAmount}
-                  SKUData={SKUData}
-                />
-              </View>
             </ScrollView>
 
             <Button
               onPress={!isSubmitLoading ? bookAppointmentHandler : () => {}}
-              title={'Book'}
+              title={existingAppointment ? 'Reschedule' : 'Book'}
               color={Color.primary}
               disabled={!user}
               loading={isSubmitLoading}

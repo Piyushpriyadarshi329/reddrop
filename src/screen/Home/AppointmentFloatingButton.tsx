@@ -10,7 +10,7 @@ import {useGetDoctor} from '../DoctorDetails/useDoctorQuery';
 import {AppPages} from '../../appPages';
 
 const AppointmentFloatingButton = () => {
-  const {username, userid} = useSelector((root: RootState) => root.Appstate);
+  const {userid} = useSelector((root: RootState) => root.Appstate);
   const {data: appointments} = useGetAppointments({
     customerId: userid,
   });

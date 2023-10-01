@@ -31,9 +31,7 @@ const DoctorListCard = ({
   clinicDetails?: ClinicWithAddressAndImage;
 }) => {
   const navigation = useNavigation<any>();
-  const {username, userid, cityName} = useSelector(
-    (root: RootState) => root.Appstate,
-  );
+  const {userid, cityName} = useSelector((root: RootState) => root.Appstate);
 
   const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();

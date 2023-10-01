@@ -3,13 +3,16 @@ import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import Color from '../../../../asset/Color';
 import ShadowWrapper from '../../../../component/ShadowWrapper';
+import {Appointmentdto} from '../../../../types';
 import {BookingUserInterface} from './UserForm';
 
 export const UserCard = ({
   user,
   onEdit,
+  existingAppointment,
 }: {
   user?: BookingUserInterface;
+  existingAppointment: Appointmentdto;
   onEdit: () => void;
 }) => {
   return (
@@ -26,11 +29,18 @@ export const UserCard = ({
           {!!user?.dob && `(${user?.dob} Y)`}
         </Text>
         <Text>{user?.gender}</Text>
-        <TouchableOpacity
-          onPress={onEdit}
-          style={{padding: 5, justifyContent: 'center', alignItems: 'center'}}>
-          <Icon name="pencil" color={Color.primary} />
-        </TouchableOpacity>
+
+        {existingAppointment ? null : (
+          <TouchableOpacity
+            onPress={onEdit}
+            style={{
+              padding: 5,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Icon name="pencil" color={Color.primary} />
+          </TouchableOpacity>
+        )}
       </View>
     </ShadowWrapper>
   );
