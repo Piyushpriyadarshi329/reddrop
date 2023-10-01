@@ -26,7 +26,7 @@ export const useNotificationHandler = () => {
       case CB_NOTIFICATION.FIRST_SLOT_STARTED:
         console.log(CB_NOTIFICATION.FIRST_SLOT_STARTED, notification);
         qc.invalidateQueries(['APPOINTMENTS']);
-        infoAlert(notification.title, undefined, 2000);
+        infoAlert(notification.title, undefined, 10000);
         return;
       case CB_NOTIFICATION.VISIBLE_NOTIFICATION:
         infoAlert(notification.title, notification.body);
