@@ -1,16 +1,17 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {Image, SearchBar, Skeleton, makeStyles} from '@rneui/themed';
-import React, {useEffect, useState} from 'react';
+import {SearchBar, Skeleton, makeStyles} from '@rneui/themed';
+import React, {useEffect} from 'react';
 import {
   FlatList,
-  ImageBackground,
   Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
-  useWindowDimensions,
+  Image,
   View,
+  useWindowDimensions,
 } from 'react-native';
+import GetLocation from 'react-native-get-location';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useSelector} from 'react-redux';
 import {AppPages} from '../../appPages';
@@ -18,26 +19,20 @@ import Color from '../../asset/Color';
 import {commonStyles} from '../../asset/styles';
 import Clinic from '../../component/Clinic';
 import Doctor from '../../component/Doctor';
-import Specialty from './Specialty';
 import {useGetcliniclist} from '../../customhook/useGetcliniclist';
 import {usegetSpeciality} from '../../customhook/usegetSpeciality';
 import {RootState} from '../../redux/Store';
+import {updateuserdata} from '../../redux/reducer/Authreducer';
 import {SpecialityDto} from '../../types';
 import {sliceIntoChunks} from '../../utils/jsMethods';
 import {useModalMethods} from '../../utils/useModalMethods';
 import {useGetDoctorList} from '../DoctorDetails/useDoctorQuery';
-import LocationModal from './LocationSelect';
-import {useScrollAnimation} from './ScrollAnimation';
-import {ScrollWP} from './ScrollWP';
-import GetLocation from 'react-native-get-location';
 import {useReverseSearchCity} from './../../customhook/useReverseSearchCity';
-import {updateuserdata} from '../../redux/reducer/Authreducer';
-
+import LocationModal from './LocationSelect';
+import {ScrollWP} from './ScrollWP';
+import Specialty from './Specialty';
 import {useDispatch} from 'react-redux';
-
-import AppIntroSlider from 'react-native-app-intro-slider';
-import Carousel, {Pagination} from 'react-native-snap-carousel';
-import MyCarousel from './CarousalWithPagination';
+import Carousel from 'react-native-snap-carousel';
 import {useAdBannerQuery} from './useAdBannerQuery';
 
 // const bgc = '#dcedec';
@@ -75,30 +70,6 @@ const useStyles = makeStyles((theme, props: Props) => ({
   },
 }));
 
-const slides = [
-  {
-    key: 1,
-    title: 'Title 1',
-    text: 'Description.\nSay something cool',
-    // image: require('./assets/1.jpg'),
-    backgroundColor: '#59b2ab',
-  },
-  {
-    key: 2,
-    title: 'Title 2',
-    text: 'Other cool stuff',
-    // image: require('./assets/2.jpg'),
-    backgroundColor: '#febe29',
-  },
-  {
-    key: 3,
-    title: 'Rocket guy',
-    text: "I'm already out of descriptions\n\nLorem ipsum bla bla bla",
-    // image: require('./assets/3.jpg'),
-    backgroundColor: '#22bcb5',
-  },
-];
-
 export default function Home() {
   const {username, userid, cityName} = useSelector(
     (root: RootState) => root.Appstate,
@@ -106,7 +77,6 @@ export default function Home() {
   const navigation = useNavigation<NavigationProp<any>>();
   const dispatch = useDispatch();
   const styles = useStyles();
-  const [activeSlide, setActiveSlide] = useState<number>(0);
   const {data: banners} = useAdBannerQuery();
   const {mutate, isLoading} = useReverseSearchCity({
     onSuccess: (data: any) => {
@@ -155,10 +125,8 @@ export default function Home() {
         });
     }
   }, []);
-  const onSnapToItem = (index: number) => {
-    console.log('index', index);
-    setActiveSlide(index);
-  };
+  const width = useWindowDimensions().width - 20;
+  console.log(banners?.[0].image_key);
   return (
     <View style={{flex: 1, gap: 5, backgroundColor: bgc}}>
       <View
@@ -218,7 +186,7 @@ export default function Home() {
             gap: 10,
             paddingTop: bottomContainerTopPaddding,
           }}>
-          {banners && banners?.length && (
+          {banners && banners.filter(b => Boolean(b.image_key))?.length && (
             <View style={{height: 100, width: '100%'}}>
               <Carousel
                 loop
@@ -227,23 +195,23 @@ export default function Home() {
                 renderItem={({item}) => {
                   return (
                     <View style={{flex: 1}}>
-                      <View
-                        style={{
-                          height: 70,
-                        }}>
+                      {banners?.[0]?.image_key && (
                         <Image
-                          resizeMode="stretch"
+                          style={{
+                            height: 300,
+                            width: 300,
+                          }}
                           source={{
-                            uri: item.image_key,
+                            uri: banners?.[0]?.image_key,
                           }}
                         />
-                      </View>
+                      )}
                     </View>
                   );
                 }}
                 pagingEnabled
-                sliderWidth={useWindowDimensions().width - 20}
-                itemWidth={useWindowDimensions().width - 20}
+                sliderWidth={width}
+                itemWidth={width}
               />
             </View>
           )}
