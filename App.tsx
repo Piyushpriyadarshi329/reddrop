@@ -9,6 +9,7 @@ import {Provider} from 'react-redux';
 import Color, {Pallet3} from './src/asset/Color';
 import Auth from './src/auth/Auth';
 import {store} from './src/redux/Store';
+import {useNotificationPermission} from './src/utils/notification';
 
 const queryClient = new QueryClient();
 const theme = createTheme({
@@ -38,7 +39,7 @@ const theme = createTheme({
 });
 export default function App() {
   const keyboardVerticalOffset = Platform.OS === 'ios' ? 40 : 0;
-
+  useNotificationPermission();
   const [showsplash, setshowsplash] = useState(true);
 
   useEffect(() => {

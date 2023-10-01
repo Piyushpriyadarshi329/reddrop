@@ -44,5 +44,8 @@
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "omnisharp.useModernNet": false
+  "omnisharp.useModernNet": false,
+  "[xml]": {
+    "editor.defaultFormatter": "redhat.vscode-xml"
+  }
 }
