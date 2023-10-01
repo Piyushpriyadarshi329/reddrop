@@ -25,6 +25,7 @@ export default function Specialty({details}: {details: SpecialityDto}) {
           backgroundColor: 'white',
           borderRadius: 10,
           padding: 10,
+          height: '100%',
         }}
         onPress={() => {
           navigation.navigate(AppPages.DoctorlistSpecialitywise, {
@@ -44,7 +45,7 @@ export default function Specialty({details}: {details: SpecialityDto}) {
           />
         </View>
         <View style={{paddingTop: 5, flex: 1}}>
-          <Text style={{fontSize: 12, color: '#00ccff'}} numberOfLines={1}>
+          <Text style={{fontSize: 12, color: '#00ccff'}} numberOfLines={2}>
             {details.name}
           </Text>
           <View style={{width: '100%'}}></View>
