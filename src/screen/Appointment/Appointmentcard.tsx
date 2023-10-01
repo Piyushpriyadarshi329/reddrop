@@ -143,13 +143,12 @@ export default function AppointmentCard({
       </View>
 
       <View style={appointmentStyles.tagLine}>
-        <View>
+        <View style={{flex: 1}}>
           <Text style={commonStyles.font14}>
             {new Date(Number(appointment.appointment_date)).toDateString()}
           </Text>
 
-          <View
-            style={[commonStyles.flexRowAlignCenter, {alignSelf: 'flex-end'}]}>
+          <View style={[commonStyles.flexRowAlignCenter]}>
             <Text style={commonStyles.font14}>
               {getTimeStringFromDBTime(appointment.from_working_time)}
               &nbsp;-&nbsp;
@@ -157,38 +156,39 @@ export default function AppointmentCard({
             </Text>
           </View>
         </View>
-        <View>
-          <View
-            style={[commonStyles.flexRowAlignCenter, {alignSelf: 'flex-end'}]}>
+        <View
+          style={{flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end'}}>
+          <View style={[commonStyles.flexRowAlignCenter]}>
             <Text style={commonStyles.font14}>Slot: &nbsp;</Text>
-            <Text style={commonStyles.font18}>{appointment.slot_index}</Text>
+            <Text style={commonStyles.font14}>{appointment.slot_index}</Text>
           </View>
-          <View
-            style={[commonStyles.flexRowAlignCenter, {alignSelf: 'flex-end'}]}>
-            <Text style={commonStyles.font14}>Patient:&nbsp;</Text>
-            <Text style={commonStyles.font16}>{appointment.name}</Text>
+          <View style={[commonStyles.flexRowAlignCenter]}>
+            <Text style={[commonStyles.font14, {textAlign: 'right'}]}>
+              Patient:&nbsp;{appointment.name}
+            </Text>
           </View>
         </View>
       </View>
 
       {appointment?.latestBookingStatus && (
         <>
-          {appointment?.latestBookingStatus?.started_slot && (
+          {appointment?.latestBookingStatus?.started_slot ? (
             <View style={appointmentStyles.onGoingSlotContainer}>
               <Text style={commonStyles.font16}>Ongoing Slot:&nbsp;</Text>
-              <Text style={commonStyles.font24}>
+              <Text style={commonStyles.font20}>
                 {appointment?.latestBookingStatus?.started_slot}
               </Text>
             </View>
+          ) : (
+            appointment?.latestBookingStatus?.completed_slot && (
+              <View style={appointmentStyles.completedSlotContainer}>
+                <Text style={commonStyles.font16}>Completed Slot:&nbsp;</Text>
+                <Text style={commonStyles.font20}>
+                  {appointment?.latestBookingStatus?.completed_slot}
+                </Text>
+              </View>
+            )
           )}
-          {appointment?.latestBookingStatus?.completed_slot ? (
-            <View style={appointmentStyles.completedSlotContainer}>
-              <Text style={commonStyles.font16}>Completed Slot:&nbsp;</Text>
-              <Text style={commonStyles.font24}>
-                {appointment?.latestBookingStatus?.completed_slot}
-              </Text>
-            </View>
-          ) : null}
         </>
       )}
 
