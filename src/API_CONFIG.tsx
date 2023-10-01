@@ -30,3 +30,4 @@ export const customerSignUp_URL = BASE_URL + '/customer';
 export const sku_URL = BASE_URL + '/sku';
 export const checkCode_URL = BASE_URL + '/checkCode';
 export const reverseSearchCity_URL = BASE_URL + '/customerSearchCity';
+export const adBanners = BASE_URL + '/adBanners';

@@ -1,18 +1,16 @@
 import {useNavigation} from '@react-navigation/native';
 import {Text} from '@rneui/themed';
 import React, {useState} from 'react';
-import {Image, Modal, Pressable, TouchableOpacity, View} from 'react-native';
+import {Image, TouchableOpacity, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import {AppPages} from '../appPages';
 import {commonStyles} from '../asset/styles';
+import {useGetcliniclist as useGetClinicsList} from '../customhook/useGetcliniclist';
+import {RootState} from '../redux/Store';
 import {updatecustomerdata} from '../redux/reducer/Customerreducer';
 import {ClinicWithAddressAndImage, DoctorDto} from '../types';
-import ShadowWrapper from './ShadowWrapper';
-import {AppPages} from '../appPages';
-import {useGetcliniclist as useGetClinicsList} from '../customhook/useGetcliniclist';
-import Color from '../asset/Color';
-import {Button} from 'react-native';
-import {RootState} from '../redux/Store';
 import ClinicsListModel from './ClinicsListModel';
+import ShadowWrapper from './ShadowWrapper';
 
 export default function Doctor({details}: {details: DoctorDto}) {
   const navigation = useNavigation<any>();
@@ -36,10 +34,10 @@ export default function Doctor({details}: {details: DoctorDto}) {
           doctor: details,
         }),
       );
-      if (clinicsList.length > 1) {
+      if ((clinicsList?.length ?? 0) > 1) {
         setModalVisible(true);
       } else {
-        clinicHandler(clinicsList[0]);
+        clinicsList?.[0] && clinicHandler(clinicsList[0]);
       }
     } catch (error) {
       console.log(error);

@@ -249,12 +249,21 @@ export interface BookingDto {
 }
 export type BookSlotRequest = Omit<
   BookingDto,
-  'id' | 'created_datetime' | 'modified_datetime' | 'group_id' | 'status'
+  | 'id'
+  | 'created_datetime'
+  | 'modified_datetime'
+  | 'group_id'
+  | 'status'
+  | 'doctor_clinic_id'
 > & {
   group_id?: string;
-  discountAmount?: number;
   offerCode?: string;
   amount: number;
+  discountAmount?: number;
+  baseAmount: number;
+  gstAmount: number;
+  doctor_id: string;
+  clinic_id: string;
 };
 export type BookSlotResponse = DataResponse<any>;
 
@@ -600,3 +609,11 @@ export type getAmountAndOffersResponse = DataResponse<{
 export enum CodeType {
   REFERRAL = 'REFERRAL',
 }
+
+export interface AdBanner {
+  id: string;
+  name: string;
+  image_key: string;
+}
+
+export type AdDataResponse = DataResponse<AdBanner[]>;

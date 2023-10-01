@@ -1,5 +1,5 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {SearchBar, Skeleton, makeStyles} from '@rneui/themed';
+import {Image, SearchBar, Skeleton, makeStyles} from '@rneui/themed';
 import React, {useEffect, useState} from 'react';
 import {
   FlatList,
@@ -38,6 +38,7 @@ import {useDispatch} from 'react-redux';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import MyCarousel from './CarousalWithPagination';
+import {useAdBannerQuery} from './useAdBannerQuery';
 
 // const bgc = '#dcedec';
 const bgc = Color.primary;
@@ -106,6 +107,7 @@ export default function Home() {
   const dispatch = useDispatch();
   const styles = useStyles();
   const [activeSlide, setActiveSlide] = useState<number>(0);
+  const {data: banners} = useAdBannerQuery();
   const {mutate, isLoading} = useReverseSearchCity({
     onSuccess: (data: any) => {
       console.log('search city', data);
@@ -217,30 +219,35 @@ export default function Home() {
             gap: 10,
             paddingTop: bottomContainerTopPaddding,
           }}>
-          <View style={{height: 100, width: '100%'}}>
-            <Carousel
-              loop
-              autoplay
-              data={slides}
-              renderItem={({item}: {item: any}) => {
-                return (
-                  <View style={{flex: 1}}>
-                    <View
-                      style={{
-                        height: 70,
-                        backgroundColor: item.backgroundColor,
-                      }}>
-                      <Text>{JSON.stringify(item.title)}</Text>
+          {banners && banners?.length && (
+            <View style={{height: 100, width: '100%'}}>
+              <Carousel
+                loop
+                autoplay
+                data={banners}
+                renderItem={({item}) => {
+                  return (
+                    <View style={{flex: 1}}>
+                      <View
+                        style={{
+                          height: 70,
+                        }}>
+                        <Image
+                          resizeMode="stretch"
+                          source={{
+                            uri: item.image_key,
+                          }}
+                        />
+                      </View>
                     </View>
-                  </View>
-                );
-              }}
-              pagingEnabled
-              sliderWidth={useWindowDimensions().width - 20}
-              itemWidth={useWindowDimensions().width - 20}
-            />
-            <MyCarousel />
-          </View>
+                  );
+                }}
+                pagingEnabled
+                sliderWidth={useWindowDimensions().width - 20}
+                itemWidth={useWindowDimensions().width - 20}
+              />
+            </View>
+          )}
 
           <View style={{flexDirection: 'column', gap: 10}}>
             <Text style={styles.sectionTitle}>Top Doctors</Text>
