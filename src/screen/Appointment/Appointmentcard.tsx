@@ -288,6 +288,6 @@ const appointmentStyles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 10,
-    backgroundColor: Pallet3.secondary,
+    backgroundColor: '#8eedcc',
   },
 });
