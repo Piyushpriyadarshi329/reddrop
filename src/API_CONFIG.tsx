@@ -1,7 +1,7 @@
-export const BASE_URL = 'http://43.204.45.2:5002/api/v1'; //dev
+// export const BASE_URL = 'http://43.204.45.2:5002/api/v1'; //dev
 
 // export const BASE_URL = 'http://43.204.45.2:5000/api/v1'; //QA
-// export const BASE_URL = 'http://43.204.45.2:5001/api/v1'; //prod
+export const BASE_URL = 'http://43.204.45.2:5001/api/v1'; //prod
 
 export const LOGIN_URL = BASE_URL + '/login';
 export const REGISTER_URL = BASE_URL + '/signup';

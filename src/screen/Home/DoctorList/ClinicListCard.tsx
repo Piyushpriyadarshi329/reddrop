@@ -136,7 +136,7 @@ const ClinicListCard = ({
           />
         </View>
         <View style={{flex: 6}}>
-          <Text style={commonStyles.font18}>Dr. {details.name}</Text>
+          <Text style={commonStyles.font18}> {details.name}</Text>
 
           <Text style={commonStyles.font12}>{details.address_line1}</Text>
           <Text style={commonStyles.font12}>{details.address_line2}</Text>
