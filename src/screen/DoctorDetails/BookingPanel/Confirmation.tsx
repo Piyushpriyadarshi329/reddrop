@@ -60,11 +60,13 @@ export const BookingConfirmation = ({route}: {route: any}) => {
 
   const AppState = useSelector((state: RootState) => state.Appstate);
   const [loader, setLoader] = useState(false);
+  const [errorAlert, setErrorAlert] = useState(false);
 
   const [selectedOffer, setSelectedOffer] = useState<OfferEntity | null>(null);
   const navigation = useNavigation<NavigationProp<any>>();
 
   const dispatch = useDispatch();
+
   const onPaymentSuccess = () => {
     navigation.dispatch(
       CommonActions.reset({
@@ -139,6 +141,7 @@ export const BookingConfirmation = ({route}: {route: any}) => {
           },
     [SKUData],
   );
+
   const offerObject = useMemo(
     () => (!existingAppointment ? SKUData?.offers : []),
     [SKUData],
@@ -164,6 +167,17 @@ export const BookingConfirmation = ({route}: {route: any}) => {
       name: customerData?.name ?? '',
     });
   }, [customerData]);
+
+  useEffect(() => {
+    if (existingAppointment) {
+      setUser({
+        // dob: new Date('1995-12-17T03:24:00'),
+        dob: existingAppointment?.dob,
+        gender: existingAppointment?.gender,
+        name: existingAppointment?.name,
+      });
+    }
+  }, [existingAppointment]);
 
   const [showUserForm, setShowUserForm] = useState(false);
 
@@ -195,6 +209,7 @@ export const BookingConfirmation = ({route}: {route: any}) => {
         0.01
     );
   }, [selectedOffer, SKUData]);
+
   const gstAmount = useMemo(() => {
     return (
       ((amountObject?.amount ?? 0) - discount) *
@@ -205,6 +220,10 @@ export const BookingConfirmation = ({route}: {route: any}) => {
 
   const onPaymentOrderCreated = async (paymentOrder: any) => {
     try {
+      if (!user?.dob || !user?.gender || !user?.name) {
+        setErrorAlert(true);
+        return;
+      }
       let bookSlotPayload: BookSlotRequest = {
         customer_id: AppState.userid,
         // doctor_clinic_id: selectedClinic?.clinic_doctor_id ?? '',
@@ -276,11 +295,13 @@ export const BookingConfirmation = ({route}: {route: any}) => {
 
   const {mutate: createPaymentOrder, isLoading: isCreatingPaymentOrder} =
     useCreatePaymentOrder({onSuccess: onPaymentOrderCreated});
+
   function bookAppointmentHandler() {
     createPaymentOrder({
       customerId: AppState.userid,
     });
   }
+
   const isSubmitLoading = isCreatingPaymentOrder || isLoading;
 
   return (
@@ -328,7 +349,9 @@ export const BookingConfirmation = ({route}: {route: any}) => {
                   <UserCard
                     user={existingAppointment ? existingAppointment : user}
                     existingAppointment={existingAppointment}
+                    errorAlert={errorAlert}
                     onEdit={() => {
+                      setErrorAlert(false);
                       setShowUserForm(true);
                     }}
                   />
@@ -368,7 +391,7 @@ export const BookingConfirmation = ({route}: {route: any}) => {
               onPress={!isSubmitLoading ? bookAppointmentHandler : () => {}}
               title={existingAppointment ? 'Reschedule' : 'Book'}
               color={Color.primary}
-              disabled={!user}
+              disabled={showUserForm}
               loading={isSubmitLoading}
             />
           </>

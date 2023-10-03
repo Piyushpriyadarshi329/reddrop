@@ -1,5 +1,10 @@
 import axios from 'axios';
-import {GETDOCTORLIST_URL, GET_DOCTOR, SearchDoctorUrl} from '../../API_CONFIG';
+import {
+  GETDOCTORLIST_URL,
+  GET_DOCTOR,
+  SearchDoctorUrl,
+  getDoctorListBySpecialty,
+} from '../../API_CONFIG';
 import {useQuery} from '@tanstack/react-query';
 import {
   DoctorDto,
@@ -40,7 +45,20 @@ export function useGetDoctorList(payload: GetDotcorsListRequest) {
     },
   );
 }
-
+export function useGetDoctorListBySpecialty(payload: GetDotcorsListRequest) {
+  const cityName = useSelector((root: RootState) => root.Appstate.cityName);
+  return useQuery(
+    ['DOCTORS', cityName, payload],
+    () =>
+      axios.post<GetDoctorsListResponse>(getDoctorListBySpecialty, {
+        ...payload,
+        city: cityName,
+      }),
+    {
+      select: data => data.data.data,
+    },
+  );
+}
 export const useGetDoctor = (
   id: string,
   onSuccess?: (

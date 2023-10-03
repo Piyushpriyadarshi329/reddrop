@@ -203,6 +203,7 @@ export default function Home() {
                           style={{
                             height: (width * 500) / 1024,
                             width: width,
+                            borderRadius: 10,
                           }}
                           source={{
                             uri: item?.image_key,

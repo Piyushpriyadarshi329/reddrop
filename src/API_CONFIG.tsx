@@ -1,13 +1,14 @@
 // export const BASE_URL = 'http://43.204.45.2:5002/api/v1'; //dev
 
-// export const BASE_URL = 'http://43.204.45.2:5000/api/v1'; //QA
-export const BASE_URL = 'http://43.204.45.2:5001/api/v1'; //prod
+export const BASE_URL = 'http://43.204.45.2:5000/api/v1'; //QA
+// export const BASE_URL = 'http://43.204.45.2:5001/api/v1'; //prod
 
 export const LOGIN_URL = BASE_URL + '/login';
 export const REGISTER_URL = BASE_URL + '/signup';
 export const GETDOCTORLIST_URL = BASE_URL + '/getdoctorlist';
 export const SearchDoctorUrl = BASE_URL + '/searchDoctor';
 export const GET_DOCTOR = BASE_URL + '/getdoctor';
+export const getDoctorListBySpecialty = BASE_URL + '/getDoctorListBySpecialty';
 export const GETAVAILABLITY_URL = BASE_URL + '/getavailability';
 export const BOOKSLOT_URL = BASE_URL + '/bookSlot';
 export const GETCLINICLIST_URL = BASE_URL + '/getcliniclist';

@@ -2,6 +2,7 @@ import axios from 'axios';
 import {LOGIN_URL} from '../API_CONFIG';
 import {CustomerDto, DataResponse, LoginRequest} from '../types';
 import {useMutation} from '@tanstack/react-query';
+import {axiosAlert, errorAlert} from '../utils/useShowAlert';
 
 export function useLoginMutation({
   onSuccess,
@@ -12,7 +13,16 @@ export function useLoginMutation({
     (payload: LoginRequest) =>
       axios.post<DataResponse<CustomerDto>>(LOGIN_URL, payload),
     {
-      onSuccess: data => onSuccess(data.data.data),
+      onError: axiosAlert,
+
+      // onSuccess: data => onSuccess(data.data.data),
+      onSuccess: data => {
+        if (data.data.Success) {
+          onSuccess(data.data.data);
+        } else {
+          errorAlert(data.data.Message);
+        }
+      },
     },
   );
 }

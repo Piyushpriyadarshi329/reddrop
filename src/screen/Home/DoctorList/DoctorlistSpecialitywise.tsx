@@ -3,14 +3,19 @@ import React from 'react';
 import {SafeAreaView, ScrollView, View, Image} from 'react-native';
 import Doctor from '../../../component/Doctor';
 import Navbar from '../../../component/Navbar';
-import {useGetDoctorList} from '../../DoctorDetails/useDoctorQuery';
+import {
+  useGetDoctorList,
+  useGetDoctorListBySpecialty,
+} from '../../DoctorDetails/useDoctorQuery';
 import DoctorListCard from './DoctorListCard';
 import {Pallet3} from '../../../asset/Color';
 import {usegetSpeciality} from '../../../customhook/usegetSpeciality';
 
 export default function DoctorlistSpecialitywise({route}: any) {
   const {data} = route.params;
-  const {data: topdoctorlist} = useGetDoctorList({speciality: data.name});
+  const {data: topdoctorlist} = useGetDoctorListBySpecialty({
+    specialty: data.name,
+  });
   const {data: Specialitylist} = usegetSpeciality();
   const currentSpeciality = Specialitylist?.data?.find(
     s => s.name === data.name,

@@ -53,7 +53,7 @@ const ClinicListCard = ({
 
         if (filterCity.length == 0) {
           alert(
-            `Doctor is available in ${[
+            `Clinic is available in ${[
               details?.location
                 .map(l => l.city)
                 .slice(0, -1)

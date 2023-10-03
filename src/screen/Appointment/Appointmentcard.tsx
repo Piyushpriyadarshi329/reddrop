@@ -259,6 +259,7 @@ export default function AppointmentCard({
               clinicDetails: clinicDetails?.[0],
             },
           });
+          setReScheduleModal(false);
         }}
         modalVisible={rescheduleModal}
         setModalVisible={setReScheduleModal}

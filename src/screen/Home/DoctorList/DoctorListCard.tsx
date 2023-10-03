@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import {Text} from '@rneui/themed';
+import {Button, Text} from '@rneui/themed';
 import React, {useState} from 'react';
 import {Image, TouchableOpacity, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -10,6 +10,8 @@ import {commonStyles} from '../../../asset/styles';
 import ClinicsListModel from '../../../component/ClinicsListModel';
 import {useGetcliniclist as useGetClinicsList} from '../../../customhook/useGetcliniclist';
 import {RootState} from '../../../redux/Store';
+import {Modal} from 'react-native';
+import Color from '../../../asset/Color';
 
 type Location = {
   city: string;
@@ -30,9 +32,12 @@ const DoctorListCard = ({
   details: Doctor;
   clinicDetails?: ClinicWithAddressAndImage;
 }) => {
+  console.log('details', details);
+
   const navigation = useNavigation<any>();
   const {userid, cityName} = useSelector((root: RootState) => root.Appstate);
 
+  const [alertModalVisible, setAlertModalVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
 
@@ -52,17 +57,18 @@ const DoctorListCard = ({
         );
 
         if (filterCity.length == 0) {
-          alert(
-            `Doctor is available in ${[
-              details?.location
-                .map(l => l.city)
-                .slice(0, -1)
-                .join(', '),
-              details.location[details.location.length - 1].city,
-            ]
-              .filter(Boolean)
-              .join('&')} \n\n Please change your city to book`,
-          );
+          setAlertModalVisible(true);
+          // alert(
+          //   `Doctor is available in ${[
+          //     details?.location
+          //       .map(l => l.city)
+          //       .slice(0, -1)
+          //       .join(', '),
+          //     details.location[details.location.length - 1].city,
+          //   ]
+          //     .filter(Boolean)
+          //     .join('&')} \n\n Please change your city to book`,
+          // );
           return;
         }
       }
@@ -87,13 +93,6 @@ const DoctorListCard = ({
     }
   }
 
-  // const {data: clinicList} = useGetClinicsList({
-  //   doctor_id: details.id,
-  //   city: cityName,
-  // });
-
-  // console.log('clinicList', clinicList);
-
   async function clinicHandler(clinic: ClinicWithAddressAndImage | undefined) {
     try {
       navigation.navigate(AppPages.BookApointment, {
@@ -115,6 +114,57 @@ const DoctorListCard = ({
           doctorDetails={details}
         />
       )}
+
+      {alertModalVisible ? (
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={alertModalVisible}
+          onRequestClose={() => {
+            setAlertModalVisible(!alertModalVisible);
+          }}>
+          <View
+            style={{
+              backgroundColor: 'rgba(52, 52, 52, 0.8)',
+              flex: 1,
+              // opacity: 0.8,
+            }}>
+            <View
+              style={{
+                backgroundColor: Color.white,
+                marginHorizontal: 40,
+                height: 300,
+                marginTop: 200,
+                opacity: 1,
+                borderRadius: 10,
+              }}>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  marginTop: 50,
+                }}>{`Doctor is available in ${[
+                details?.location
+                  .map(l => l.city)
+                  .slice(0, -1)
+                  .join(', '),
+                details.location[details.location.length - 1].city,
+              ]
+                .filter(Boolean)
+                .join(' & ')} \n Please change your city to book.`}</Text>
+
+              <View style={{marginTop: 50, marginHorizontal: 50}}>
+                <Button
+                  onPress={() => {
+                    setAlertModalVisible(false);
+                  }}
+                  style={{width: 80}}
+                  title={'OK'}></Button>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      ) : null}
+
       <TouchableOpacity
         onPress={clickHandler}
         style={[
