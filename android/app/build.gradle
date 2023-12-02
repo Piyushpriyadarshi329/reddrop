@@ -81,8 +81,8 @@ android {
         applicationId "com.reddrop"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 7
-        versionName "1.7"
+        versionCode 8
+        versionName "1.8"
     }
     signingConfigs {
         debug {
@@ -137,6 +137,7 @@ dependencies {
     
     implementation 'com.facebook.fresco:fresco:2.0.0' 
     implementation 'com.facebook.fresco:animated-gif:2.6.0'
+    implementation 'com.facebook.android:facebook-android-sdk:latest.release'
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

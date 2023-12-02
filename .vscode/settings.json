@@ -47,5 +47,6 @@
   "omnisharp.useModernNet": false,
   "[xml]": {
     "editor.defaultFormatter": "redhat.vscode-xml"
-  }
+  },
+  "java.configuration.updateBuildConfiguration": "interactive"
 }

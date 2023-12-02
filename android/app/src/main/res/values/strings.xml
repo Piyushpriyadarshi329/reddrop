@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Carebook </string>
+    <string name="facebook_app_id">881909726591151</string>
+    <string name="fb_login_protocol_scheme">fb881909726591151</string>
+    <string name="facebook_client_token">f0aaf0ff40b56d21db76c227a49d361b</string>
 </resources>
