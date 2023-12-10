@@ -39,7 +39,10 @@ import {updateuserdata} from '../../../redux/reducer/Authreducer';
 import {BookSlotRequest, Gender, OfferEntity} from '../../../types';
 import {getAge} from '../../../utils/dateMethods';
 import {useGetCustomer} from '../../Profile/useCustomerQuery';
-import {errorAlert, successAlert} from '../../../utils/useShowAlert';
+import {
+  errorAlert as errorPopup,
+  successAlert,
+} from '../../../utils/useShowAlert';
 import {NameNote} from './NameNote';
 import {BookingUserInterface, UserForm} from './User/UserForm';
 import {OfferCard} from './Offer/OfferCard';
@@ -96,7 +99,7 @@ export const BookingConfirmation = ({route}: {route: any}) => {
       successAlert('Payment Complete Successfully');
       onPaymentSuccess();
     } else if (AppState.paymentStatus == 'FAILED') {
-      errorAlert('Payment Failed');
+      errorPopup('Payment Failed');
       navigation.goBack();
     }
 
@@ -157,14 +160,20 @@ export const BookingConfirmation = ({route}: {route: any}) => {
     dob: customerData?.dob ? getAge(Number(customerData?.dob)) : undefined,
     gender: (customerData?.gender ?? '') as Gender,
     name: customerData?.name ?? '',
+    phone: customerData?.mobile ?? '',
+    patient_address: customerData?.address ?? '',
   });
 
   useEffect(() => {
+    console.log('customerData==>', customerData);
+
     setUser({
       // dob: new Date('1995-12-17T03:24:00'),
       dob: customerData?.dob ? getAge(Number(customerData?.dob)) : undefined,
       gender: (customerData?.gender ?? '') as Gender,
       name: customerData?.name ?? '',
+      phone: customerData?.mobile ?? '',
+      patient_address: customerData?.address ?? '',
     });
   }, [customerData]);
 
@@ -175,6 +184,8 @@ export const BookingConfirmation = ({route}: {route: any}) => {
         dob: existingAppointment?.dob,
         gender: existingAppointment?.gender,
         name: existingAppointment?.name,
+        patient_address: existingAppointment.patient_address ?? '',
+        phone: existingAppointment?.phone ?? '',
       });
     }
   }, [existingAppointment]);
@@ -220,7 +231,7 @@ export const BookingConfirmation = ({route}: {route: any}) => {
 
   const onPaymentOrderCreated = async (paymentOrder: any) => {
     try {
-      if (!user?.dob || !user?.gender || !user?.name) {
+      if (!user?.gender || !user?.name) {
         setErrorAlert(true);
         return;
       }
@@ -238,6 +249,10 @@ export const BookingConfirmation = ({route}: {route: any}) => {
         dob: existingAppointment ? existingAppointment.dob : user?.dob,
         gender: existingAppointment ? existingAppointment.gender : user?.gender,
         name: existingAppointment ? existingAppointment.name : user?.name,
+        phone: existingAppointment ? existingAppointment.phone : user?.phone,
+        patient_address: existingAppointment
+          ? existingAppointment.patient_address
+          : user?.patient_address,
 
         amount: payableAmount,
         baseAmount: amountObject?.amount ?? 0,
@@ -338,6 +353,7 @@ export const BookingConfirmation = ({route}: {route: any}) => {
             <ScrollView>
               {showUserForm ? (
                 <UserForm
+                  user={user}
                   onClose={() => setShowUserForm(false)}
                   onSubmit={user => {
                     setUser(user);

@@ -1,5 +1,5 @@
 import {Button, FAB, Icon, Input} from '@rneui/themed';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {FormProvider, useForm} from 'react-hook-form';
 import {View, TouchableOpacity} from 'react-native';
 import Color from '../../../../../asset/Color';
@@ -11,20 +11,31 @@ import {genderOptions} from './constants';
 export interface BookingUserInterface {
   id?: string;
   name: string;
-  dob?: Date;
+  dob?: number | string;
   gender: Gender;
+  patient_address: string;
+  phone: string;
 }
 
 export const UserForm = ({
   onSubmit,
   onClose,
+  user,
 }: {
   onSubmit: (p: BookingUserInterface) => void;
   onClose: () => void;
+  user: BookingUserInterface;
 }) => {
   const formMethods = useForm<BookingUserInterface>({
     mode: 'onTouched',
+    defaultValues: {...user, dob: user.dob?.toString()},
   });
+
+  // useEffect(() => {
+  //   formMethods.reset({...user, dob: user.dob?.toString()});
+  // }, [user]);
+
+  console.log('user', user);
   return (
     <View style={{paddingHorizontal: 40}}>
       <FormProvider {...formMethods}>
@@ -37,8 +48,8 @@ export const UserForm = ({
             <View style={{flexDirection: 'row'}}>
               <RHFTextInput
                 name="dob"
-                required
                 keyboardType="numeric"
+                // value={user.dob?.toString()}
                 placeholder="Age"
                 containerStyle={{
                   width: '50%',
@@ -61,6 +72,14 @@ export const UserForm = ({
                 }}
               />
             </View>
+
+            {/* contact */}
+
+            <RHFTextInput name="phone" required placeholder="Mobile" />
+
+            {/* address */}
+
+            <RHFTextInput name="patient_address" placeholder="Address" />
 
             <Button
               title={'Save'}

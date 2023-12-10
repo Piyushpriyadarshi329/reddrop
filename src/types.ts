@@ -55,7 +55,26 @@ export type SearchDoctor = DoctorDto & {
   }[];
   fees?: number;
 };
-export type SearchDoctorsListResponse = DataResponse<SearchDoctor[]>;
+export type SearchClinic = ClinicDto & {
+  profile_image: string;
+  address_line1: string;
+  address_line2: string;
+  city: string;
+  location: {
+    city: string;
+    lat: number;
+    lan: number;
+  }[];
+  fees?: number;
+};
+export enum EntityType {
+  DOCTOR = 'DOCTOR',
+  CLINIC = 'CLINIC',
+}
+export type SearchedEntity =
+  | {type: EntityType; data: SearchDoctor}
+  | {type: EntityType; data: SearchClinic};
+export type SearchDoctorsListResponse = DataResponse<SearchedEntity[]>;
 export type GetDoctorsListResponse = DataResponse<
   (DoctorDto & {
     profile_image: string;
@@ -246,6 +265,8 @@ export interface BookingDto {
   dob: number;
   name: string;
   gender: Gender;
+  phone: string;
+  patient_address: string;
 }
 export type BookSlotRequest = Omit<
   BookingDto,
@@ -405,6 +426,7 @@ export interface GetAdressRequest {
 export interface updateSlotsStatusRequest {
   id?: string;
   status?: string;
+  remarks?: string;
 }
 
 export interface AddAdresstdto extends AddAdressRequest {
